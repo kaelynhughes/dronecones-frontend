@@ -6,19 +6,91 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import "./index.css";
-import TestPage0 from "./views/test/TestPage0";
-import TestPage1 from "./views/test/TestPage1";
 
 import background from "./assets/vecteezy_retro-style-80s-sci-fi-background.jpg";
+import HomePage from "./views/HomePage";
+import SignUpPage from "./views/SignUpPage";
+import LoginPage from "./views/LoginPage";
+import ErrorPage from "./views/ErrorPage";
+import AppPage from "./views/AppPage";
+import MenuPage from "./views/customer/MenuPage";
+import DroneQuickviewPage from "./views/employee/DroneQuickviewPage";
+import ManagerQuickviewPage from "./views/manager/ManagerQuickviewPage";
+import CartPage from "./views/customer/CartPage";
+import ConfirmationPage from "./views/customer/ConfirmationPage";
+import CustomerHistoryPage from "./views/customer/CustomerHistoryPage";
+import ManageDronesPage from "./views/employee/ManageDronesPage";
+import DroneHistoryPage from "./views/employee/DroneHistoryPage";
+import ManageInventoryPage from "./views/manager/ManageInventoryPage";
+import ManageUsersPage from "./views/manager/ManageUsersPage";
+import ManagerHistoryPage from "./views/manager/ManagerHistoryPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <TestPage0 />,
+    element: <HomePage />,
+    errorElement: <ErrorPage />,
   },
   {
-    path: "test1",
-    element: <TestPage1 />,
+    path: "/signup",
+    element: <SignUpPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/app",
+    element: <AppPage />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/app/menu",
+        element: <MenuPage />,
+      },
+      {
+        path: "/app/cart",
+        element: <CartPage />,
+      },
+      {
+        path: "/app/confirmation",
+        element: <ConfirmationPage />,
+      },
+      {
+        path: "/app/customer-history",
+        element: <CustomerHistoryPage />,
+      },
+      {
+        path: "/app/drone-quickview",
+        element: <DroneQuickviewPage />,
+      },
+      {
+        path: "/app/manage-drones",
+        element: <ManageDronesPage />,
+      },
+      {
+        path: "/app/drone-history",
+        element: <DroneHistoryPage />,
+      },
+      {
+        path: "/app/manager-quickview",
+        element: <ManagerQuickviewPage />,
+      },
+      {
+        path: "/app/manage-inventory",
+        element: <ManageInventoryPage />,
+      },
+      {
+        path: "/app/manage-users",
+        element: <ManageUsersPage />,
+      },
+      {
+        path: "/app/manager-history",
+        element: <ManagerHistoryPage />,
+      },
+    ],
   },
 ]);
 
