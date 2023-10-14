@@ -9,8 +9,8 @@ export default function ManageUsersPage() {
         Manage Users Page, allows a manager to ban or unban users sorted by
         recent orders
       </h1>
-      <Button variant="contained" component={Link} to="/">
-        Back to home
+      <Button variant="contained" component={Link} to="/app/manager-quickview">
+        Back to Quickview
       </Button>
     </>
   );

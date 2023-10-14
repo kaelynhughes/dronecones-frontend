@@ -9,8 +9,8 @@ export default function ManagerHistoryPage() {
         Manager History Page, allows the manager to view all recent orders and
         their details
       </h1>
-      <Button variant="contained" component={Link} to="/">
-        Back to Home
+      <Button variant="contained" component={Link} to="/app/manager-quickview">
+        Back to Quickview
       </Button>
     </>
   );

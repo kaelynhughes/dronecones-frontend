@@ -6,6 +6,7 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import "./index.css";
+import "./fonts/AerologicaRegular-K7day.ttf";
 
 import background from "./assets/vecteezy_retro-style-80s-sci-fi-background.jpg";
 import HomePage from "./views/HomePage";
