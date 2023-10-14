@@ -1,4 +1,4 @@
-type Product = {
+export type Product = {
     name: String,
     stock: number,
     //ppu is the Price the customer will pay for a unit of this Product
@@ -10,7 +10,7 @@ type Product = {
     id: number,
 }
 
-enum ProductType {
+export enum ProductType {
     ICECREAM = "Ice Cream",
     CONE = "Cone",
     TOPPING = "Topping"

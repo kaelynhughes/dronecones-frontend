@@ -9,8 +9,8 @@ export default function ManageDronesPage() {
         Manage Drones Page, allows detailed info on each drone, with a button to
         add drones that opens a dialog for drone info input
       </h1>
-      <Button variant="contained" component={Link} to="/">
-        Back to Home
+      <Button variant="contained" component={Link} to="/app/drone-quickview">
+        Back to Quickview
       </Button>
     </>
   );

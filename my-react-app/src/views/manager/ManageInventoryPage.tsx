@@ -9,8 +9,8 @@ export default function ManageInventoryPage() {
         Manage Inventory Page, displays remaining stock and inventory cost,
         allows user to bulk restock items, add new items, and change prices
       </h1>
-      <Button variant="contained" component={Link} to="/">
-        Back to Home
+      <Button variant="contained" component={Link} to="/app/manager-quickview">
+        Back to Quickview
       </Button>
     </>
   );
