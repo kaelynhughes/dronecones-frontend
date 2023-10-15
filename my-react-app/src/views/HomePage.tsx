@@ -12,8 +12,16 @@ export default function HomePage() {
 
       <div className="centerFormat">
 
-        <h1 className= "logo-fontFirst">DRONE</h1>
-        <h1 className= "logo-fontSecond">CONES</h1>
+        <h1 className= "logo-fontFirst" style= {{
+            padding: "1px",
+            border: "1px",
+            margin: "0px",
+        }}>DRONE</h1>
+        <h1 className= "logo-fontSecond" style= {{
+            padding: "1px",
+            border: "1px",
+            margin: "0px",
+        }}>CONES</h1>
 
 
       </div>
