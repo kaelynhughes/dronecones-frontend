@@ -57,12 +57,49 @@ button:focus-visible {
 
 @font-face {
   font-family: "logo";
-  src: local("AerologicaRegular-K7day") url("./fonts/AerologicaRegular-K7day.ttf") format ("truetype");
+  src: local("logo"), url("./fonts/AerologicaRegular-K7day.ttf"), format ("truetype");
+}
+
+@font-face {
+  font-family: 'homeheader';
+  src: local('homeheader'), url("./fonts/Games-XvD2.ttf"), format ("truetype");
+}
+
+.logo-fontFirst {
+  font-family: 'logo'; 
+  color:#ff188b;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  size: 100px;
+
+}
+
+.logo-fontSecond {
+  font-family: 'logo'; 
+  color:#fc7303;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  color: #ff7c02; /* Set the text color */
+  size: 100px;
+
+}
+
+.header-font {
+  font-family: 'homeheader'; 
+  color:#ffffff;
+  text-shadow: 0 0 10px rgba(0, 153, 255, 0.7);
+  color: #fff; /* Set the text color */
+
 }
 
 .logo-name {
   font-family: "Orbitron";
   font-size: x-large;
+}
+
+.centerFormat {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center;
+
 }
 
 
