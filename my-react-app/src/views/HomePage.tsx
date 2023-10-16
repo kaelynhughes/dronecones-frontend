@@ -33,8 +33,9 @@ export default function HomePage() {
 
       <Button style={{
           backgroundColor: "purple",
-          fontFamily:"pixelfont"
-
+          fontFamily:"pixelfont",
+          textShadow: "0 0 5px",
+          boxShadow: "0 0 10px"
         }} variant="contained" component={Link} to="/login">
         Log In!
       </Button>
@@ -47,10 +48,12 @@ export default function HomePage() {
 
       <Button style={{
           backgroundColor: "purple",
-          fontFamily:"pixelfont"
+          fontFamily:"pixelfont",
+          textShadow: "0 0 5px",
+          boxShadow: "0 0 10px"
           
         }}  variant="contained" component={Link} to="/signup">
-        Sign Up
+        Sign Up!
       </Button>
       </div>
 
@@ -70,25 +73,6 @@ export default function HomePage() {
   ice cream experience. Our drones are not only fast and efficient but also eco-friendly, ensuring your 
   treats arrive with a minimal carbon footprint.</h1>
 
-
-
-
-
-
-      <div>
-
-
-      </div>
-      
-
-      <h1>Home Page, displays company info and links to Login and Signup</h1>
-      <Button variant="contained" component={Link} to="/login">
-        Log In
-      </Button>
-      <br></br>
-      <Button variant="contained" component={Link} to="/signup">
-        Sign Up
-      </Button>
     </>
   );
 }
