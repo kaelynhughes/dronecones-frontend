@@ -15,8 +15,14 @@ import "../fonts/AerologicaRegular-K7day.ttf";
 import { UserType } from "../types";
 
 
+const optionButtonStyle = {
+  backgroundColor: "rgb(178,87,253)",
+  fontFamily: "pixelfont",
+  textShadow: "0 0 10px rgba(0, 153, 255, 0.7)",
+  fontSize: "12px",
+  color: "#ffff"
 
-
+};
 
 
 // Open to renaming this, this is the parent page for the rest of the app once the user has logged in.
@@ -28,7 +34,7 @@ export default function AppPage() {
   return (
     <>
       <Box sx={{ display: "flex" }}>
-        <AppBar sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <AppBar sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor:"rgb(153,46,255)" }} >
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <IcecreamOutlinedIcon sx={{ mr: 1 }} />
@@ -70,17 +76,18 @@ export default function AppPage() {
             pageType === 0 ||
             pageType === 1) && (
             <Container>
-              <Button className="button-link" variant="contained" component={Link} to="/app/menu">
+              <Button sx={optionButtonStyle} variant="contained" component={Link} to="/app/menu">
                 Menu
               </Button>
               <br />
               <br />
-              <Button variant="contained" component={Link} to="/app/cart">
+              <Button sx={optionButtonStyle}  variant="contained" component={Link} to="/app/cart">
                 Cart
               </Button>
               <br />
               <br />
               <Button
+              sx={optionButtonStyle}
                 variant="contained"
                 component={Link}
                 to="/app/customer-history"
