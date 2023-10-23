@@ -19,14 +19,25 @@ export default function SignUpPage() {
     
   
   <>
-    <div className="dialogue-container">
+    <div className="centerFormat">
         <div className="login">
-          <div>Sign Up</div>
+          <div className="centerFormat">
+          <h1 className="header-font">Sign Up</h1>
           <input type="username" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username"/>
           <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"/>
+          <br></br>
           <div className="signup-controls">
-            <Button variant="contained" id="fullbutton" className="signupbutton button" onClick={signUp}>Sign Up</Button>
+            <Button style={{
+              backgroundColor: "purple",
+              fontFamily:"pixelfont",
+              textShadow: "0 0 5px",
+              boxShadow: "0 0 10px"
+            }}variant="contained" id="fullbutton" className="" onClick={signUp}>Create Account</Button>
           </div>
+          </div>
+          
+          
+          
         </div>
       </div>
     
