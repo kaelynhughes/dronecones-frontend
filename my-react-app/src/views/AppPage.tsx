@@ -12,7 +12,12 @@ import {
 import IcecreamOutlinedIcon from "@mui/icons-material/IcecreamOutlined";
 import "../index.css";
 import "../fonts/AerologicaRegular-K7day.ttf";
-import { UserType } from "../data-objects/User";
+import { UserType } from "../types";
+
+
+
+
+
 
 // Open to renaming this, this is the parent page for the rest of the app once the user has logged in.
 export default function AppPage() {
@@ -27,12 +32,21 @@ export default function AppPage() {
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <IcecreamOutlinedIcon sx={{ mr: 1 }} />
-              <span className="logo-name">Drone Cones</span>
+
+              <div>
+              <span className="logo-fontFirst" style = {{
+                fontSize : "25px"
+              }}>DRONE</span>
+              <span className="logo-fontSecond" style = {{
+                fontSize : "25px"
+              }}>CONES</span>
+              </div>
+              
               <Button
                 variant="outlined"
                 component={Link}
                 to="/"
-                style={{ color: "purple" }}
+                style={{ color: "purple",fontFamily : "pixelfont" }}
               >
                 Home/Logout
               </Button>
@@ -56,7 +70,7 @@ export default function AppPage() {
             pageType === 0 ||
             pageType === 1) && (
             <Container>
-              <Button variant="contained" component={Link} to="/app/menu">
+              <Button className="button-link" variant="contained" component={Link} to="/app/menu">
                 Menu
               </Button>
               <br />

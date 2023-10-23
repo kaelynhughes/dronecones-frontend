@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import { UserType } from "../data-objects/User";
+import { UserType } from "../types";
 
 export default function LoginPage() {
   return (

@@ -114,7 +114,7 @@ button:focus-visible {
 
 }
 
-.button-link{
+.MuiButton-root{
   background-color: "purple";
   font-family: "pixelfont";
   text-shadow: 0 0 10px rgba(0, 153, 255, 0.7);
