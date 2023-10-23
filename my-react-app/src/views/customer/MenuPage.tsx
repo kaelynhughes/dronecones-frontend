@@ -79,38 +79,25 @@ export default function MenuPage() {
             {/*ADD/TAKEOFF option 1 BUTTON*/}
             <Button variant="contained"
         onClick={() =>{ 
-            if(flavor == ""){
+
               flavor = flavor_1;
-            }
-            else{
-              flavor = "";
-            }
-            console.log(flavor)
+              console.log(flavor);
+
         
         }}> {flavor_1} </Button>
             {/*ADD/TAKEOFF option 2 BUTTON*/}
         <Button variant="contained"
           onClick={() =>{ 
-              if(flavor == ""){
                 flavor = flavor_2;
-              }
-              else{
-                flavor = "";
-              }
-              console.log(flavor)
+                console.log(flavor);
         
         }}> {flavor_2} </Button>
 
             {/*ADD/TAKEOFF option 2 BUTTON*/}
             <Button variant="contained"
           onClick={() =>{ 
-              if(flavor == ""){
                 flavor = flavor_3;
-              }
-              else{
-                flavor = "";
-              }
-              console.log(flavor)
+                console.log(flavor);
         
         }}> {flavor_3} </Button>
 
@@ -120,39 +107,24 @@ export default function MenuPage() {
             {/*ADD/TAKEOFF option 1 BUTTON*/}
             <Button variant="contained"
         onClick={() =>{ 
-            if(cone == ""){
               cone = cone_1;
-            }
-            else{
-              cone = "";
-            }
-            console.log(cone)
+              console.log(cone);
         
         }}> {cone_1} </Button>
 
           {/*ADD/TAKEOFF option 2 BUTTON*/}
           <Button variant="contained"
       onClick={() =>{ 
-          if(cone == ""){
             cone = cone_2;
-          }
-          else{
-            cone = "";
-          }
-          console.log(cone)
+            console.log(cone);
       
       }}> {cone_2} </Button>
         
                   {/*ADD/TAKEOFF option 3 BUTTON*/}
                   <Button variant="contained"
       onClick={() =>{ 
-          if(cone == ""){
             cone = cone_3;
-          }
-           else{
-            cone = "";
-          }
-          console.log(cone)
+            console.log(cone);
       
       }}> {cone_3} </Button>
 
