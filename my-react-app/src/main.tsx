@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import {
   BrowserRouter,
+  Outlet,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
@@ -28,68 +29,73 @@ import ManagerHistoryPage from "./views/manager/ManagerHistoryPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <HomePage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignUpPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/app",
-    element: <AppPage />,
-    errorElement: <ErrorPage />,
+    element: <Outlet />,
     children: [
       {
-        path: "/app/menu",
-        element: <MenuPage />,
+        path: "/",
+        element: <HomePage />,
+        errorElement: <ErrorPage />,
       },
       {
-        path: "/app/cart",
-        element: <CartPage />,
+        path: "/signup",
+        element: <SignUpPage />,
+        errorElement: <ErrorPage />,
       },
       {
-        path: "/app/confirmation",
-        element: <ConfirmationPage />,
+        path: "/login",
+        element: <LoginPage />,
+        errorElement: <ErrorPage />,
       },
       {
-        path: "/app/customer-history",
-        element: <CustomerHistoryPage />,
-      },
-      {
-        path: "/app/drone-quickview",
-        element: <DroneQuickviewPage />,
-      },
-      {
-        path: "/app/manage-drones",
-        element: <ManageDronesPage />,
-      },
-      {
-        path: "/app/drone-history",
-        element: <DroneHistoryPage />,
-      },
-      {
-        path: "/app/manager-quickview",
-        element: <ManagerQuickviewPage />,
-      },
-      {
-        path: "/app/manage-inventory",
-        element: <ManageInventoryPage />,
-      },
-      {
-        path: "/app/manage-users",
-        element: <ManageUsersPage />,
-      },
-      {
-        path: "/app/manager-history",
-        element: <ManagerHistoryPage />,
+        path: "/app",
+        element: <AppPage />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "menu",
+            element: <MenuPage />,
+          },
+          {
+            path: "cart",
+            element: <CartPage />,
+          },
+          {
+            path: "confirmation",
+            element: <ConfirmationPage />,
+          },
+          {
+            path: "customer-history",
+            element: <CustomerHistoryPage />,
+          },
+          {
+            path: "drone-quickview",
+            element: <DroneQuickviewPage />,
+          },
+          {
+            path: "manage-drones",
+            element: <ManageDronesPage />,
+          },
+          {
+            path: "drone-history",
+            element: <DroneHistoryPage />,
+          },
+          {
+            path: "manager-quickview",
+            element: <ManagerQuickviewPage />,
+          },
+          {
+            path: "manage-inventory",
+            element: <ManageInventoryPage />,
+          },
+          {
+            path: "manage-users",
+            element: <ManageUsersPage />,
+          },
+          {
+            path: "manager-history",
+            element: <ManagerHistoryPage />,
+          },
+        ],
       },
     ],
   },
