@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import Button from "@mui/material/Button";
+
 import { Link, useNavigate} from "react-router-dom";
 import { UserType } from "../types";
+import { useStore } from "../store";
 
 
 
@@ -17,7 +19,6 @@ export default function LoginPage() {
     //TODO some logic to detect user via api that uses case statement to push to correct page
     navigate("/app/drone-quickview");
   }
-
 
   return (
     <>
@@ -40,45 +41,45 @@ export default function LoginPage() {
       </h1>
       <Button
         variant="contained"
-        component={Link}
-        to="/app/menu"
-        state={{
-          user: {
+        onClick={() => {
+          login({
             username: "TestConeKitten",
             userType: UserType.CUSTOMER,
             isActive: true,
             id: 0,
-          },
+          });
+          changeMode(UserType.CUSTOMER);
+          navigate("/app/menu");
         }}
       >
         Logged In (Customer)
       </Button>
       <Button
         variant="contained"
-        component={Link}
-        to="/app/drone-quickview"
-        state={{
-          user: {
+        onClick={() => {
+          login({
             username: "TestDroneDaddy",
             userType: UserType.EMPLOYEE,
             isActive: true,
             id: 1,
-          },
+          });
+          changeMode(UserType.EMPLOYEE);
+          navigate("/app/drone-quickview");
         }}
       >
         Logged In (Employee)
       </Button>
       <Button
         variant="contained"
-        component={Link}
-        to="/app/manager-quickview"
-        state={{
-          user: {
+        onClick={() => {
+          login({
             username: "TestManagerMommy",
             userType: UserType.MANAGER,
             isActive: true,
             id: 2,
-          },
+          });
+          changeMode(UserType.MANAGER);
+          navigate("/app/manager-quickview");
         }}
       >
         Logged In (Manager)
