@@ -122,6 +122,12 @@ button:focus-visible {
 
 }
 
+.sidebar * {
+  margin: 0;
+  padding: 0;
+  height: 75px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

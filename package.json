@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "create-vite": "^4.4.1"
+  },
+  "dependencies": {
+    "zustand": "^4.4.4"
   }
 }

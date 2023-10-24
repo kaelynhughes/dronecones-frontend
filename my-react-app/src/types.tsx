@@ -2,11 +2,11 @@ export type Drone = {
   name: String;
   isActive: boolean;
   size: number;
-  id: number;
+  id?: number;
 };
 
 export type FullCone = {
-  droneId: number;
+  droneId?: number;
   components: Product[];
 };
 
@@ -16,7 +16,7 @@ export type Order = {
   employeeCut: number;
   remainder: number;
   timestamp: Date;
-  id: number;
+  id?: number;
 };
 
 export type Product = {
@@ -26,9 +26,9 @@ export type Product = {
   ppu: number;
   //cpu is the Cost we pay as the vendor to suppoly a unit of this Product
   cpu: number;
-  img: File;
+  img?: File;
   type: ProductType;
-  id: number;
+  id?: number;
 };
 
 export enum ProductType {
@@ -41,11 +41,12 @@ export type User = {
   username: String;
   userType: UserType;
   isActive: boolean;
-  id: number;
+  id?: number;
 };
 
 export enum UserType {
   CUSTOMER = "Customer",
   EMPLOYEE = "Employee",
   MANAGER = "Manager",
+  GUEST = "Guest",
 }
