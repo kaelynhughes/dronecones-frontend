@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -7,21 +7,16 @@ import {
   Container,
   Divider,
   Drawer,
+  ToggleButton,
+  ToggleButtonGroup,
   Toolbar,
+  useTheme,
 } from "@mui/material";
 import IcecreamOutlinedIcon from "@mui/icons-material/IcecreamOutlined";
 import "../index.css";
 import "../fonts/AerologicaRegular-K7day.ttf";
 import { ProductType, UserType } from "../types";
 import { useStore } from "../store";
-
-const optionButtonStyle = {
-  backgroundColor: "rgb(178,87,253)",
-  fontFamily: "pixelfont",
-  textShadow: "0 0 10px rgba(0, 153, 255, 0.7)",
-  fontSize: "12px",
-  color: "#ffff",
-};
 
 // Open to renaming this, this is the parent page for the rest of the app once the user has logged in.
 export default function AppPage() {
@@ -31,14 +26,33 @@ export default function AppPage() {
   const orders = useStore((state) => state.orders);
   const drones = useStore((state) => state.drones);
   const cart = useStore((state) => state.cart);
+  const appPath = useStore((state) => state.appPath);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const { changeMode } = useStore();
+  const { changePath } = useStore();
   const { loadProducts } = useStore();
   const { loadDrones } = useStore();
   const { loadHistory } = useStore();
   const { addConesToCart } = useStore();
   const { logout } = useStore();
+
+  const optionButtonStyle = {
+    backgroundColor: `${theme.palette.primary.main}`,
+    fontFamily: "pixelfont",
+    textShadow: "0 0 10px rgba(0, 153, 255, 0.7)",
+    fontSize: "12px",
+    color: "#ffff",
+    width: "100%",
+  };
+
+  const handleNavBar = (event: any, newPath: string) => {
+    if (newPath !== null) {
+      changePath(newPath);
+      navigate(`/${newPath}`);
+    }
+  };
 
   return (
     <>
@@ -46,7 +60,8 @@ export default function AppPage() {
         <AppBar
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            backgroundColor: "rgb(153,46,255)",
+            backgroundColor: `${theme.palette.background.default}`,
+            height: "65px",
           }}
         >
           <Container maxWidth="xl">
@@ -71,67 +86,128 @@ export default function AppPage() {
                   CONES
                 </span>
               </div>
-
-              {(user.userType === UserType.EMPLOYEE ||
-                user.userType === UserType.MANAGER) &&
-                mode !== UserType.CUSTOMER && (
-                  <Button
-                    variant="outlined"
-                    style={{ color: "purple", fontFamily: "pixelfont" }}
-                    onClick={() => {
-                      changeMode(UserType.CUSTOMER);
-                      navigate("/app/menu");
-                    }}
-                  >
-                    Want Cones?
-                  </Button>
-                )}
-
-              {(user.userType === UserType.EMPLOYEE ||
-                user.userType === UserType.MANAGER) &&
-                mode !== UserType.EMPLOYEE && (
-                  <Button
-                    variant="outlined"
-                    style={{ color: "purple", fontFamily: "pixelfont" }}
-                    onClick={() => {
-                      changeMode(UserType.EMPLOYEE);
-                      navigate("/app/drone-quickview");
-                    }}
-                  >
-                    Your Drones
-                  </Button>
-                )}
-
-              {user.userType === UserType.MANAGER &&
-                mode !== UserType.MANAGER && (
-                  <Button
-                    variant="outlined"
-                    style={{ color: "purple", fontFamily: "pixelfont" }}
-                    onClick={() => {
-                      changeMode(UserType.MANAGER);
-                      navigate("/app/manager-quickview");
-                    }}
-                  >
-                    Manager Mode
-                  </Button>
-                )}
-
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  logout();
-                  navigate("/");
+              <Toolbar sx={{ width: "10%" }} />
+              <Box
+                sx={{
+                  width: "100%",
+                  justifyContent: "end",
+                  display: "flex",
+                  flexDirection: "row",
                 }}
-                style={{ color: "purple", fontFamily: "pixelfont" }}
               >
-                Home/Logout
-              </Button>
+                {(user.userType === UserType.EMPLOYEE ||
+                  user.userType === UserType.MANAGER) &&
+                  mode !== UserType.CUSTOMER && (
+                    <Button
+                      variant="outlined"
+                      style={{
+                        color: `${theme.palette.primary.main}`,
+                        fontFamily: "pixelfont",
+                        fontSize: "13px",
+                        width: "120px",
+                      }}
+                      size="medium"
+                      onClick={() => {
+                        changeMode(UserType.CUSTOMER);
+                        changePath("app/menu");
+                        navigate("/app/menu");
+                      }}
+                    >
+                      Want Cones?
+                    </Button>
+                  )}
+
+                {(user.userType === UserType.EMPLOYEE ||
+                  user.userType === UserType.MANAGER) &&
+                  mode !== UserType.EMPLOYEE && (
+                    <Button
+                      variant="outlined"
+                      style={{
+                        color: `${theme.palette.primary.main}`,
+                        fontFamily: "pixelfont",
+                        fontSize: "13px",
+                        width: "120px",
+                      }}
+                      size="medium"
+                      onClick={() => {
+                        changeMode(UserType.EMPLOYEE);
+                        changePath("app/drone-quickview");
+                        navigate("/app/drone-quickview");
+                      }}
+                    >
+                      Your Drones
+                    </Button>
+                  )}
+
+                {user.userType === UserType.MANAGER &&
+                  mode !== UserType.MANAGER && (
+                    <Button
+                      variant="outlined"
+                      style={{
+                        color: `${theme.palette.secondary.main}`,
+                        fontFamily: "pixelfont",
+                        fontSize: "13px",
+                        width: "120px",
+                      }}
+                      size="medium"
+                      onClick={() => {
+                        changeMode(UserType.MANAGER);
+                        changePath("app/manager-quickview");
+                        navigate("/app/manager-quickview");
+                      }}
+                    >
+                      Manager Mode
+                    </Button>
+                  )}
+
+                <div
+                  style={{
+                    height: "30px",
+                    marginLeft: "16px",
+                    marginRight: "16px",
+                  }}
+                >
+                  <span style={{ fontFamily: "pixelfont", fontSize: "8px" }}>
+                    Welcome,
+                  </span>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontFamily: "pixelfont",
+                      fontSize: "11px",
+                    }}
+                  >
+                    {user.username}
+                  </p>
+                </div>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                  size="small"
+                  style={{
+                    color: `${theme.palette.primary.main}`,
+                    fontFamily: "pixelfont",
+                    fontSize: "11px",
+                    height: "30px",
+                    marginTop: "15px",
+                  }}
+                >
+                  Logout
+                </Button>
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
         <Drawer
           PaperProps={{
-            sx: { backgroundColor: "purple", color: "pink", width: "100px" },
+            sx: {
+              backgroundColor: `${theme.palette.primary.dark}`,
+              color: `${theme.palette.divider}`,
+              width: "100px",
+            },
           }}
           sx={{
             display: "flex",
@@ -141,117 +217,117 @@ export default function AppPage() {
           anchor="left"
           className="sidebar"
         >
-          <Toolbar />
-          <br />
           {(user.userType === UserType.CUSTOMER ||
             user.userType === UserType.GUEST ||
             mode === UserType.CUSTOMER) && (
-            <>
-              <Button
-                sx={optionButtonStyle}
-                variant="text"
-                component={Link}
-                to="/app/menu"
+            <Box sx={{ width: "100%", padding: 0 }}>
+              <Divider sx={{ height: "65px" }} />
+              {/* Here we use a vertical ToggleButtonGroup */}
+              <ToggleButtonGroup
+                orientation="vertical"
+                value={appPath}
+                exclusive
+                onChange={handleNavBar}
+                fullWidth // The buttons take the full width of the container
+                sx={{ width: "100%", height: "100%" }} // Style to expand to container
               >
-                Menu
-              </Button>
-              <br />
-              <Button
-                sx={optionButtonStyle}
-                variant="text"
-                component={Link}
-                to="/app/cart"
-              >
-                Cart
-              </Button>
-              <br />
-              <Button
-                sx={optionButtonStyle}
-                variant="text"
-                component={Link}
-                to="/app/customer-history"
-              >
-                History
-              </Button>
-            </>
+                <ToggleButton value="app/menu" sx={optionButtonStyle}>
+                  Menu
+                </ToggleButton>
+                <Divider sx={{ height: "1px" }} />
+                <ToggleButton value="app/cart" sx={optionButtonStyle}>
+                  Cart
+                </ToggleButton>
+                <Divider sx={{ height: "1px" }} />
+                <ToggleButton
+                  value="app/customer-history"
+                  sx={optionButtonStyle}
+                >
+                  History
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
           )}
           {(user.userType === UserType.EMPLOYEE ||
             user.userType === UserType.MANAGER) &&
             mode === UserType.EMPLOYEE && (
-              <>
-                <Button
-                  sx={optionButtonStyle}
-                  variant="contained"
-                  component={Link}
-                  to="/app/drone-quickview"
+              <Box sx={{ width: "100%", padding: 0 }}>
+                <Divider sx={{ height: "65px" }} />
+                {/* Here we use a vertical ToggleButtonGroup */}
+                <ToggleButtonGroup
+                  orientation="vertical"
+                  value={appPath}
+                  exclusive
+                  onChange={handleNavBar}
+                  fullWidth // The buttons take the full width of the container
+                  sx={{ width: "100%", height: "100%", optionButtonStyle }} // Style to expand to container
                 >
-                  Quick View
-                </Button>
-                <br />
-                <Button
-                  sx={optionButtonStyle}
-                  variant="contained"
-                  component={Link}
-                  to="/app/manage-drones"
-                >
-                  Manage Drones
-                </Button>
-                <br />
-                <Button
-                  sx={optionButtonStyle}
-                  variant="contained"
-                  component={Link}
-                  to="/app/drone-history"
-                >
-                  History
-                </Button>
-                <br />
-              </>
+                  <ToggleButton
+                    value="app/drone-quickview"
+                    sx={optionButtonStyle}
+                  >
+                    Quick View
+                  </ToggleButton>
+                  <Divider sx={{ height: "1px" }} />
+                  <ToggleButton
+                    value="app/manage-drones"
+                    sx={optionButtonStyle}
+                  >
+                    Manage Drones
+                  </ToggleButton>
+                  <Divider sx={{ height: "1px" }} />
+                  <ToggleButton
+                    value="app/drone-history"
+                    sx={optionButtonStyle}
+                  >
+                    History
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
             )}
           {user.userType === UserType.MANAGER && mode === UserType.MANAGER && (
-            <>
-              <Button
-                sx={optionButtonStyle}
-                variant="contained"
-                component={Link}
-                to="/app/manager-quickview"
+            <Box sx={{ width: "100%", padding: 0 }}>
+              <Divider sx={{ height: "65px" }} />
+              {/* Here we use a vertical ToggleButtonGroup */}
+              <ToggleButtonGroup
+                orientation="vertical"
+                value={appPath}
+                exclusive
+                onChange={handleNavBar}
+                fullWidth // The buttons take the full width of the container
+                sx={{ width: "100%", height: "100%", optionButtonStyle }} // Style to expand to container
               >
-                Quick View
-              </Button>
-              <br />
-              <Button
-                sx={optionButtonStyle}
-                variant="contained"
-                component={Link}
-                to="/app/manage-inventory"
-              >
-                Restock
-              </Button>
-              <br />
-              <Button
-                sx={optionButtonStyle}
-                variant="contained"
-                component={Link}
-                to="/app/manage-users"
-              >
-                Users
-              </Button>
-              <br />
-              <Button
-                sx={optionButtonStyle}
-                variant="contained"
-                component={Link}
-                to="/app/manager-history"
-              >
-                History
-              </Button>
-            </>
+                <ToggleButton
+                  value="app/manager-quickview"
+                  sx={optionButtonStyle}
+                >
+                  Quick View
+                </ToggleButton>
+                <Divider sx={{ height: "1px" }} />
+                <ToggleButton
+                  value="app/manage-inventory"
+                  sx={optionButtonStyle}
+                >
+                  Restock
+                </ToggleButton>
+                <Divider sx={{ height: "1px" }} />
+                <ToggleButton value="app/manage-users" sx={optionButtonStyle}>
+                  Users
+                </ToggleButton>
+                <Divider sx={{ height: "1px" }} />
+                <ToggleButton
+                  value="app/manager-history"
+                  sx={optionButtonStyle}
+                >
+                  History
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
           )}
-          <br />
-          <br />
-          <br />
+          <Divider sx={{ height: "75%" }} />
           <Button
             sx={optionButtonStyle}
+            style={{ justifySelf: "end" }}
             variant="outlined"
             onClick={() => {
               if (products.length === 0) {
