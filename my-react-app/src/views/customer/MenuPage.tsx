@@ -47,13 +47,21 @@ export default function MenuPage() {
       <h1 className="header-font">TOPPINGS</h1>
       {/*ADD/TAKEOFF option 1 BUTTON*/}
       <Button
+        id="button0"
         variant="contained"
         sx={optionButtonStyle}
         onClick={() => {
+          const buttonElement = document.getElementById("button0");
           if (toppings[0] == "") {
             toppings[0] = toppingOption_1;
+            if (buttonElement) {
+              buttonElement.style.backgroundColor = "#0000ff";
+            }
           } else {
             toppings[0] = "";
+            if (buttonElement) {
+              buttonElement.style.backgroundColor = "darkviolet";
+            }
           }
           console.log(toppings[0]);
         }}
