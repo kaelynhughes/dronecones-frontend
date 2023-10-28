@@ -10,16 +10,19 @@ export default () => {
     name: "C-3PO",
     isActive: true,
     size: 3,
+    id: 1,
   };
   const drone2: Drone = {
     name: "R2-D2",
     isActive: false,
     size: 2,
+    id: 2,
   };
   const drone3: Drone = {
     name: "BB-8",
     isActive: true,
     size: 1,
+    id: 3,
   };
   return [drone1, drone2, drone3];
 };
