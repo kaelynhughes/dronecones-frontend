@@ -13,19 +13,19 @@ export type FullCone = {
 export type Order = {
   cones: FullCone[];
   totalPrice: number;
-  employeeCut: number;
-  remainder: number;
+  employeeCut?: number;
+  remainder?: number;
   timestamp: Date;
   id?: number;
 };
 
 export type Product = {
   name: String;
-  stock: number;
+  stock?: number;
   //ppu is the Price the customer will pay for a unit of this Product
-  ppu: number;
+  ppu?: number;
   //cpu is the Cost we pay as the vendor to suppoly a unit of this Product
-  cpu: number;
+  cpu?: number;
   img?: File;
   type: ProductType;
   id?: number;

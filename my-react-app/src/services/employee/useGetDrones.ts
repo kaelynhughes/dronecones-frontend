@@ -1,6 +1,6 @@
-import axios from "./axios";
-import { BACKEND_URL_DEV } from "../constants";
-import { Drone } from "../types";
+import axios from "../axios";
+import { BACKEND_URL_DEV } from "../../constants";
+import { Drone } from "../../types";
 
 export default () => {
   axios.get(`${BACKEND_URL_DEV}/employee/drones`).then((response) => {

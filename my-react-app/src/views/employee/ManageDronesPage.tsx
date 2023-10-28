@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { UserType } from "../../types";
 import { useStore } from "../../store";
-import useGetDrones from "../../services/useGetDrones";
+import useGetDrones from "../../services/employee/useGetDrones";
 import { Drone } from "../../types";
 
 export default function ManageDronesPage() {

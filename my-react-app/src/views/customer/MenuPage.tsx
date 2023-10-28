@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import useGetMenu from "../../services/useGetMenu";
+import useGetMenu from "../../services/customer/useGetMenu";
 import { Product } from "../../types";
 
 const optionButtonStyle = {

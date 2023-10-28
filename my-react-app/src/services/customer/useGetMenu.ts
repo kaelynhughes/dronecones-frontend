@@ -1,6 +1,6 @@
-import axios from "./axios";
-import { BACKEND_URL_DEV } from "../constants";
-import { Product, ProductType } from "../types";
+import axios from "../axios";
+import { BACKEND_URL_DEV } from "../../constants";
+import { Product, ProductType } from "../../types";
 
 export default () => {
   axios
