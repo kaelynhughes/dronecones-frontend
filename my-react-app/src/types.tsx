@@ -2,6 +2,8 @@ export type Drone = {
   name: String;
   isActive: boolean;
   size: number;
+  earnings: number;
+  orderCount: number;
   id?: number;
 };
 
@@ -24,7 +26,7 @@ export type Product = {
   stock: number;
   //ppu is the Price the customer will pay for a unit of this Product
   ppu: number;
-  //cpu is the Cost we pay as the vendor to suppoly a unit of this Product
+  //cpu is the Cost we pay as the vendor to supply a unit of this Product
   cpu: number;
   img?: File;
   type: ProductType;

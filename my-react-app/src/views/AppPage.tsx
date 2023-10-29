@@ -64,9 +64,9 @@ export default function AppPage() {
             height: "65px",
           }}
         >
-          <Container maxWidth="xl">
-            <Toolbar disableGutters>
-              <IcecreamOutlinedIcon sx={{ mr: 1 }} />
+          <Container maxWidth={false}>
+            <Toolbar sx={{ width: "100%" }} disableGutters>
+              <IcecreamOutlinedIcon sx={{ mr: 1, align: "left" }} />
 
               <div>
                 <span
@@ -537,9 +537,30 @@ const mockCones = [
 ];
 
 const mockDrones = [
-  { name: "Big Boss", isActive: true, size: 3, id: 1 },
-  { name: "2-Cone Terry", isActive: false, size: 2, id: 2 },
-  { name: "Lightweight", isActive: true, size: 1, id: 3 },
+  {
+    name: "Big Boss",
+    isActive: true,
+    size: 3,
+    orderCount: 11,
+    earnings: 3400,
+    id: 1,
+  },
+  {
+    name: "2-Cone Terry",
+    isActive: false,
+    size: 2,
+    orderCount: 5,
+    earnings: 1800,
+    id: 2,
+  },
+  {
+    name: "Lightweight",
+    isActive: true,
+    size: 1,
+    orderCount: 17,
+    earnings: 5900,
+    id: 3,
+  },
 ];
 
 const mockOrders = [
