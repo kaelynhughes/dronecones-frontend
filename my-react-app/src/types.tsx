@@ -4,7 +4,7 @@ export type Drone = {
   size: number;
   earnings: number;
   orderCount: number;
-  id?: number;
+  id: number;
 };
 
 export type FullCone = {
@@ -15,19 +15,19 @@ export type FullCone = {
 export type Order = {
   cones: FullCone[];
   totalPrice: number;
-  employeeCut: number;
-  remainder: number;
+  employeeCut?: number;
+  remainder?: number;
   timestamp: Date;
   id?: number;
 };
 
 export type Product = {
-  name: string;
-  stock: number;
+  name: String;
+  stock?: number;
   //ppu is the Price the customer will pay for a unit of this Product
-  ppu: number;
-  //cpu is the Cost we pay as the vendor to supply a unit of this Product
-  cpu: number;
+  ppu?: number;
+  //cpu is the Cost we pay as the vendor to suppoly a unit of this Product
+  cpu?: number;
   img?: File;
   type: ProductType;
   id?: number;

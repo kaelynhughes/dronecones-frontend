@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import { UserType } from "../../types";
+import { Product, UserType } from "../../types";
 import { useStore } from "../../store";
+import useGetInventory from "../../services/manager/useGetInventory";
 
 export default function ManageInventoryPage() {
   const user = useStore((state) => state.user);
+
+  const [inventory, setInventory] = useState<Product[] | null>();
+
+  const fetchInventory = async () => {
+    const fetchedInventory = await useGetInventory();
+    setInventory(fetchedInventory);
+  };
+
+  useEffect(() => {
+    fetchInventory;
+  }, []);
 
   return (
     <>

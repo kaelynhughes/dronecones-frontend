@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import useGetMenu from "../../services/customer/useGetMenu";
+import { Product } from "../../types";
 
 const optionButtonStyle = {
   backgroundColor: "DarkViolet",
@@ -41,27 +43,42 @@ function resetOptions() {
 }
 
 export default function MenuPage() {
-  return (
+  const [menu, setMenu] = useState<Product[] | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchMenu = async () => {
+    const menuInfo = await useGetMenu();
+    console.log("MENU INFO");
+    console.log(menuInfo);
+    if (menuInfo instanceof Error) {
+      setError(menuInfo);
+    } else {
+      setMenu(menuInfo);
+    }
+  };
+
+  useEffect(() => {
+    fetchMenu();
+  }, []);
+  return error ? (
+    <>
+      <h1>ERROR</h1>
+    </>
+  ) : (
     <>
       {/*TOPPINGS*/}
-      <h1 className="header-font">TOPPINGS</h1>
+      <h1 className="header-font" onClick={useGetMenu}>
+        TOPPINGS
+      </h1>
       {/*ADD/TAKEOFF option 1 BUTTON*/}
       <Button
-        id="button0"
         variant="contained"
         sx={optionButtonStyle}
         onClick={() => {
-          const buttonElement = document.getElementById("button0");
           if (toppings[0] == "") {
             toppings[0] = toppingOption_1;
-            if (buttonElement) {
-              buttonElement.style.backgroundColor = "#0000ff";
-            }
           } else {
             toppings[0] = "";
-            if (buttonElement) {
-              buttonElement.style.backgroundColor = "darkviolet";
-            }
           }
           console.log(toppings[0]);
         }}
@@ -69,7 +86,6 @@ export default function MenuPage() {
         {" "}
         {toppingOption_1}{" "}
       </Button>
-
       {/*ADD/TAKEOFF option 2 BUTTON*/}
       <Button
         variant="contained"
@@ -86,7 +102,6 @@ export default function MenuPage() {
         {" "}
         {toppingOption_2}{" "}
       </Button>
-
       {/*ADD/TAKEOFF option 3 BUTTON*/}
       <Button
         variant="contained"
@@ -103,7 +118,6 @@ export default function MenuPage() {
         {" "}
         {toppingOption_3}{" "}
       </Button>
-
       {/*FLAVORS*/}
       <h1 className="header-font">FLAVOR</h1>
       {/*ADD/TAKEOFF option 1 BUTTON*/}
@@ -130,7 +144,6 @@ export default function MenuPage() {
         {" "}
         {flavor_2}{" "}
       </Button>
-
       {/*ADD/TAKEOFF option 2 BUTTON*/}
       <Button
         variant="contained"
@@ -143,10 +156,8 @@ export default function MenuPage() {
         {" "}
         {flavor_3}{" "}
       </Button>
-
       {/*CONES*/}
       <h1 className="header-font">CONE</h1>
-
       {/*ADD/TAKEOFF option 1 BUTTON*/}
       <Button
         variant="contained"
@@ -159,7 +170,6 @@ export default function MenuPage() {
         {" "}
         {cone_1}{" "}
       </Button>
-
       {/*ADD/TAKEOFF option 2 BUTTON*/}
       <Button
         variant="contained"
@@ -172,7 +182,6 @@ export default function MenuPage() {
         {" "}
         {cone_2}{" "}
       </Button>
-
       {/*ADD/TAKEOFF option 3 BUTTON*/}
       <Button
         variant="contained"
@@ -185,15 +194,12 @@ export default function MenuPage() {
         {" "}
         {cone_3}{" "}
       </Button>
-
       {/*CART*/}
       <h1 className="header-font">CART</h1>
-
       {/*This button will post item to cart database and reset everything locally that has been pressed*/}
       <Button variant="contained" sx={optionButtonStyle}>
         Add to Cart
       </Button>
-
       <Button
         variant="contained"
         component={Link}
