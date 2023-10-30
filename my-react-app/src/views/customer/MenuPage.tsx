@@ -12,6 +12,27 @@ const optionButtonStyle = {
 {
   /*These constant variables should be instaciated from the database, for now these will be filled up based from defaults that I will set*/
 }
+
+const toppingsList = ["Fudge", "Strawberry", "Yeah"];
+const renderedItems = toppingsList.map((item) => {
+  return (
+    <Button sx={optionButtonStyle} key={item}
+    
+    onClick={() => {
+      const buttonElement = document.getElementById("button0");
+      for (let i = 0; i < toppingsList.length; i++) {
+        if(toppings[i] == ""){
+          toppings[i] = item;
+          console.log(toppings[i]);
+          break;
+        }
+      }
+    }}>
+      {item}
+      </Button>
+  );
+});
+
 const toppingOption_1 = "Fudge";
 const toppingOption_2 = "M&Ms";
 const toppingOption_3 = "Oreos";
@@ -28,7 +49,7 @@ const cone_3 = "Waffle";
   /*0 indicates required element has not been selected*/
 }
 let toppings = ["", "", ""];
-let flavor = "";
+let flavor = ["", "", ""];
 let cone = "";
 
 {
@@ -43,6 +64,7 @@ function resetOptions() {
 export default function MenuPage() {
   return (
     <>
+    {renderedItems}
       {/*TOPPINGS*/}
       <h1 className="header-font">TOPPINGS</h1>
       {/*ADD/TAKEOFF option 1 BUTTON*/}
