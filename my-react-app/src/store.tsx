@@ -14,7 +14,6 @@ type DroneConesState = {
 
 type DroneConesActions = {
   login: (user: User) => void;
-  logout: () => void;
 
   changeMode: (mode: UserType) => void;
   changePath: (path: string) => void;
@@ -29,7 +28,8 @@ type DroneConesActions = {
 
   loadDrones: (drones: Drone[]) => void;
   loadDrone: (drone: Drone) => void;
-  removeDrone: (drone: Drone) => void;
+  editDrone: (id: number, drone: Drone) => void;
+  removeDrone: (id: number) => void;
 
   loadHistory: (orders: Order[]) => void;
   addHistory: (order: Order) => void;
@@ -59,10 +59,6 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
       changePath: (path) => set(() => ({ appPath: path })),
 
       login: (user) => set(() => ({ user: user })),
-      logout: () =>
-        set(() => ({
-          user: { userType: UserType.GUEST, username: "Guest", isActive: true },
-        })),
 
       loadProducts: (products) =>
         set((state) => ({ products: [...state.products, ...products] })),
@@ -86,12 +82,13 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         set((state) => ({ drones: [...state.drones, ...drones] })),
       loadDrone: (drone) =>
         set((state) => ({ drones: [...state.drones, drone] })),
-      removeDrone: (drone) =>
+      editDrone: (id, drone) =>
         set((state) => ({
-          drones: state.drones.splice(
-            state.drones.findIndex((element) => element === drone),
-            1
-          ),
+          drones: [...state.drones.filter((drone) => drone.id !== id), drone],
+        })),
+      removeDrone: (id) =>
+        set((state) => ({
+          drones: state.drones.filter((drone) => drone.id !== id),
         })),
 
       loadHistory: (orders) =>
