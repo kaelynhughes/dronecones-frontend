@@ -13,14 +13,17 @@ const optionButtonStyle = {
   /*These constant variables should be instaciated from the database, for now these will be filled up based from defaults that I will set*/
 }
 
-const toppingsList = ["Fudge", "Strawberry", "Yeah"];
-const renderedItems = toppingsList.map((item) => {
+const toppingsList = ["Fudge", "M&Ms", "Oreos"];
+const flavorList = ["Strawberry","Vanilla","Chocolate"];
+const conesList = ["Cake","Sugar","Waffle"];
+
+const renderedToppingsList = toppingsList.map((item) => {
   return (
     <Button sx={optionButtonStyle} key={item}
     
     onClick={() => {
       const buttonElement = document.getElementById("button0");
-      for (let i = 0; i < toppingsList.length; i++) {
+      for (let i = 0; i < toppings.length; i++) {
         if(toppings[i] == ""){
           toppings[i] = item;
           console.log(toppings[i]);
@@ -33,23 +36,45 @@ const renderedItems = toppingsList.map((item) => {
   );
 });
 
-const toppingOption_1 = "Fudge";
-const toppingOption_2 = "M&Ms";
-const toppingOption_3 = "Oreos";
+const renderedFlavorList = flavorList.map((item) => {
+  return (
+    <Button sx={optionButtonStyle} key={item}
+    
+    onClick={() => {
+      const buttonElement = document.getElementById("button0");
+      for (let i = 0; i < scoops.length; i++) {
+        if(scoops[i] == ""){
+          scoops[i] = item;
+          console.log(scoops[i]);
+          break;
+        }
+      }
+    }}>
+      {item}
+      </Button>
+  );
+});
 
-const flavor_1 = "Strawberry";
-const flavor_2 = "Vanilla";
-const flavor_3 = "Chocolate";
+const renderedConesList = conesList.map((item) => {
+  return (
+    <Button sx={optionButtonStyle} key={item}
+    
+    onClick={() => {
+      const buttonElement = document.getElementById("button0");
+        cone = item;
+        console.log(item);
+    }}>
+      {item}
+      </Button>
+  );
+});
 
-const cone_1 = "Cake";
-const cone_2 = "Sugar";
-const cone_3 = "Waffle";
 
 {
   /*0 indicates required element has not been selected*/
 }
 let toppings = ["", "", ""];
-let flavor = ["", "", ""];
+let scoops = ["", "", ""];
 let cone = "";
 
 {
@@ -57,156 +82,25 @@ let cone = "";
 }
 function resetOptions() {
   toppings = ["", "", ""];
-  flavor = "";
+  scoops = ["", "", ""];
   cone = "";
 }
 
 export default function MenuPage() {
   return (
     <>
-    {renderedItems}
       {/*TOPPINGS*/}
       <h1 className="header-font">TOPPINGS</h1>
-      {/*ADD/TAKEOFF option 1 BUTTON*/}
-      <Button
-        id="button0"
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          const buttonElement = document.getElementById("button0");
-          if (toppings[0] == "") {
-            toppings[0] = toppingOption_1;
-            if (buttonElement) {
-              buttonElement.style.backgroundColor = "#0000ff";
-            }
-          } else {
-            toppings[0] = "";
-            if (buttonElement) {
-              buttonElement.style.backgroundColor = "darkviolet";
-            }
-          }
-          console.log(toppings[0]);
-        }}
-      >
-        {" "}
-        {toppingOption_1}{" "}
-      </Button>
-
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          if (toppings[1] == "") {
-            toppings[1] = toppingOption_2;
-          } else {
-            toppings[1] = "";
-          }
-          console.log(toppings[1]);
-        }}
-      >
-        {" "}
-        {toppingOption_2}{" "}
-      </Button>
-
-      {/*ADD/TAKEOFF option 3 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          if (toppings[2] == "") {
-            toppings[2] = toppingOption_3;
-          } else {
-            toppings[2] = "";
-          }
-          console.log(toppings[2]);
-        }}
-      >
-        {" "}
-        {toppingOption_3}{" "}
-      </Button>
+      {renderedToppingsList}
 
       {/*FLAVORS*/}
       <h1 className="header-font">FLAVOR</h1>
-      {/*ADD/TAKEOFF option 1 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          flavor = flavor_1;
-          console.log(flavor);
-        }}
-      >
-        {" "}
-        {flavor_1}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          flavor = flavor_2;
-          console.log(flavor);
-        }}
-      >
-        {" "}
-        {flavor_2}{" "}
-      </Button>
-
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          flavor = flavor_3;
-          console.log(flavor);
-        }}
-      >
-        {" "}
-        {flavor_3}{" "}
-      </Button>
+      {renderedFlavorList}
 
       {/*CONES*/}
       <h1 className="header-font">CONE</h1>
-
-      {/*ADD/TAKEOFF option 1 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          cone = cone_1;
-          console.log(cone);
-        }}
-      >
-        {" "}
-        {cone_1}{" "}
-      </Button>
-
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          cone = cone_2;
-          console.log(cone);
-        }}
-      >
-        {" "}
-        {cone_2}{" "}
-      </Button>
-
-      {/*ADD/TAKEOFF option 3 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          cone = cone_3;
-          console.log(cone);
-        }}
-      >
-        {" "}
-        {cone_3}{" "}
-      </Button>
+      {renderedConesList}
+      
 
       {/*CART*/}
       <h1 className="header-font">CART</h1>
