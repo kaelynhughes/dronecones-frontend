@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { Drone, UserType } from "../../types";
@@ -21,7 +21,9 @@ import {
   Switch,
   IconButton,
   useTheme,
+  Tooltip,
 } from "@mui/material";
+import { DroneDialog } from "./DroneDialog";
 
 const tableCellStyleHeader = {
   color: "white",
@@ -37,6 +39,11 @@ const tableCellStyle = {
 
 export default function ManageDronesPage() {
   const theme = useTheme();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [currentDroneId, setCurrentDroneId] = useState(-1);
+
+  const open = () => setDialogOpen(true);
+  const close = () => setDialogOpen(false);
 
   const user = useStore((state) => state.user);
   const drones = useStore((state) => state.drones);
@@ -76,10 +83,19 @@ export default function ManageDronesPage() {
                 }}
                 color="inherit"
                 variant="outlined"
+                onClick={() => {
+                  setCurrentDroneId(-1);
+                  setDialogOpen(true);
+                }}
               >
                 <AddIcon />
                 New Drone
               </Button>
+              <DroneDialog
+                open={isDialogOpen}
+                onClose={close}
+                droneId={currentDroneId}
+              />
             </Toolbar>
           </AppBar>
 
@@ -138,9 +154,9 @@ export default function ManageDronesPage() {
               <TableBody>
                 {drones
                   .sort((a: Drone, b: Drone) => {
-                    if (a.name < b.name) {
+                    if (a.earnings > b.earnings) {
                       return -1;
-                    } else if (a.name > b.name) {
+                    } else if (a.earnings < b.earnings) {
                       return 1;
                     }
                     return 0;
@@ -164,28 +180,34 @@ export default function ManageDronesPage() {
                         {drone.orderCount}
                       </TableCell>
                       <TableCell align="center" sx={tableCellStyle}>
-                        {(drone?.earnings / 100).toLocaleString("en-US", {
+                        {(drone.earnings / 100).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
-                        }) || 0}
+                        })}
                       </TableCell>
                       <TableCell sx={tableCellStyle} align="right">
-                        <Switch
-                          inputProps={{ "aria-label": "controlled" }}
-                          name="active"
-                          checked={drone.isActive}
-                          onChange={() => {
-                            const updateDrone = { ...drone };
-                            updateDrone.isActive = !drone.isActive;
-                            if (drone.id) {
-                              editDrone(drone.id, updateDrone);
-                            }
-                          }}
-                        />
+                        <Tooltip title="Drone Available Off/On">
+                          <Switch
+                            inputProps={{ "aria-label": "controlled" }}
+                            name="active"
+                            checked={drone.isActive}
+                            onChange={() => {
+                              const updateDrone = { ...drone };
+                              updateDrone.isActive = !drone.isActive;
+                              if (drone.id) {
+                                editDrone(drone.id, updateDrone);
+                              }
+                            }}
+                          />
+                        </Tooltip>
+
                         <IconButton
                           aria-label="edit"
                           color="primary"
-                          onClick={() => {}}
+                          onClick={() => {
+                            setCurrentDroneId(drone.id || -1);
+                            setDialogOpen(true);
+                          }}
                         >
                           <EditIcon />
                         </IconButton>

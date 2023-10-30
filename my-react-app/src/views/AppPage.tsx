@@ -36,7 +36,7 @@ export default function AppPage() {
   const { loadDrones } = useStore();
   const { loadHistory } = useStore();
   const { addConesToCart } = useStore();
-  const { logout } = useStore();
+  const { clearState } = useStore();
 
   const optionButtonStyle = {
     backgroundColor: `${theme.palette.primary.main}`,
@@ -183,7 +183,7 @@ export default function AppPage() {
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    logout();
+                    clearState();
                     navigate("/");
                   }}
                   size="small"
@@ -542,7 +542,7 @@ const mockDrones = [
     isActive: true,
     size: 3,
     orderCount: 11,
-    earnings: 3400,
+    earnings: 3420,
     id: 1,
   },
   {
@@ -550,7 +550,7 @@ const mockDrones = [
     isActive: false,
     size: 2,
     orderCount: 5,
-    earnings: 1800,
+    earnings: 1853,
     id: 2,
   },
   {
@@ -558,8 +558,32 @@ const mockDrones = [
     isActive: true,
     size: 1,
     orderCount: 17,
-    earnings: 5900,
+    earnings: 2900,
     id: 3,
+  },
+  {
+    name: "Quad-Copter",
+    isActive: true,
+    size: 3,
+    orderCount: 4,
+    earnings: 879,
+    id: 4,
+  },
+  {
+    name: "Mini",
+    isActive: true,
+    size: 1,
+    orderCount: 8,
+    earnings: 950,
+    id: 5,
+  },
+  {
+    name: "Jerry",
+    isActive: false,
+    size: 2,
+    orderCount: 3,
+    earnings: 324,
+    id: 6,
   },
 ];
 

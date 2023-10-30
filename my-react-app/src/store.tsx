@@ -14,7 +14,6 @@ type DroneConesState = {
 
 type DroneConesActions = {
   login: (user: User) => void;
-  logout: () => void;
 
   changeMode: (mode: UserType) => void;
   changePath: (path: string) => void;
@@ -60,10 +59,6 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
       changePath: (path) => set(() => ({ appPath: path })),
 
       login: (user) => set(() => ({ user: user })),
-      logout: () =>
-        set(() => ({
-          user: { userType: UserType.GUEST, username: "Guest", isActive: true },
-        })),
 
       loadProducts: (products) =>
         set((state) => ({ products: [...state.products, ...products] })),
