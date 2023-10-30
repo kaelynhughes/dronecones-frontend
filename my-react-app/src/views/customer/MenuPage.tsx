@@ -5,7 +5,7 @@ import useGetMenu from "../../services/customer/useGetMenu";
 import { Product } from "../../types";
 
 const optionButtonStyle = {
-  backgroundColor: "purple",
+  backgroundColor: "DarkViolet",
   fontFamily: "pixelfont",
   textShadow: "0 0 10px rgba(0, 153, 255, 0.7)",
   color: "#ffff",

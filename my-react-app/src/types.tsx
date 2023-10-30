@@ -1,7 +1,9 @@
 export type Drone = {
-  name: String;
+  name: string;
   isActive: boolean;
   size: number;
+  earnings: number;
+  orderCount: number;
   id: number;
 };
 
@@ -38,7 +40,7 @@ export enum ProductType {
 }
 
 export type User = {
-  username: String;
+  username: string;
   userType: UserType;
   isActive: boolean;
   id?: number;

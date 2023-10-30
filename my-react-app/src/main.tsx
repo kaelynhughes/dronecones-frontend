@@ -26,6 +26,8 @@ import DroneHistoryPage from "./views/employee/DroneHistoryPage";
 import ManageInventoryPage from "./views/manager/ManageInventoryPage";
 import ManageUsersPage from "./views/manager/ManageUsersPage";
 import ManagerHistoryPage from "./views/manager/ManagerHistoryPage";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from "@mui/material";
 
 const router = createBrowserRouter([
   {
@@ -101,13 +103,43 @@ const router = createBrowserRouter([
   },
 ]);
 
+const theme = createTheme({
+  palette: {
+    mode: "light",
+    primary: {
+      main: "#ff188b",
+      contrastText: "white",
+    },
+    secondary: {
+      main: "#fc7303",
+      contrastText: "white",
+    },
+    background: {
+      default: "#2f005a",
+      paper: "rgba(97, 29, 159, 0.65)",
+    },
+    divider: "rgba(0,169,255,0.39)",
+    error: {
+      main: "#c11212",
+    },
+    info: {
+      main: "#00d9ff",
+    },
+    success: {
+      main: "#27b12d",
+    },
+  },
+});
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     {/*Vecteezy said we need this. If we don't use their photos we can delete this*/}
     <a hidden href="https://www.vecteezy.com/free-photos">
       Free Stock photos by Vecteezy
     </a>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
 

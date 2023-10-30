@@ -1,39 +1,56 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserType } from "../types";
 import { useStore } from "../store";
 
-
-
-
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { login } = useStore();
+  const { changeMode } = useStore();
+  const { changePath } = useStore();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   function logIn() {
     //TODO remove console
-    console.log("The password and username are now in the variables and a request is ready to be sent to the api");
+    console.log(
+      "The password and username are now in the variables and a request is ready to be sent to the api"
+    );
     //TODO some logic to detect user via api that uses case statement to push to correct page
     navigate("/app/drone-quickview");
   }
 
   return (
     <>
-
-<div className="dialogue-container">
+      <div className="dialogue-container">
         <div className="login">
           <div>Login</div>
-          <input type="username" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username"/>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"/>
+          <input
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
           <div className="login-controls">
-            <Button variant="contained" id="fullbutton" className="loginbutton button" onClick={logIn}>Log in</Button>
+            <Button
+              variant="contained"
+              id="fullbutton"
+              className="loginbutton button"
+              onClick={logIn}
+            >
+              Log in
+            </Button>
           </div>
         </div>
       </div>
-
 
       <h1>
         Log In, allows users to enter credentials, links to Customer, Employee
@@ -43,12 +60,13 @@ export default function LoginPage() {
         variant="contained"
         onClick={() => {
           login({
-            username: "TestConeKitten",
+            username: "TestConer",
             userType: UserType.CUSTOMER,
             isActive: true,
             id: 0,
           });
           changeMode(UserType.CUSTOMER);
+          changePath("app/menu");
           navigate("/app/menu");
         }}
       >
@@ -58,12 +76,13 @@ export default function LoginPage() {
         variant="contained"
         onClick={() => {
           login({
-            username: "TestDroneDaddy",
+            username: "TestDroner",
             userType: UserType.EMPLOYEE,
             isActive: true,
             id: 1,
           });
           changeMode(UserType.EMPLOYEE);
+          changePath("app/drone-quickview");
           navigate("/app/drone-quickview");
         }}
       >
@@ -73,12 +92,13 @@ export default function LoginPage() {
         variant="contained"
         onClick={() => {
           login({
-            username: "TestManagerMommy",
+            username: "TestOwner",
             userType: UserType.MANAGER,
             isActive: true,
             id: 2,
           });
           changeMode(UserType.MANAGER);
+          changePath("app/manager-quickview");
           navigate("/app/manager-quickview");
         }}
       >
