@@ -116,6 +116,7 @@ const theme = createTheme({
     },
     background: {
       default: "#2f005a",
+      paper: "rgba(97, 29, 159, 0.65)",
     },
     divider: "rgba(0,169,255,0.39)",
     error: {

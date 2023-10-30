@@ -60,7 +60,7 @@ export default function LoginPage() {
         variant="contained"
         onClick={() => {
           login({
-            username: "TestConeKitten",
+            username: "TestConer",
             userType: UserType.CUSTOMER,
             isActive: true,
             id: 0,
@@ -76,7 +76,7 @@ export default function LoginPage() {
         variant="contained"
         onClick={() => {
           login({
-            username: "TestDroneDaddy",
+            username: "TestDroner",
             userType: UserType.EMPLOYEE,
             isActive: true,
             id: 1,
@@ -92,7 +92,7 @@ export default function LoginPage() {
         variant="contained"
         onClick={() => {
           login({
-            username: "TestManagerMommy",
+            username: "TestOwner",
             userType: UserType.MANAGER,
             isActive: true,
             id: 2,

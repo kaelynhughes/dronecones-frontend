@@ -1,7 +1,9 @@
 export type Drone = {
-  name: String;
+  name: string;
   isActive: boolean;
   size: number;
+  earnings: number;
+  orderCount: number;
   id?: number;
 };
 
@@ -20,11 +22,11 @@ export type Order = {
 };
 
 export type Product = {
-  name: String;
+  name: string;
   stock: number;
   //ppu is the Price the customer will pay for a unit of this Product
   ppu: number;
-  //cpu is the Cost we pay as the vendor to suppoly a unit of this Product
+  //cpu is the Cost we pay as the vendor to supply a unit of this Product
   cpu: number;
   img?: File;
   type: ProductType;
@@ -38,7 +40,7 @@ export enum ProductType {
 }
 
 export type User = {
-  username: String;
+  username: string;
   userType: UserType;
   isActive: boolean;
   id?: number;

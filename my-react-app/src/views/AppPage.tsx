@@ -36,7 +36,7 @@ export default function AppPage() {
   const { loadDrones } = useStore();
   const { loadHistory } = useStore();
   const { addConesToCart } = useStore();
-  const { logout } = useStore();
+  const { clearState } = useStore();
 
   const optionButtonStyle = {
     backgroundColor: `${theme.palette.primary.main}`,
@@ -64,9 +64,9 @@ export default function AppPage() {
             height: "65px",
           }}
         >
-          <Container maxWidth="xl">
-            <Toolbar disableGutters>
-              <IcecreamOutlinedIcon sx={{ mr: 1 }} />
+          <Container maxWidth={false}>
+            <Toolbar sx={{ width: "100%" }} disableGutters>
+              <IcecreamOutlinedIcon sx={{ mr: 1, align: "left" }} />
 
               <div>
                 <span
@@ -183,7 +183,7 @@ export default function AppPage() {
                 <Button
                   variant="outlined"
                   onClick={() => {
-                    logout();
+                    clearState();
                     navigate("/");
                   }}
                   size="small"
@@ -537,9 +537,54 @@ const mockCones = [
 ];
 
 const mockDrones = [
-  { name: "Big Boss", isActive: true, size: 3, id: 1 },
-  { name: "2-Cone Terry", isActive: false, size: 2, id: 2 },
-  { name: "Lightweight", isActive: true, size: 1, id: 3 },
+  {
+    name: "Big Boss",
+    isActive: true,
+    size: 3,
+    orderCount: 11,
+    earnings: 3420,
+    id: 1,
+  },
+  {
+    name: "2-Cone Terry",
+    isActive: false,
+    size: 2,
+    orderCount: 5,
+    earnings: 1853,
+    id: 2,
+  },
+  {
+    name: "Lightweight",
+    isActive: true,
+    size: 1,
+    orderCount: 17,
+    earnings: 2900,
+    id: 3,
+  },
+  {
+    name: "Quad-Copter",
+    isActive: true,
+    size: 3,
+    orderCount: 4,
+    earnings: 879,
+    id: 4,
+  },
+  {
+    name: "Mini",
+    isActive: true,
+    size: 1,
+    orderCount: 8,
+    earnings: 950,
+    id: 5,
+  },
+  {
+    name: "Jerry",
+    isActive: false,
+    size: 2,
+    orderCount: 3,
+    earnings: 324,
+    id: 6,
+  },
 ];
 
 const mockOrders = [
