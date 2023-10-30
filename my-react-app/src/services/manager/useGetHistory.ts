@@ -1,7 +1,4 @@
-import { BACKEND_URL_DEV } from "../../constants";
-import { useStore } from "../../store";
 import { Order, ProductType } from "../../types";
-import axios from "../axios";
 
 const dummyData: Order[] = [
   {
@@ -81,14 +78,6 @@ const dummyData: Order[] = [
 ];
 
 export default () => {
-  axios
-    .get(
-      `${BACKEND_URL_DEV}/customer/${useStore(
-        (state) => state.user.id
-      )}/history`
-    )
-    .then((response) => {
-      console.log(response);
-    });
+  // axios call for manager history
   return dummyData;
 };
