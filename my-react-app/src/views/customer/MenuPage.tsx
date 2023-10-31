@@ -18,75 +18,31 @@ const toppingsList = ["Fudge", "M&Ms", "Oreos"];
 const flavorList = ["Strawberry","Vanilla","Chocolate"];
 const conesList = ["Cake","Sugar","Waffle"];
 
-
-
-
-const renderedFlavorList = flavorList.map((item) => {
-  return (
-    <Button sx={optionButtonStyle} key={item}
-    
-    onClick={() => {
-      const buttonElement = document.getElementById("button0");
-      for (let i = 0; i < scoops.length; i++) {
-        if(scoops[i] == ""){
-          scoops[i] = item;
-          console.log(scoops[i]);
-          break;
-        }
-      }
-    }}>
-      {item}
-      </Button>
-  );
-});
-
-const renderedConesList = conesList.map((item) => {
-  return (
-    <Button sx={optionButtonStyle} key={item}
-    
-    onClick={() => {
-      const buttonElement = document.getElementById("button0");
-        cone = item;
-        console.log(item);
-    }}>
-      {item}
-      </Button>
-  );
-});
-
-
-{
-  /*empty string indicates element has not been selected*/
-}
-let toppings = ["", "", ""];
-let scoops = ["", "", ""];
-let cone = "";
-
- 
-
 {
   /*Resets temporary variables when building a cone*/
 }
-function resetOptions() {
-  toppings = ["", "", ""];
-  scoops = ["", "", ""];
-  cone = "";
-}
+
+
+
 
 export default function MenuPage() {
-  const [selectedToppings, setselectedToppings] = useState(toppings);
+  const [selectedToppings, setselectedToppings] = useState(["","",""]);
+  const [selectedFlavors, setselectedFlavor] = useState(["","",""]);
+  const [selectedCone, setselectedCone] = useState("");
 
   const renderedToppingsList = toppingsList.map((item) => {
     return (
+      
       <Button sx={optionButtonStyle} key={item}
       
       onClick={() => {
+        const newToppings = [...selectedToppings];
         const buttonElement = document.getElementById("button0");
-        for (let i = 0; i < toppings.length; i++) {
-          if(toppings[i] == ""){
-            toppings[i] = item;
-            setselectedToppings(toppings);
-            console.log(toppings[i]);
+        for (let i = 0; i < newToppings.length; i++) {
+          if(newToppings[i] == ""){
+            newToppings[i] = item;
+            setselectedToppings(newToppings);
+            console.log(newToppings[i]);
             break;
           }
         }
@@ -96,6 +52,40 @@ export default function MenuPage() {
     );
   });
 
+  const renderedFlavorList = flavorList.map((item) => {
+    return (
+      <Button sx={optionButtonStyle} key={item}
+      
+      onClick={() => {
+        const newScoops = [...selectedFlavors];
+        const buttonElement = document.getElementById("button0");
+        for (let i = 0; i < newScoops.length; i++) {
+          if(newScoops[i] == ""){
+            newScoops[i] = item;
+            setselectedFlavor(newScoops);
+            console.log(newScoops[i]);
+            break;
+          }
+        }
+      }}>
+        {item}
+        </Button>
+    );
+  });
+
+  const renderedConesList = conesList.map((item) => {
+    return (
+      <Button sx={optionButtonStyle} key={item}
+      
+      onClick={() => {
+        const buttonElement = document.getElementById("button0");
+          setselectedCone(item);
+          console.log(item);
+      }}>
+        {item}
+        </Button>
+    );
+  });
   return (
     <>
 
@@ -143,7 +133,9 @@ export default function MenuPage() {
       <h1 className="header-font">My Toppings</h1>
         <p>{selectedToppings}</p>
         <h1 className="header-font">My Scoops</h1>
+        <p>{selectedFlavors}</p>
         <h1 className="header-font">Selected Cone</h1>
+        <p>{selectedCone}</p>
 
               {/*This button will post item to cart database and reset everything locally that has been pressed*/}
       <Button variant="contained" sx={optionButtonStyle}>
