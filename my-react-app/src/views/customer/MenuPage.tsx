@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import Card from "@mui/material/Card"
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { ListItem } from "@mui/material";
 
 const optionButtonStyle = {
   backgroundColor: "DarkViolet",
@@ -30,6 +31,7 @@ export default function MenuPage() {
   const [selectedFlavors, setselectedFlavor] = useState(["","",""]);
   const [selectedCone, setselectedCone] = useState("");
 
+  {/*Populate topping options*/}
   const renderedToppingsList = toppingsList.map((item) => {
     return (
       
@@ -52,6 +54,7 @@ export default function MenuPage() {
     );
   });
 
+    {/*Populate flavor options*/}
   const renderedFlavorList = flavorList.map((item) => {
     return (
       <Button sx={optionButtonStyle} key={item}
@@ -73,6 +76,7 @@ export default function MenuPage() {
     );
   });
 
+{/*Populate cone options*/}
   const renderedConesList = conesList.map((item) => {
     return (
       <Button sx={optionButtonStyle} key={item}
@@ -86,8 +90,11 @@ export default function MenuPage() {
         </Button>
     );
   });
+
   return (
     <>
+
+    {/*Populate flavor options*/}
 
     
     <div style ={{display: "flex"}}>
@@ -130,12 +137,20 @@ export default function MenuPage() {
         paddingRight:"100px"
       }}> 
       <div className="centerFormat">
-      <h1 className="header-font">My Toppings</h1>
-        <p>{selectedToppings}</p>
-        <h1 className="header-font">My Scoops</h1>
-        <p>{selectedFlavors}</p>
-        <h1 className="header-font">Selected Cone</h1>
-        <p>{selectedCone}</p>
+        {/*Display selected toppings*/}
+      <h1 style={{margin:"10px"}} className="header-font">My Toppings</h1>
+        <div >{selectedToppings.map((item) => (
+        <p key={item} style={{margin:"10px"}}  className="pixel-font">{item}</p>
+      ))}</div>
+
+      {/*Display selected scoops*/}
+        <h1 style={{marginTop:"5px"}} className="header-font">My Scoops</h1>
+        <div style={{margin:"0px",border:"0px",padding:"0px"}} >{selectedFlavors.map((item) => (
+        <p key={item} className="pixel-font">{item}</p>
+      ))}</div>
+
+        <h1 style={{margin:"10px"}} className="header-font">Selected Cone</h1>
+        <p className="pixel-font">{selectedCone}</p>
 
               {/*This button will post item to cart database and reset everything locally that has been pressed*/}
       <Button variant="contained" sx={optionButtonStyle}>
@@ -143,14 +158,8 @@ export default function MenuPage() {
       </Button>
       <br></br>
       </div>
-        
-        
       </Card>
-
     </div>
-
-
-
     </div>
       
     </>
