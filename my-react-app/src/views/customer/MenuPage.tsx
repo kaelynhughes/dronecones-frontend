@@ -28,7 +28,7 @@ const conesList = ["Cake","Sugar","Waffle"];
 
 export default function MenuPage() {
   const [selectedToppings, setselectedToppings] = useState(["","",""]);
-  const [selectedFlavors, setselectedFlavor] = useState(["","",""]);
+  const [selectedFlavors, setselectedFlavors] = useState(["","",""]);
   const [selectedCone, setselectedCone] = useState("");
 
   {/*Populate topping options*/}
@@ -65,7 +65,7 @@ export default function MenuPage() {
         for (let i = 0; i < newScoops.length; i++) {
           if(newScoops[i] == ""){
             newScoops[i] = item;
-            setselectedFlavor(newScoops);
+            setselectedFlavors(newScoops);
             console.log(newScoops[i]);
             break;
           }
@@ -91,11 +91,29 @@ export default function MenuPage() {
     );
   });
 
+  function showSelectedOptions( list:string[]){
+  
+    let display = "";
+    for(let i = 0; i< list.length; i++){
+        if(i == 0){
+          display = list[i];
+
+        }
+        else{display = display + " " + list[i]}
+    }
+
+    if(list[0] == "") display = "None";
+    return (
+      <p className="pixel-font">
+        {display}
+      </p>
+    );
+  };
+  const dynamicSelectedToppings = showSelectedOptions(selectedToppings);
+  const dynamicSelectedFlavors = showSelectedOptions(selectedFlavors);
+
   return (
     <>
-
-    {/*Populate flavor options*/}
-
     
     <div style ={{display: "flex"}}>
 {/*LHS Menu Side*/}
@@ -139,21 +157,37 @@ export default function MenuPage() {
       <div className="centerFormat">
         {/*Display selected toppings*/}
       <h1 style={{margin:"10px"}} className="header-font">My Toppings</h1>
-        <div >{selectedToppings.map((item) => (
-        <p key={item} style={{margin:"10px"}}  className="pixel-font">{item}</p>
-      ))}</div>
+        <div >{dynamicSelectedToppings}</div>
 
       {/*Display selected scoops*/}
-        <h1 style={{marginTop:"5px"}} className="header-font">My Scoops</h1>
-        <div style={{margin:"0px",border:"0px",padding:"0px"}} >{selectedFlavors.map((item) => (
-        <p key={item} className="pixel-font">{item}</p>
-      ))}</div>
+        <h1 style={{margin:"5px"}} className="header-font">My Scoops</h1>
+        <div style={{margin:"0px",border:"0px",padding:"0px"}} >{dynamicSelectedFlavors}</div>
 
         <h1 style={{margin:"10px"}} className="header-font">Selected Cone</h1>
         <p className="pixel-font">{selectedCone}</p>
 
-              {/*This button will post item to cart database and reset everything locally that has been pressed*/}
-      <Button variant="contained" sx={optionButtonStyle}>
+      {/*This button will post item to cart database and reset everything locally that has been pressed*/}
+      <Button variant="contained" sx={optionButtonStyle} onClick={() => {
+      //if(selectedFlavors[0] != "" && selectedCone != ""){
+        
+
+        console.log(selectedFlavors.length);
+        {/*-----SEND DATA TO CART HERE--------*/}
+
+        const scoops = selectedFlavors;
+
+        for(let i = 0; i < selectedFlavors.length;i++){
+          scoops[i] = '';
+          
+       // }
+        setselectedToppings(["","",""]);
+        setselectedFlavors(["","",""]);
+        setselectedCone("");
+      } 
+      //else {console.log("Invalid Cone");}
+      console.log(scoops);
+      console.log(selectedFlavors);
+      }}>
         Add to Cart
       </Button>
       <br></br>
