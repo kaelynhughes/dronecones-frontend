@@ -14,6 +14,7 @@ const dummyData: Order[] = [
     ],
     totalPrice: 500,
     timestamp: new Date(),
+    id: 1,
   },
   {
     cones: [
@@ -47,6 +48,7 @@ const dummyData: Order[] = [
     ],
     totalPrice: 1800,
     timestamp: new Date(),
+    id: 2,
   },
   {
     cones: [
@@ -67,6 +69,7 @@ const dummyData: Order[] = [
     ],
     totalPrice: 1000,
     timestamp: new Date(),
+    id: 3,
   },
 ];
 
