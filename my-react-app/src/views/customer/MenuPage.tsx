@@ -90,6 +90,7 @@ export default function MenuPage() {
         </Button>
     );
   });
+  
 
   function showSelectedOptions( list:string[]){
   
@@ -156,11 +157,23 @@ export default function MenuPage() {
       }}> 
       <div className="centerFormat">
         {/*Display selected toppings*/}
-      <h1 style={{margin:"10px"}} className="header-font">My Toppings</h1>
+        <div style={{display:"flex"}}>
+        <h1 style={{margin:"10px"}} className="header-font">My Toppings</h1>
+        <Button sx={optionButtonStyle} style={{height:"40px",margin:"10px"}} onClick={() => {
+        
+        setselectedToppings(["","",""])
+
+        }}>clear</Button>
+        </div>
         <div >{dynamicSelectedToppings}</div>
 
       {/*Display selected scoops*/}
-        <h1 style={{margin:"5px"}} className="header-font">My Scoops</h1>
+      <div style={{display:"flex"}}>
+      <h1 style={{margin:"5px"}} className="header-font">My Scoops</h1>
+      <Button sx={optionButtonStyle} style={{height:"40px",margin:"5px"}} onClick={() => {
+        setselectedFlavors(["","",""])
+        }}>clear</Button>
+      </div>
         <div style={{margin:"0px",border:"0px",padding:"0px"}} >{dynamicSelectedFlavors}</div>
 
         <h1 style={{margin:"10px"}} className="header-font">Selected Cone</h1>
@@ -168,25 +181,17 @@ export default function MenuPage() {
 
       {/*This button will post item to cart database and reset everything locally that has been pressed*/}
       <Button variant="contained" sx={optionButtonStyle} onClick={() => {
-      //if(selectedFlavors[0] != "" && selectedCone != ""){
+      if(selectedFlavors[0] != "" && selectedCone != ""){
         
 
-        console.log(selectedFlavors.length);
-        {/*-----SEND DATA TO CART HERE--------*/}
+        {/*-----SEND DATA TO CART HERE AND CLEAR OPTIONS--------*/}
 
-        const scoops = selectedFlavors;
-
-        for(let i = 0; i < selectedFlavors.length;i++){
-          scoops[i] = '';
-          
-       // }
         setselectedToppings(["","",""]);
         setselectedFlavors(["","",""]);
         setselectedCone("");
-      } 
-      //else {console.log("Invalid Cone");}
-      console.log(scoops);
-      console.log(selectedFlavors);
+        
+      } else {console.log("Invalid Cone");}
+      
       }}>
         Add to Cart
       </Button>
