@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { useStore } from "../../store";
-import { UserType } from "../../types";
+import { Drone, UserType } from "../../types";
+import useGetDrones from "../../services/employee/useGetDrones";
 
 export default function DroneHistoryPage() {
   const user = useStore((state) => state.user);
+  const [drones, setDrones] = useState<Drone[] | null>();
 
+  const fetchDrones = async () => {
+    const dronesList = await useGetDrones();
+    setDrones(dronesList);
+  };
+
+  useEffect(() => {
+    fetchDrones();
+  }, []);
   return (
     <>
       {(user.userType === UserType.EMPLOYEE ||

@@ -1,8 +1,12 @@
-import React,{useState} from "react";
-import Card from "@mui/material/Card"
+
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import { ListItem } from "@mui/material";
+import useGetMenu from "../../services/customer/useGetMenu";
+import { Product } from "../../types";
+import Card from "@mui/material/Card"
+
+
 
 const optionButtonStyle = {
   backgroundColor: "DarkViolet",
@@ -27,6 +31,11 @@ const conesList = ["Cake","Sugar","Waffle"];
 
 
 export default function MenuPage() {
+
+  const [menu, setMenu] = useState<Product[] | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+    
+    
   const [selectedToppings, setselectedToppings] = useState(["","",""]);
   const [selectedFlavors, setselectedFlavors] = useState(["","",""]);
   const [selectedCone, setselectedCone] = useState("");
@@ -113,6 +122,28 @@ export default function MenuPage() {
   const dynamicSelectedToppings = showSelectedOptions(selectedToppings);
   const dynamicSelectedFlavors = showSelectedOptions(selectedFlavors);
 
+  const fetchMenu = async () => {
+    const menuInfo = await useGetMenu();
+    console.log("MENU INFO");
+    console.log(menuInfo);
+    if (menuInfo instanceof Error) {
+      setError(menuInfo);
+    } else {
+      setMenu(menuInfo);
+    }
+  };
+
+  useEffect(() => {
+    fetchMenu();
+  }, []);
+  return error ? (
+    <>
+      <h1>ERROR</h1>
+    </>
+  ) : (
+    <>
+   
+
   return (
     <>
     
@@ -134,8 +165,6 @@ export default function MenuPage() {
 
       {/*CART*/}
       <h1 className="header-font">CART</h1>
-
-
 
       <Button
         variant="contained"
