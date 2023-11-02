@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Drone, UserType } from "../../types";
 import { useStore } from "../../store";
 import useGetDrones from "../../services/employee/useGetDrones";
-import { Drone } from "../../types";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import AddIcon from "@mui/icons-material/Add";
@@ -43,6 +42,7 @@ export default function ManageDronesPage() {
   const theme = useTheme();
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [currentDroneId, setCurrentDroneId] = useState(-1);
+  const [dronesList, setDronesList] = useState<Drone[]>([]);
 
   const open = () => setDialogOpen(true);
   const close = () => setDialogOpen(false);
@@ -53,6 +53,15 @@ export default function ManageDronesPage() {
 
   const { removeDrone } = useStore();
   const { editDrone } = useStore();
+
+  const fetchDrones = async () => {
+    const fetchedDrones: Drone[] = await useGetDrones();
+    setDronesList(fetchedDrones);
+  };
+
+  useEffect(() => {
+    fetchDrones();
+  }, []);
 
   return (
     <>
