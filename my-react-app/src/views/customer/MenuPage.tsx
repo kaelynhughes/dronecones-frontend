@@ -1,8 +1,12 @@
+
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import useGetMenu from "../../services/customer/useGetMenu";
 import { Product } from "../../types";
+import Card from "@mui/material/Card"
+
+
 
 const optionButtonStyle = {
   backgroundColor: "DarkViolet",
@@ -14,37 +18,109 @@ const optionButtonStyle = {
 {
   /*These constant variables should be instaciated from the database, for now these will be filled up based from defaults that I will set*/
 }
-const toppingOption_1 = "Fudge";
-const toppingOption_2 = "M&Ms";
-const toppingOption_3 = "Oreos";
 
-const flavor_1 = "Strawberry";
-const flavor_2 = "Vanilla";
-const flavor_3 = "Chocolate";
-
-const cone_1 = "Cake";
-const cone_2 = "Sugar";
-const cone_3 = "Waffle";
-
-{
-  /*0 indicates required element has not been selected*/
-}
-let toppings = ["", "", ""];
-let flavor = "";
-let cone = "";
+const toppingsList = ["Fudge", "M&Ms", "Oreos"];
+const flavorList = ["Strawberry","Vanilla","Chocolate"];
+const conesList = ["Cake","Sugar","Waffle"];
 
 {
   /*Resets temporary variables when building a cone*/
 }
-function resetOptions() {
-  toppings = ["", "", ""];
-  flavor = "";
-  cone = "";
-}
+
+
+
 
 export default function MenuPage() {
+
   const [menu, setMenu] = useState<Product[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
+    
+    
+  const [selectedToppings, setselectedToppings] = useState(["","",""]);
+  const [selectedFlavors, setselectedFlavors] = useState(["","",""]);
+  const [selectedCone, setselectedCone] = useState("");
+
+  {/*Populate topping options*/}
+  const renderedToppingsList = toppingsList.map((item) => {
+    return (
+      
+      <Button sx={optionButtonStyle} key={item}
+      
+      onClick={() => {
+        const newToppings = [...selectedToppings];
+        const buttonElement = document.getElementById("button0");
+        for (let i = 0; i < newToppings.length; i++) {
+          if(newToppings[i] == ""){
+            newToppings[i] = item;
+            setselectedToppings(newToppings);
+            console.log(newToppings[i]);
+            break;
+          }
+        }
+      }}>
+        {item}
+        </Button>
+    );
+  });
+
+    {/*Populate flavor options*/}
+  const renderedFlavorList = flavorList.map((item) => {
+    return (
+      <Button sx={optionButtonStyle} key={item}
+      
+      onClick={() => {
+        const newScoops = [...selectedFlavors];
+        const buttonElement = document.getElementById("button0");
+        for (let i = 0; i < newScoops.length; i++) {
+          if(newScoops[i] == ""){
+            newScoops[i] = item;
+            setselectedFlavors(newScoops);
+            console.log(newScoops[i]);
+            break;
+          }
+        }
+      }}>
+        {item}
+        </Button>
+    );
+  });
+
+{/*Populate cone options*/}
+  const renderedConesList = conesList.map((item) => {
+    return (
+      <Button sx={optionButtonStyle} key={item}
+      
+      onClick={() => {
+        const buttonElement = document.getElementById("button0");
+          setselectedCone(item);
+          console.log(item);
+      }}>
+        {item}
+        </Button>
+    );
+  });
+  
+
+  function showSelectedOptions( list:string[]){
+  
+    let display = "";
+    for(let i = 0; i< list.length; i++){
+        if(i == 0){
+          display = list[i];
+
+        }
+        else{display = display + " " + list[i]}
+    }
+
+    if(list[0] == "") display = "None";
+    return (
+      <p className="pixel-font">
+        {display}
+      </p>
+    );
+  };
+  const dynamicSelectedToppings = showSelectedOptions(selectedToppings);
+  const dynamicSelectedFlavors = showSelectedOptions(selectedFlavors);
 
   const fetchMenu = async () => {
     const menuInfo = await useGetMenu();
@@ -66,140 +142,30 @@ export default function MenuPage() {
     </>
   ) : (
     <>
+   
+
+  return (
+    <>
+    
+    <div style ={{display: "flex"}}>
+{/*LHS Menu Side*/}
+    <div>
       {/*TOPPINGS*/}
-      <h1 className="header-font" onClick={useGetMenu}>
-        TOPPINGS
-      </h1>
-      {/*ADD/TAKEOFF option 1 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          if (toppings[0] == "") {
-            toppings[0] = toppingOption_1;
-          } else {
-            toppings[0] = "";
-          }
-          console.log(toppings[0]);
-        }}
-      >
-        {" "}
-        {toppingOption_1}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          if (toppings[1] == "") {
-            toppings[1] = toppingOption_2;
-          } else {
-            toppings[1] = "";
-          }
-          console.log(toppings[1]);
-        }}
-      >
-        {" "}
-        {toppingOption_2}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 3 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          if (toppings[2] == "") {
-            toppings[2] = toppingOption_3;
-          } else {
-            toppings[2] = "";
-          }
-          console.log(toppings[2]);
-        }}
-      >
-        {" "}
-        {toppingOption_3}{" "}
-      </Button>
+<     h1 className="header-font">TOPPINGS</h1>
+      {renderedToppingsList}
+
       {/*FLAVORS*/}
       <h1 className="header-font">FLAVOR</h1>
-      {/*ADD/TAKEOFF option 1 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          flavor = flavor_1;
-          console.log(flavor);
-        }}
-      >
-        {" "}
-        {flavor_1}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          flavor = flavor_2;
-          console.log(flavor);
-        }}
-      >
-        {" "}
-        {flavor_2}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          flavor = flavor_3;
-          console.log(flavor);
-        }}
-      >
-        {" "}
-        {flavor_3}{" "}
-      </Button>
+      {renderedFlavorList}
+
       {/*CONES*/}
       <h1 className="header-font">CONE</h1>
-      {/*ADD/TAKEOFF option 1 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          cone = cone_1;
-          console.log(cone);
-        }}
-      >
-        {" "}
-        {cone_1}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 2 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          cone = cone_2;
-          console.log(cone);
-        }}
-      >
-        {" "}
-        {cone_2}{" "}
-      </Button>
-      {/*ADD/TAKEOFF option 3 BUTTON*/}
-      <Button
-        variant="contained"
-        sx={optionButtonStyle}
-        onClick={() => {
-          cone = cone_3;
-          console.log(cone);
-        }}
-      >
-        {" "}
-        {cone_3}{" "}
-      </Button>
+      {renderedConesList}
+      
+
       {/*CART*/}
       <h1 className="header-font">CART</h1>
-      {/*This button will post item to cart database and reset everything locally that has been pressed*/}
-      <Button variant="contained" sx={optionButtonStyle}>
-        Add to Cart
-      </Button>
+
       <Button
         variant="contained"
         component={Link}
@@ -208,6 +174,62 @@ export default function MenuPage() {
       >
         View Cart
       </Button>
+    </div>
+
+{/*RHS View Order*/}
+    <div>
+      <Card style= {{
+
+        marginLeft :"100px",
+        paddingLeft:"100px",
+        paddingRight:"100px"
+      }}> 
+      <div className="centerFormat">
+        {/*Display selected toppings*/}
+        <div style={{display:"flex"}}>
+        <h1 style={{margin:"10px"}} className="header-font">My Toppings</h1>
+        <Button sx={optionButtonStyle} style={{height:"40px",margin:"10px"}} onClick={() => {
+        
+        setselectedToppings(["","",""])
+
+        }}>clear</Button>
+        </div>
+        <div >{dynamicSelectedToppings}</div>
+
+      {/*Display selected scoops*/}
+      <div style={{display:"flex"}}>
+      <h1 style={{margin:"5px"}} className="header-font">My Scoops</h1>
+      <Button sx={optionButtonStyle} style={{height:"40px",margin:"5px"}} onClick={() => {
+        setselectedFlavors(["","",""])
+        }}>clear</Button>
+      </div>
+        <div style={{margin:"0px",border:"0px",padding:"0px"}} >{dynamicSelectedFlavors}</div>
+
+        <h1 style={{margin:"10px"}} className="header-font">Selected Cone</h1>
+        <p className="pixel-font">{selectedCone}</p>
+
+      {/*This button will post item to cart database and reset everything locally that has been pressed*/}
+      <Button variant="contained" sx={optionButtonStyle} onClick={() => {
+      if(selectedFlavors[0] != "" && selectedCone != ""){
+        
+
+        {/*-----SEND DATA TO CART HERE AND CLEAR OPTIONS--------*/}
+
+        setselectedToppings(["","",""]);
+        setselectedFlavors(["","",""]);
+        setselectedCone("");
+        
+      } else {console.log("Invalid Cone");}
+      
+      }}>
+        Add to Cart
+      </Button>
+      <br></br>
+      </div>
+      </Card>
+    </div>
+    </div>
+      
     </>
   );
 }
