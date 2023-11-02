@@ -71,10 +71,7 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         set((state) => ({ cart: [...state.cart, ...cones] })),
       removeConeFromCart: (cone) =>
         set((state) => ({
-          cart: state.cart.splice(
-            state.cart.findIndex((element) => element === cone),
-            1
-          ),
+          cart: state.cart.filter((item) => item !== cone),
         })),
       clearCart: () => set(() => ({ cart: [] })),
 
