@@ -1,12 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import useGetMenu from "../../services/customer/useGetMenu";
 import { Product } from "../../types";
 import Card from "@mui/material/Card"
-
-
 
 const optionButtonStyle = {
   backgroundColor: "DarkViolet",
@@ -18,24 +15,16 @@ const optionButtonStyle = {
 {
   /*These constant variables should be instaciated from the database, for now these will be filled up based from defaults that I will set*/
 }
-
 const toppingsList = ["Fudge", "M&Ms", "Oreos"];
 const flavorList = ["Strawberry","Vanilla","Chocolate"];
 const conesList = ["Cake","Sugar","Waffle"];
 
 {
-  /*Resets temporary variables when building a cone*/
+  /*0 indicates required element has not been selected*/
 }
-
-
-
 
 export default function MenuPage() {
 
-  const [menu, setMenu] = useState<Product[] | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-    
-    
   const [selectedToppings, setselectedToppings] = useState(["","",""]);
   const [selectedFlavors, setselectedFlavors] = useState(["","",""]);
   const [selectedCone, setselectedCone] = useState("");
@@ -43,9 +32,9 @@ export default function MenuPage() {
   {/*Populate topping options*/}
   const renderedToppingsList = toppingsList.map((item) => {
     return (
-      
+     
       <Button sx={optionButtonStyle} key={item}
-      
+     
       onClick={() => {
         const newToppings = [...selectedToppings];
         const buttonElement = document.getElementById("button0");
@@ -63,33 +52,34 @@ export default function MenuPage() {
     );
   });
 
-    {/*Populate flavor options*/}
-  const renderedFlavorList = flavorList.map((item) => {
-    return (
-      <Button sx={optionButtonStyle} key={item}
-      
-      onClick={() => {
-        const newScoops = [...selectedFlavors];
-        const buttonElement = document.getElementById("button0");
-        for (let i = 0; i < newScoops.length; i++) {
-          if(newScoops[i] == ""){
-            newScoops[i] = item;
-            setselectedFlavors(newScoops);
-            console.log(newScoops[i]);
-            break;
-          }
-        }
-      }}>
-        {item}
-        </Button>
-    );
-  });
+      {/*Populate flavor options*/}
+      const renderedFlavorList = flavorList.map((item) => {
+        return (
+          <Button sx={optionButtonStyle} key={item}
+         
+          onClick={() => {
+            const newScoops = [...selectedFlavors];
+            const buttonElement = document.getElementById("button0");
+            for (let i = 0; i < newScoops.length; i++) {
+              if(newScoops[i] == ""){
+                newScoops[i] = item;
+                setselectedFlavors(newScoops);
+                console.log(newScoops[i]);
+                break;
+              }
+            }
+          }}>
+            {item}
+            </Button>
+        );
+      });
+    
 
-{/*Populate cone options*/}
+  {/*Populate cone options*/}
   const renderedConesList = conesList.map((item) => {
     return (
       <Button sx={optionButtonStyle} key={item}
-      
+     
       onClick={() => {
         const buttonElement = document.getElementById("button0");
           setselectedCone(item);
@@ -99,18 +89,19 @@ export default function MenuPage() {
         </Button>
     );
   });
-  
 
   function showSelectedOptions( list:string[]){
-  
+ 
     let display = "";
     for(let i = 0; i< list.length; i++){
         if(i == 0){
           display = list[i];
 
+
         }
         else{display = display + " " + list[i]}
     }
+
 
     if(list[0] == "") display = "None";
     return (
@@ -119,8 +110,12 @@ export default function MenuPage() {
       </p>
     );
   };
+
   const dynamicSelectedToppings = showSelectedOptions(selectedToppings);
-  const dynamicSelectedFlavors = showSelectedOptions(selectedFlavors);
+  const dynamicSelectedFlavors = showSelectedOptions(selectedFlavors)
+
+  const [menu, setMenu] = useState<Product[] | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchMenu = async () => {
     const menuInfo = await useGetMenu();
@@ -142,29 +137,32 @@ export default function MenuPage() {
     </>
   ) : (
     <>
-   
-
-  return (
-    <>
-    
-    <div style ={{display: "flex"}}>
+        <div style ={{display: "flex"}}>
 {/*LHS Menu Side*/}
     <div>
       {/*TOPPINGS*/}
 <     h1 className="header-font">TOPPINGS</h1>
       {renderedToppingsList}
 
+
       {/*FLAVORS*/}
       <h1 className="header-font">FLAVOR</h1>
       {renderedFlavorList}
 
+
       {/*CONES*/}
       <h1 className="header-font">CONE</h1>
       {renderedConesList}
-      
+     
+
 
       {/*CART*/}
       <h1 className="header-font">CART</h1>
+
+
+
+
+
 
       <Button
         variant="contained"
@@ -176,25 +174,29 @@ export default function MenuPage() {
       </Button>
     </div>
 
+
 {/*RHS View Order*/}
     <div>
       <Card style= {{
 
+
         marginLeft :"100px",
         paddingLeft:"100px",
         paddingRight:"100px"
-      }}> 
+      }}>
       <div className="centerFormat">
         {/*Display selected toppings*/}
         <div style={{display:"flex"}}>
         <h1 style={{margin:"10px"}} className="header-font">My Toppings</h1>
         <Button sx={optionButtonStyle} style={{height:"40px",margin:"10px"}} onClick={() => {
-        
+       
         setselectedToppings(["","",""])
+
 
         }}>clear</Button>
         </div>
         <div >{dynamicSelectedToppings}</div>
+
 
       {/*Display selected scoops*/}
       <div style={{display:"flex"}}>
@@ -205,22 +207,26 @@ export default function MenuPage() {
       </div>
         <div style={{margin:"0px",border:"0px",padding:"0px"}} >{dynamicSelectedFlavors}</div>
 
+
         <h1 style={{margin:"10px"}} className="header-font">Selected Cone</h1>
         <p className="pixel-font">{selectedCone}</p>
+
 
       {/*This button will post item to cart database and reset everything locally that has been pressed*/}
       <Button variant="contained" sx={optionButtonStyle} onClick={() => {
       if(selectedFlavors[0] != "" && selectedCone != ""){
-        
+       
+
 
         {/*-----SEND DATA TO CART HERE AND CLEAR OPTIONS--------*/}
+
 
         setselectedToppings(["","",""]);
         setselectedFlavors(["","",""]);
         setselectedCone("");
-        
+       
       } else {console.log("Invalid Cone");}
-      
+     
       }}>
         Add to Cart
       </Button>
@@ -229,7 +235,6 @@ export default function MenuPage() {
       </Card>
     </div>
     </div>
-      
     </>
   );
 }
