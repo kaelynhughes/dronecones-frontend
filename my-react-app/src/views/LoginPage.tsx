@@ -24,9 +24,12 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="dialogue-container">
+    <div className="centerFormat">
+    <div className="dialogue-container">
         <div className="login">
-          <div>Login</div>
+          
+          <div className="centerFormat">
+          <h1 className="header-font">Log in</h1>
           <input
             type="username"
             value={username}
@@ -44,13 +47,20 @@ export default function LoginPage() {
               variant="contained"
               id="fullbutton"
               className="loginbutton button"
+              style={{margin:"20px",fontFamily:"pixelfont"}}
               onClick={logIn}
             >
               Log in
             </Button>
+          </div>            
           </div>
+
+
         </div>
       </div>
+
+    </div>
+
 
       <h1>
         Log In, allows users to enter credentials, links to Customer, Employee
