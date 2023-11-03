@@ -44,6 +44,7 @@ export default function ManageDronesPage() {
   const theme = useTheme();
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [currentDroneId, setCurrentDroneId] = useState(-1);
+  const [dronesList, setDronesList] = useState<Drone[]>([]);
 
   const open = () => setDialogOpen(true);
   const close = () => setDialogOpen(false);
@@ -59,6 +60,15 @@ export default function ManageDronesPage() {
   if (drones.length === 0) {
     loadDrones(useGetDrones());
   }
+
+  const fetchDrones = async () => {
+    const fetchedDrones: Drone[] = await useGetDrones();
+    setDronesList(fetchedDrones);
+  };
+
+  useEffect(() => {
+    fetchDrones();
+  }, []);
 
   return (
     <>

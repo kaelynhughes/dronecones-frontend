@@ -19,7 +19,7 @@ export default () => {
     name: "R2-D2",
     isActive: false,
     size: 2,
-    earnings: 2000,
+    earnings: 3000,
     orderCount: 2,
     id: 2,
   };
@@ -27,7 +27,7 @@ export default () => {
     name: "BB-8",
     isActive: true,
     size: 1,
-    earnings: 1000,
+    earnings: 3000,
     orderCount: 2,
     id: 3,
   };
