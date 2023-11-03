@@ -228,7 +228,6 @@ export default function AppPage() {
                 value={appPath}
                 exclusive
                 onChange={handleNavBar}
-                fullWidth // The buttons take the full width of the container
                 sx={{ width: "100%", height: "100%" }} // Style to expand to container
               >
                 <ToggleButton value="app/menu" sx={optionButtonStyle}>
@@ -259,7 +258,6 @@ export default function AppPage() {
                   value={appPath}
                   exclusive
                   onChange={handleNavBar}
-                  fullWidth // The buttons take the full width of the container
                   sx={{ width: "100%", height: "100%", optionButtonStyle }} // Style to expand to container
                 >
                   <ToggleButton
@@ -294,7 +292,6 @@ export default function AppPage() {
                 value={appPath}
                 exclusive
                 onChange={handleNavBar}
-                fullWidth // The buttons take the full width of the container
                 sx={{ width: "100%", height: "100%", optionButtonStyle }} // Style to expand to container
               >
                 <ToggleButton
@@ -324,7 +321,7 @@ export default function AppPage() {
               </ToggleButtonGroup>
             </Box>
           )}
-          <Divider sx={{ height: "75%" }} />
+          <Divider sx={{ height: "45%" }} />
           <Button
             sx={optionButtonStyle}
             style={{ justifySelf: "end" }}
@@ -336,9 +333,6 @@ export default function AppPage() {
               if (cart.length === 0) {
                 addConesToCart(mockCones);
               }
-              if (drones.length === 0) {
-                loadDrones(mockDrones);
-              }
               if (orders.length === 0) {
                 loadHistory(mockOrders);
               }
@@ -349,7 +343,12 @@ export default function AppPage() {
         </Drawer>
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 3, marginLeft: "100px", marginTop: "50px" }}
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            marginLeft: "100px",
+            marginTop: "50px",
+          }}
         >
           <Outlet />
         </Box>
@@ -536,56 +535,56 @@ const mockCones = [
   },
 ];
 
-const mockDrones = [
-  {
-    name: "Big Boss",
-    isActive: true,
-    size: 3,
-    orderCount: 11,
-    earnings: 3420,
-    id: 1,
-  },
-  {
-    name: "2-Cone Terry",
-    isActive: false,
-    size: 2,
-    orderCount: 5,
-    earnings: 1853,
-    id: 2,
-  },
-  {
-    name: "Lightweight",
-    isActive: true,
-    size: 1,
-    orderCount: 17,
-    earnings: 2900,
-    id: 3,
-  },
-  {
-    name: "Quad-Copter",
-    isActive: true,
-    size: 3,
-    orderCount: 4,
-    earnings: 879,
-    id: 4,
-  },
-  {
-    name: "Mini",
-    isActive: true,
-    size: 1,
-    orderCount: 8,
-    earnings: 950,
-    id: 5,
-  },
-  {
-    name: "Jerry",
-    isActive: false,
-    size: 2,
-    orderCount: 3,
-    earnings: 324,
-    id: 6,
-  },
-];
+// const mockDrones = [
+//   {
+//     name: "Big Boss",
+//     isActive: true,
+//     size: 3,
+//     orderCount: 11,
+//     earnings: 3420,
+//     id: 1,
+//   },
+//   {
+//     name: "2-Cone Terry",
+//     isActive: false,
+//     size: 2,
+//     orderCount: 5,
+//     earnings: 1853,
+//     id: 2,
+//   },
+//   {
+//     name: "Lightweight",
+//     isActive: true,
+//     size: 1,
+//     orderCount: 17,
+//     earnings: 2900,
+//     id: 3,
+//   },
+//   {
+//     name: "Quad-Copter",
+//     isActive: true,
+//     size: 3,
+//     orderCount: 4,
+//     earnings: 879,
+//     id: 4,
+//   },
+//   {
+//     name: "Mini",
+//     isActive: true,
+//     size: 1,
+//     orderCount: 8,
+//     earnings: 950,
+//     id: 5,
+//   },
+//   {
+//     name: "Jerry",
+//     isActive: false,
+//     size: 2,
+//     orderCount: 3,
+//     earnings: 324,
+//     id: 6,
+//   },
+// ];
 
 const mockOrders = [
   {
