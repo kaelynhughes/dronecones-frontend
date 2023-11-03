@@ -23,8 +23,10 @@ import {
   IconButton,
   useTheme,
   Tooltip,
+  Hidden,
 } from "@mui/material";
 import { DroneDialog } from "./DroneDialog";
+import { getPriceString } from "../../services/helperFunctions";
 
 const tableCellStyleHeader = {
   color: "white",
@@ -52,6 +54,11 @@ export default function ManageDronesPage() {
 
   const { removeDrone } = useStore();
   const { editDrone } = useStore();
+  const { loadDrones } = useStore();
+
+  if (drones.length === 0) {
+    loadDrones(useGetDrones());
+  }
 
   return (
     <>
@@ -59,11 +66,12 @@ export default function ManageDronesPage() {
         user.userType === UserType.MANAGER) && (
         <Box
           sx={{
-            height: "92vh",
             width: "100%",
+            height: "100%",
             display: "flex",
             flexDirection: "column",
             flexGrow: 1,
+            overflow: "hidden",
           }}
         >
           <AppBar position="static">
@@ -99,14 +107,13 @@ export default function ManageDronesPage() {
               />
             </Toolbar>
           </AppBar>
-
           <TableContainer
             component={Paper}
             sx={{
-              maxHeight: "100%",
-              width: "100%",
-              overflow: "auto",
+              height: "100%",
+              width: "auto",
               mt: 2,
+              overflow: "auto",
               flexGrow: 1,
             }}
           >
@@ -181,10 +188,7 @@ export default function ManageDronesPage() {
                         {drone.orderCount}
                       </TableCell>
                       <TableCell align="center" sx={tableCellStyle}>
-                        {(drone.earnings / 100).toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                        })}
+                        {getPriceString(drone.earnings)}
                       </TableCell>
                       <TableCell sx={tableCellStyle} align="right">
                         <Tooltip title="Drone Available Off/On">
