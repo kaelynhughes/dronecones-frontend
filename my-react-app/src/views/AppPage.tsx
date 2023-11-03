@@ -123,7 +123,7 @@ export default function AppPage() {
                     <Button
                       variant="outlined"
                       style={{
-                        color: `${theme.palette.primary.main}`,
+                        color: `${theme.palette.secondary.main}`,
                         fontFamily: "pixelfont",
                         fontSize: "13px",
                         width: "120px",
@@ -327,9 +327,6 @@ export default function AppPage() {
             style={{ justifySelf: "end" }}
             variant="outlined"
             onClick={() => {
-              if (products.length === 0) {
-                loadProducts(mockProducts);
-              }
               if (cart.length === 0) {
                 addConesToCart(mockCones);
               }
@@ -356,73 +353,6 @@ export default function AppPage() {
     </>
   );
 }
-
-const mockProducts = [
-  {
-    name: "Sugar Cone",
-    stock: 20,
-    ppu: 50,
-    cpu: 10,
-    type: ProductType.CONE,
-    id: 1,
-  },
-  {
-    name: "Waffle Cone",
-    stock: 11,
-    ppu: 100,
-    cpu: 25,
-    type: ProductType.CONE,
-    id: 2,
-  },
-  {
-    name: "Sprinkles",
-    stock: 56,
-    ppu: 50,
-    cpu: 1,
-    type: ProductType.TOPPING,
-    id: 3,
-  },
-  {
-    name: "Oreos",
-    stock: 35,
-    ppu: 50,
-    cpu: 10,
-    type: ProductType.TOPPING,
-    id: 4,
-  },
-  {
-    name: "Chocolate Syrup",
-    stock: 27,
-    ppu: 50,
-    cpu: 5,
-    type: ProductType.TOPPING,
-    id: 5,
-  },
-  {
-    name: "Chocolate",
-    stock: 76,
-    ppu: 250,
-    cpu: 60,
-    type: ProductType.ICECREAM,
-    id: 6,
-  },
-  {
-    name: "Vanilla",
-    stock: 45,
-    ppu: 250,
-    cpu: 30,
-    type: ProductType.ICECREAM,
-    id: 7,
-  },
-  {
-    name: "Mint Chocolate Chip",
-    stock: 63,
-    ppu: 250,
-    cpu: 75,
-    type: ProductType.ICECREAM,
-    id: 8,
-  },
-];
 
 const mockCones = [
   {
@@ -534,57 +464,6 @@ const mockCones = [
     ],
   },
 ];
-
-// const mockDrones = [
-//   {
-//     name: "Big Boss",
-//     isActive: true,
-//     size: 3,
-//     orderCount: 11,
-//     earnings: 3420,
-//     id: 1,
-//   },
-//   {
-//     name: "2-Cone Terry",
-//     isActive: false,
-//     size: 2,
-//     orderCount: 5,
-//     earnings: 1853,
-//     id: 2,
-//   },
-//   {
-//     name: "Lightweight",
-//     isActive: true,
-//     size: 1,
-//     orderCount: 17,
-//     earnings: 2900,
-//     id: 3,
-//   },
-//   {
-//     name: "Quad-Copter",
-//     isActive: true,
-//     size: 3,
-//     orderCount: 4,
-//     earnings: 879,
-//     id: 4,
-//   },
-//   {
-//     name: "Mini",
-//     isActive: true,
-//     size: 1,
-//     orderCount: 8,
-//     earnings: 950,
-//     id: 5,
-//   },
-//   {
-//     name: "Jerry",
-//     isActive: false,
-//     size: 2,
-//     orderCount: 3,
-//     earnings: 324,
-//     id: 6,
-//   },
-// ];
 
 const mockOrders = [
   {
