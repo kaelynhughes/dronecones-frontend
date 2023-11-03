@@ -22,7 +22,7 @@ export type Order = {
 };
 
 export type Product = {
-  name: String;
+  name: string;
   stock?: number;
   //ppu is the Price the customer will pay for a unit of this Product
   ppu?: number;
