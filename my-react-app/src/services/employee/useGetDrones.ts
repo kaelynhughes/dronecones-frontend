@@ -4,6 +4,7 @@ import { Drone } from "../../types";
 
 export default () => {
   axios.get(`${BACKEND_URL_DEV}/employee/drones`).then((response) => {
+    console.log("RESPONSE BELOW");
     console.log(response);
   });
   const drone1: Drone = {

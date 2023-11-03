@@ -77,7 +77,6 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
           autoFocus
           margin="dense"
           label="Name"
-          fullWidth
           value={newName}
           onChange={(event) => setNewName(event.target.value)}
           sx={{ input: wordStyle }}
@@ -93,7 +92,6 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
             error: errorState,
             helperText: "Invalid Input.",
           }}
-          fullWidth
           value={newSize}
           onChange={(event) => {
             if (

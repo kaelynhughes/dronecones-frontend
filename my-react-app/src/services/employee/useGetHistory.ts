@@ -22,6 +22,20 @@ const dummyData: Order[] = [
     cones: [
       {
         components: [
+          { name: "Sugar", type: ProductType.CONE },
+          { name: "Chocolate", type: ProductType.ICECREAM },
+        ],
+        droneId: 2,
+      },
+    ],
+    totalPrice: 500,
+    timestamp: new Date(),
+    employeeCut: 300,
+  },
+  {
+    cones: [
+      {
+        components: [
           { name: "Waffle", type: ProductType.CONE },
           { name: "Chocolate", type: ProductType.ICECREAM },
           { name: "Chocolate", type: ProductType.ICECREAM },
