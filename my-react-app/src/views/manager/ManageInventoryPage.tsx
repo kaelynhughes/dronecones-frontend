@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { Product, UserType,ProductType } from "../../types";
@@ -26,6 +27,7 @@ import {
 
 export default function ManageInventoryPage() {
   const user = useStore((state) => state.user);
+  const { removeProduct } = useStore();
 
   const [inventory, setInventory] = useState<Product[] | null>();
 
@@ -66,6 +68,18 @@ if (products.length === 0) {
         <div style={{ display: "flex" }} >
       <p className="pixel-font">{item.name} - {item.stock} Units</p>
 
+      <IconButton
+          aria-label="delete"
+          color="secondary"
+          onClick={() => {
+                    if (item.id) {
+                      removeProduct(item);
+                    }
+          }}  
+      >
+      <DeleteIcon />
+      </IconButton>
+
         </div>
       </Card>
     );
@@ -80,6 +94,18 @@ if (products.length === 0) {
         <div style={{ display: "flex" }} >
       <p className="pixel-font">{item.name} - {item.stock} Units</p>
 
+      <IconButton
+          aria-label="delete"
+          color="secondary"
+          onClick={() => {
+                    if (item.id) {
+                      removeProduct(item);
+                    }
+          }}  
+      >
+      <DeleteIcon />
+      </IconButton>
+
         </div>
       </Card>
     );
@@ -93,7 +119,19 @@ if (products.length === 0) {
       <Card key={item.id}>
         <div style={{ display: "flex" }} >
       <p className="pixel-font">{item.name} - {item.stock} Units</p>
-      
+
+      <IconButton
+          aria-label="delete"
+          color="secondary"
+          onClick={() => {
+                    if (item.id) {
+                      removeProduct(item);
+                    }
+          }}  
+      >
+      <DeleteIcon />
+      </IconButton>
+
         </div>
       </Card>
     );
