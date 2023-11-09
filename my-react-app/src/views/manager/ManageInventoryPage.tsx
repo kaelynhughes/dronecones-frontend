@@ -6,6 +6,7 @@ import { Product, UserType,ProductType } from "../../types";
 import { useStore } from "../../store";
 import useGetInventory from "../../services/manager/useGetInventory";
 import {
+  TextField,
   Box,
   Card,
   AppBar,
@@ -25,6 +26,13 @@ import {
   Hidden,
 } from "@mui/material";
 
+const wordStyle = {
+  color: "white",
+  fontSize: "16px",
+  fontFamily: "pixelfont",
+};
+
+
 export default function ManageInventoryPage() {
   const user = useStore((state) => state.user);
   const { removeProduct } = useStore();
@@ -35,7 +43,7 @@ export default function ManageInventoryPage() {
     const fetchedInventory = await useGetInventory();
     setInventory(fetchedInventory);
   };
-
+  let errorState = false;
 
   const toppingsList = useStore((state) =>
   state.products.filter((product) => product.type === ProductType.TOPPING)
@@ -50,6 +58,8 @@ const conesList = useStore((state) =>
 const products = useStore((state) => state.products);
 const { loadProducts } = useStore();
 
+const [quantity, setQuantity] = useState(0);
+
 if (products.length === 0) {
   loadProducts(useGetInventory());
 }
@@ -58,6 +68,9 @@ if (products.length === 0) {
   useEffect(() => {
     fetchInventory;
   }, []);
+
+
+
 
   {
     /*Populate topping options*/
@@ -79,6 +92,32 @@ if (products.length === 0) {
       >
       <DeleteIcon />
       </IconButton>
+      <TextField size="small" variant="standard"
+          
+          label="Quantity"
+          type="number"
+          inputProps={{
+            min: "0",
+            max: "100",
+            step: "1",
+            error: errorState,
+            helperText: "Invalid.",
+          }}
+          value={quantity}
+          onChange={(event) => {
+            if (
+              parseInt(event.target.value) <= 100 &&
+              parseInt(event.target.value) >= 0
+            ) {
+              setQuantity(parseInt(event.target.value));
+              errorState = false;
+            } else {
+              setQuantity(0);
+              errorState = true;
+            }
+          }}
+        />      
+
 
         </div>
       </Card>
@@ -105,9 +144,35 @@ if (products.length === 0) {
       >
       <DeleteIcon />
       </IconButton>
-
+      
+      <TextField size="small" variant="standard"
+          
+          label="Quantity"
+          type="number"
+          inputProps={{
+            min: "0",
+            max: "100",
+            step: "1",
+            error: errorState,
+            helperText: "Invalid.",
+          }}
+          value={quantity}
+          onChange={(event) => {
+            if (
+              parseInt(event.target.value) <= 100 &&
+              parseInt(event.target.value) >= 0
+            ) {
+              setQuantity(parseInt(event.target.value));
+              errorState = false;
+            } else {
+              setQuantity(0);
+              errorState = true;
+            }
+          }}
+        />      
         </div>
       </Card>
+
     );
   });
 
@@ -132,6 +197,31 @@ if (products.length === 0) {
       <DeleteIcon />
       </IconButton>
 
+      <TextField size="small" variant="standard"
+          
+          label="Quantity"
+          type="number"
+          inputProps={{
+            min: "0",
+            max: "100",
+            step: "1",
+            error: errorState,
+            helperText: "Invalid.",
+          }}
+          value={quantity}
+          onChange={(event) => {
+            if (
+              parseInt(event.target.value) <= 100 &&
+              parseInt(event.target.value) >= 0
+            ) {
+              setQuantity(parseInt(event.target.value));
+              errorState = false;
+            } else {
+              setQuantity(0);
+              errorState = true;
+            }
+          }}
+        />         
         </div>
       </Card>
     );
@@ -151,8 +241,19 @@ if (products.length === 0) {
             allows user to bulk restock items, add new items, and change prices
           */}
             
-
+          <div style={{ display: "flex" }}>
           <h1 className="header-font">Ice Cream</h1>
+          <IconButton
+          aria-label="delete"
+          color="secondary"
+          onClick={() => {
+                    products
+          }}  
+      >
+      <DeleteIcon />
+      </IconButton>
+          </div>
+          
           {renderedFlavorList}
           <h1 className="header-font">Toppings</h1>
           {renderedToppingsList}
