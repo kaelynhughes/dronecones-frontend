@@ -74,13 +74,14 @@ const dummyData: Order[] = [
   },
 ];
 
-const userId = useStore((state) => state.user.id);
+// const userId = useStore((state) => state.user.id);
+const userId = 5;
 
 export default () => {
   axios
-    .get(`${BACKEND_URL_DEV}/customer/${userId}{/history`)
+    .get(`${BACKEND_URL_DEV}/customer/${userId}/history`)
     .then((response) => {
-      console.log(response);
+      console.log(response.data);
     });
   return dummyData;
 };
