@@ -3,21 +3,9 @@ import { BACKEND_URL_DEV } from "../../constants";
 import { Product, ProductType } from "../../types";
 
 export default () => {
-  axios
-    .get(`/customer/menu`, {
-      headers: { "Access-Request-Control-Origin": "*" },
-      transformRequest: [
-        function (data, headers) {
-          console.log("DATA");
-          console.log(data);
-          console.log("HEADERS");
-          console.log(headers);
-        },
-      ],
-    })
-    .then((response) => {
-      console.log(response.data);
-    });
+  axios.get(`/customer/menu`).then((response) => {
+    console.log(response.data);
+  });
 
   const dummyData: Product[] = [
     { name: "Sugar", stock: 100, ppu: 100, cpu: 50, type: ProductType.CONE },

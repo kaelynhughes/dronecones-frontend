@@ -1,6 +1,7 @@
 import axios from "../axios";
 import { BACKEND_URL_DEV } from "../../constants";
 import { Order, FullCone, ProductType } from "../../types";
+import { useStore } from "../../store";
 
 const dummyData: Order[] = [
   {
@@ -73,9 +74,14 @@ const dummyData: Order[] = [
   },
 ];
 
+// const userId = useStore((state) => state.user.id);
+const userId = 5;
+
 export default () => {
-  axios.get(`${BACKEND_URL_DEV}/employee/drones`).then((response) => {
-    console.log(response);
-  });
+  axios
+    .get(`${BACKEND_URL_DEV}/customer/${userId}/history`)
+    .then((response) => {
+      console.log(response.data);
+    });
   return dummyData;
 };
