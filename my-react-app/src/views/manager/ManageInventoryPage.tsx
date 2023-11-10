@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AddIcon from "@mui/icons-material/AddOutlined";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { Product, UserType,ProductType } from "../../types";
@@ -35,7 +36,10 @@ const wordStyle = {
 
 export default function ManageInventoryPage() {
   const user = useStore((state) => state.user);
+
+  const { editProduct } = useStore();
   const { removeProduct } = useStore();
+  
 
   const [inventory, setInventory] = useState<Product[] | null>();
 
@@ -76,6 +80,7 @@ if (products.length === 0) {
     /*Populate topping options*/
   }
   const renderedToppingsList = toppingsList.map((item) => {
+    let localQuanitity = 69;
     return (
       <Card key={item.id}>
         <div style={{ display: "flex" }} >
@@ -96,20 +101,21 @@ if (products.length === 0) {
           
           label="Quantity"
           type="number"
+          defaultValue="0"
           inputProps={{
-            min: "0",
+            min: "-100",
             max: "100",
-            step: "1",
+            step: "10",
             error: errorState,
             helperText: "Invalid.",
           }}
-          value={quantity}
           onChange={(event) => {
             if (
               parseInt(event.target.value) <= 100 &&
               parseInt(event.target.value) >= 0
             ) {
-              setQuantity(parseInt(event.target.value));
+              localQuanitity = parseInt(event.target.value);
+              console.log(localQuanitity);
               errorState = false;
             } else {
               setQuantity(0);
@@ -118,7 +124,34 @@ if (products.length === 0) {
           }}
         />      
 
-
+        <IconButton
+          aria-label="add"
+          color="secondary"
+          onClick={() => {
+                    if (item.id) {
+                      const updateItem = {...item};
+                      
+                      if(updateItem.stock){
+                        updateItem.stock = updateItem.stock  +  localQuanitity;
+                        console.log(updateItem.stock);
+                        if(updateItem.stock < 0){
+                          updateItem.stock = 0;
+                        }
+                        
+                      } else{
+                        updateItem.stock = localQuanitity;
+                        if(localQuanitity < 0){
+                          updateItem.stock = 0
+                        }
+                      }
+                      
+                      editProduct(item.id,updateItem);
+                      console.log("YAY");
+                    }
+          }}  
+      >
+      <AddIcon />
+      </IconButton>    
         </div>
       </Card>
     );
@@ -128,6 +161,7 @@ if (products.length === 0) {
     /*Populate flavor options*/
   }
   const renderedFlavorList = flavorList.map((item) => {
+    let localQuanitity = 0;
     return (
       <Card key={item.id}>
         <div style={{ display: "flex" }} >
@@ -144,32 +178,60 @@ if (products.length === 0) {
       >
       <DeleteIcon />
       </IconButton>
-      
       <TextField size="small" variant="standard"
           
           label="Quantity"
           type="number"
+          defaultValue="0"
           inputProps={{
-            min: "0",
+            min: "-100",
             max: "100",
-            step: "1",
+            step: "10",
             error: errorState,
             helperText: "Invalid.",
           }}
-          value={quantity}
           onChange={(event) => {
             if (
               parseInt(event.target.value) <= 100 &&
-              parseInt(event.target.value) >= 0
+              parseInt(event.target.value) >= -100
             ) {
-              setQuantity(parseInt(event.target.value));
+              localQuanitity = parseInt(event.target.value);
+              console.log(localQuanitity);
               errorState = false;
             } else {
-              setQuantity(0);
               errorState = true;
             }
           }}
-        />      
+        />  
+
+      <IconButton
+          aria-label="add"
+          color="secondary"
+          onClick={() => {
+                    if (item.id) {
+                      const updateItem = {...item};
+                      
+                      if(updateItem.stock){
+                        updateItem.stock = updateItem.stock  +  localQuanitity;
+                        console.log(updateItem.stock);
+                        if(updateItem.stock < 0){
+                          updateItem.stock = 0;
+                        }
+                        
+                      } else{
+                        updateItem.stock = localQuanitity;
+                        if(localQuanitity < 0){
+                          updateItem.stock = 0
+                        }
+                      }
+                      
+                      editProduct(item.id,updateItem);
+                      console.log("YAY");
+                    }
+          }}  
+      >
+      <AddIcon />
+      </IconButton>    
         </div>
       </Card>
 
@@ -180,6 +242,7 @@ if (products.length === 0) {
     /*Populate cone options*/
   }
   const renderedConesList = conesList.map((item) => {
+    let localQuanitity = 0;
     return (
       <Card key={item.id}>
         <div style={{ display: "flex" }} >
@@ -196,32 +259,62 @@ if (products.length === 0) {
       >
       <DeleteIcon />
       </IconButton>
-
       <TextField size="small" variant="standard"
           
           label="Quantity"
           type="number"
+          defaultValue="0"
           inputProps={{
-            min: "0",
+            min: "-100",
             max: "100",
-            step: "1",
+            step: "10",
             error: errorState,
             helperText: "Invalid.",
           }}
-          value={quantity}
+          //value={defaultValue}
           onChange={(event) => {
             if (
               parseInt(event.target.value) <= 100 &&
               parseInt(event.target.value) >= 0
             ) {
-              setQuantity(parseInt(event.target.value));
+              localQuanitity = parseInt(event.target.value);
+              console.log(localQuanitity);
               errorState = false;
             } else {
               setQuantity(0);
               errorState = true;
             }
           }}
-        />         
+        />  
+
+              <IconButton
+          aria-label="add"
+          color="secondary"
+          onClick={() => {
+                    if (item.id) {
+                      const updateItem = {...item};
+                      
+                      if(updateItem.stock){
+                        updateItem.stock = updateItem.stock  +  localQuanitity;
+                        console.log(updateItem.stock);
+                        if(updateItem.stock < 0){
+                          updateItem.stock = 0;
+                        }
+                        
+                      } else{
+                        updateItem.stock = localQuanitity;
+                        if(localQuanitity < 0){
+                          updateItem.stock = 0
+                        }
+                      }
+                      
+                      editProduct(item.id,updateItem);
+                      console.log("YAY");
+                    }
+          }}  
+      >
+      <AddIcon />
+      </IconButton>        
         </div>
       </Card>
     );

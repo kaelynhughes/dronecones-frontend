@@ -21,6 +21,7 @@ type DroneConesActions = {
   loadProducts: (products: Product[]) => void;
   addProduct: (product: Product) => void;
   removeProduct: (product: Product) => void;
+  editProduct: (id: number, product: Product) => void;
 
   addConeToCart: (cone: FullCone) => void;
   addConesToCart: (cones: FullCone[]) => void;
@@ -68,7 +69,11 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
       removeProduct: (product) =>
         set((state) => ({ 
           products: [...state.products.filter((item) => item !== product)] 
-        })),  
+        })), 
+      editProduct: (id, product) =>
+        set((state) => ({
+          products: [...state.products.filter((product) => product.id !== id), product],
+        })), 
 
       addConeToCart: (cone) =>
         set((state) => ({ cart: [...state.cart, cone] })),
