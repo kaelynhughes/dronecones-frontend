@@ -14,6 +14,7 @@ const fetchClient = () => {
 
   // Create instance
   const instance = axios.create(defaultOptions);
+
   return instance;
 };
 
