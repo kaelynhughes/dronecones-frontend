@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { Drone, UserType } from "../../types";
 import { useStore } from "../../store";
-import useGetDrones from "../../services/employee/useGetDrones";
 import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import AddIcon from "@mui/icons-material/Add";
@@ -51,24 +50,16 @@ export default function ManageDronesPage() {
 
   const user = useStore((state) => state.user);
   const drones = useStore((state) => state.drones);
+  const { loadedDrones } = useStore();
   const navigate = useNavigate();
 
   const { removeDrone } = useStore();
   const { editDrone } = useStore();
   const { loadDrones } = useStore();
 
-  if (drones.length === 0) {
-    loadDrones(useGetDrones());
+  if (drones.length === 0 && !loadedDrones) {
+    loadDrones();
   }
-
-  const fetchDrones = async () => {
-    const fetchedDrones: Drone[] = await useGetDrones();
-    setDronesList(fetchedDrones);
-  };
-
-  useEffect(() => {
-    fetchDrones();
-  }, []);
 
   return (
     <>
@@ -189,13 +180,13 @@ export default function ManageDronesPage() {
                         component="th"
                         scope="drone"
                       >
-                        {drone.name}
+                        {drone.display_name}
                       </TableCell>
                       <TableCell align="center" sx={tableCellStyle}>
-                        {drone.size}
+                        {drone.drone_size}
                       </TableCell>
                       <TableCell align="center" sx={tableCellStyle}>
-                        {drone.orderCount}
+                        {drone.num_orders}
                       </TableCell>
                       <TableCell align="center" sx={tableCellStyle}>
                         {getPriceString(drone.earnings)}
@@ -205,10 +196,10 @@ export default function ManageDronesPage() {
                           <Switch
                             inputProps={{ "aria-label": "controlled" }}
                             name="active"
-                            checked={drone.isActive}
+                            checked={drone.is_active}
                             onChange={() => {
                               const updateDrone = { ...drone };
-                              updateDrone.isActive = !drone.isActive;
+                              updateDrone.is_active = !drone.is_active;
                               if (drone.id) {
                                 editDrone(drone.id, updateDrone);
                               }
@@ -231,7 +222,7 @@ export default function ManageDronesPage() {
                           color="secondary"
                           onClick={() => {
                             if (drone.id) {
-                              removeDrone(drone.id);
+                              removeDrone(drone.serial_number);
                             }
                           }}
                         >

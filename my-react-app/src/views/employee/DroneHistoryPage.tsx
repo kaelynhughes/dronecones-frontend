@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { useStore } from "../../store";
 import { Drone, Order, UserType } from "../../types";
-import useGetDrones from "../../services/employee/useGetDrones";
 import {
   FormControl,
   InputLabel,
@@ -18,7 +17,6 @@ import {
 } from "@mui/material";
 import { getConeString, getPriceString } from "../../services/helperFunctions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import useGetHistory from "../../services/employee/useGetHistory";
 
 const wordStyle = {
   color: "white",
@@ -31,27 +29,32 @@ export default function DroneHistoryPage() {
   const user = useStore((state) => state.user);
   const drones = useStore((state) => state.drones);
   const orders = useStore((state) => state.orders);
+  const { loadedEmployeeOrders } = useStore();
+  const { loadedDrones } = useStore();
 
   const { loadDrones } = useStore();
-  const { loadHistory } = useStore();
+  const { loadEmployeeHistory } = useStore();
 
   const [sortedOrders, sortOrders] = useState(orders);
 
-  if (drones.length === 0) {
-    loadDrones(useGetDrones());
+  if (drones.length === 0 && !loadedDrones) {
+    loadDrones();
   }
 
-  if (orders.length === 0) {
-    loadHistory(useGetHistory());
+  if (orders.length === 0 && loadedEmployeeOrders) {
+    loadEmployeeHistory();
     sortOrders(orders);
   }
 
   const getDroneNames = (order: Order) => {
     const droneIds = order.cones.map((cone) => cone.droneId);
-    let names = drones.find((drone) => drone.id === droneIds[0])?.name || "";
+    let names =
+      drones.find((drone) => drone.id === droneIds[0])?.display_name ||
+      "Drone Not Found";
     droneIds.shift();
     droneIds.forEach((droneId) => {
-      let name = drones.find((drone) => drone.id === droneId)?.name || "";
+      let name =
+        drones.find((drone) => drone.id === droneId)?.display_name || "";
       if (name !== "" && !names.includes(name)) {
         names = names + " and " + name;
       }
@@ -120,9 +123,9 @@ export default function DroneHistoryPage() {
                   backgroundColor: `${theme.palette.primary.main}`,
                 }}
                 key={drone.id}
-                value={drone.name}
+                value={drone.display_name}
               >
-                {drone.name}
+                {drone.display_name}
               </MenuItem>
             ))}
           </Select>

@@ -1,10 +1,11 @@
 export type Drone = {
-  name: string;
-  isActive: boolean;
-  size: number;
+  display_name: string;
+  is_active: boolean;
+  drone_size: number;
   earnings: number;
-  orderCount: number;
-  id: number;
+  num_orders: number;
+  serial_number: string;
+  id?: number;
 };
 
 export type FullCone = {
