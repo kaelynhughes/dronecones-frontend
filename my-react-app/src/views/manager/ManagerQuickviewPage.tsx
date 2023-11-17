@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Product, UserType } from "../../types";
 import { useStore } from "../../store";
 import { getPriceString } from "../../services/helperFunctions";
-import { Box, Divider, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Card, Typography, useTheme } from "@mui/material";
 import useGetHistory from "../../services/manager/useGetHistory";
 import useGetInventory from "../../services/manager/useGetInventory";
 
@@ -19,7 +19,7 @@ export default function ManagerQuickviewPage() {
   const products = useStore((state) => state.products)
   const theme = useTheme();
   let earnings = 0;
-  let notifyQuantityValue = 20;
+  let notifyQuantityValue = 30;
   let lowStockItems: Product[] = [];
   let currentProducts: Product[] = [];
 
@@ -49,11 +49,36 @@ export default function ManagerQuickviewPage() {
             lowStockItems.push(currentProducts[i]);
           }
         }
+      } else {
+
+        lowStockItems.push(currentProducts[i]);
       }
     }
   }
-  console.log(lowStockItems)
+  let stockTitle = "Low Stock Items!"
+  if(lowStockItems.length === 0){
+    stockTitle = "No items need restocking!"
+  }
+  const renderedLowStockItems = lowStockItems.map((item) => {
+    let urgencyColor = "white";
+    if(item.stock){
+      if(item.stock <= 5){
+        urgencyColor = "red";
+      } else if(item.stock <= 10){
+        urgencyColor = "yellow";
+      }
+    } else urgencyColor = "red";
+    return (
+      <p style={{color:urgencyColor}}
+        key={item.id}
+      >
+        {item.name} - {item.stock}
+      </p>
+    );
+  });
 
+
+  
 
   return (
     <>
@@ -98,6 +123,22 @@ export default function ManagerQuickviewPage() {
               >
                 Your location has {products.length} items available!
               </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <Card sx={textStyle}><div className="centerFormat">Flavor</div></Card>
+                </Grid>
+                <Grid item xs={4}>
+                <Card sx={textStyle}><div className="centerFormat">Topping</div></Card>
+                </Grid>
+                <Grid item xs={4}>
+                <Card sx={textStyle}><div className="centerFormat">Cone</div></Card>
+                </Grid>
+                <Grid item xs={12}>
+                <Card sx={textStyle}><div className="centerFormat">{stockTitle}{renderedLowStockItems}</div></Card>
+                </Grid>
+              </Grid>
+
+            
 
         </Box>
 
