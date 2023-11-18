@@ -191,7 +191,7 @@ export default function DroneHistoryPage() {
               <Typography>{`${getDroneNames(order)} delivered ${
                 order.cones.length
               } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
-                order.timestamp
+                order.order_time
               ).toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",
@@ -203,10 +203,10 @@ export default function DroneHistoryPage() {
                 <Typography key={index}>{getConeString(cone)}</Typography>
               ))}
               <Typography>{`Total Order Price: ${getPriceString(
-                order.totalPrice
+                order.total_price
               )}`}</Typography>
               <Typography>{`Your Earnings: ${getPriceString(
-                order?.employeeCut || 0
+                order?.employee_cut || 0
               )}`}</Typography>
             </AccordionDetails>
           </Accordion>

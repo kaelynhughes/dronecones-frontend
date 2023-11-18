@@ -4,76 +4,76 @@ const dummyData: Order[] = [
   {
     cones: [
       {
-        components: [
-          { name: "Sugar", type: ProductType.CONE },
-          { name: "Chocolate", type: ProductType.ICECREAM },
+        products: [
+          { display_name: "Sugar", product_type: ProductType.CONE },
+          { display_name: "Chocolate", product_type: ProductType.ICECREAM },
         ],
         droneId: 3,
       },
     ],
-    totalPrice: 500,
-    timestamp: new Date(),
-    employeeCut: 300,
+    total_price: 500,
+    order_time: new Date(),
+    employee_cut: 300,
   },
   {
     cones: [
       {
-        components: [
-          { name: "Waffle", type: ProductType.CONE },
-          { name: "Chocolate", type: ProductType.ICECREAM },
-          { name: "Chocolate", type: ProductType.ICECREAM },
-          { name: "Chocolate", type: ProductType.ICECREAM },
-          { name: "Hot Fudge", type: ProductType.TOPPING },
-          { name: "Sprinkles", type: ProductType.TOPPING },
+        products: [
+          { display_name: "Waffle", product_type: ProductType.CONE },
+          { display_name: "Chocolate", product_type: ProductType.ICECREAM },
+          { display_name: "Chocolate", product_type: ProductType.ICECREAM },
+          { display_name: "Chocolate", product_type: ProductType.ICECREAM },
+          { display_name: "Hot Fudge", product_type: ProductType.TOPPING },
+          { display_name: "Sprinkles", product_type: ProductType.TOPPING },
         ],
         droneId: 1,
       },
       {
-        components: [
-          { name: "Sugar", type: ProductType.CONE },
-          { name: "Vanilla", type: ProductType.ICECREAM },
-          { name: "Chocolate", type: ProductType.ICECREAM },
-          { name: "Sprinkles", type: ProductType.TOPPING },
+        products: [
+          { display_name: "Sugar", product_type: ProductType.CONE },
+          { display_name: "Vanilla", product_type: ProductType.ICECREAM },
+          { display_name: "Chocolate", product_type: ProductType.ICECREAM },
+          { display_name: "Sprinkles", product_type: ProductType.TOPPING },
         ],
         droneId: 1,
       },
       {
-        components: [
-          { name: "Waffle", type: ProductType.CONE },
-          { name: "Vanilla", type: ProductType.ICECREAM },
-          { name: "Vanilla", type: ProductType.ICECREAM },
-          { name: "Hot Fudge", type: ProductType.TOPPING },
-          { name: "Sprinkles", type: ProductType.TOPPING },
+        products: [
+          { display_name: "Waffle", product_type: ProductType.CONE },
+          { display_name: "Vanilla", product_type: ProductType.ICECREAM },
+          { display_name: "Vanilla", product_type: ProductType.ICECREAM },
+          { display_name: "Hot Fudge", product_type: ProductType.TOPPING },
+          { display_name: "Sprinkles", product_type: ProductType.TOPPING },
         ],
         droneId: 1,
       },
     ],
-    totalPrice: 1800,
-    timestamp: new Date(),
-    employeeCut: 1000,
+    total_price: 1800,
+    order_time: new Date(),
+    employee_cut: 1000,
   },
   {
     cones: [
       {
-        components: [
-          { name: "Sugar", type: ProductType.CONE },
-          { name: "Vanilla", type: ProductType.ICECREAM },
-          { name: "Sprinkles", type: ProductType.TOPPING },
+        products: [
+          { display_name: "Sugar", product_type: ProductType.CONE },
+          { display_name: "Vanilla", product_type: ProductType.ICECREAM },
+          { display_name: "Sprinkles", product_type: ProductType.TOPPING },
         ],
         droneId: 2,
       },
       {
-        components: [
-          { name: "Sugar", type: ProductType.CONE },
-          { name: "Vanilla", type: ProductType.ICECREAM },
-          { name: "Sprinkles", type: ProductType.TOPPING },
+        products: [
+          { display_name: "Sugar", product_type: ProductType.CONE },
+          { display_name: "Vanilla", product_type: ProductType.ICECREAM },
+          { display_name: "Sprinkles", product_type: ProductType.TOPPING },
         ],
         droneId: 2,
       },
     ],
-    totalPrice: 1000,
-    timestamp: new Date(),
-    employeeCut: 500,
+    total_price: 1000,
+    order_time: new Date(),
+    employee_cut: 500,
   },
 ];
 

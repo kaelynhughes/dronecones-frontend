@@ -1,37 +1,39 @@
-import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
+  Alert,
   AppBar,
   Box,
   Container,
   Divider,
   Drawer,
+  IconButton,
+  Snackbar,
   ToggleButton,
   ToggleButtonGroup,
   Toolbar,
   useTheme,
 } from "@mui/material";
 import IcecreamOutlinedIcon from "@mui/icons-material/IcecreamOutlined";
+import CloseIcon from "@mui/icons-material/CloseOutlined";
 import "../index.css";
 import "../fonts/AerologicaRegular-K7day.ttf";
-import { ProductType, UserType } from "../types";
+import { UserType } from "../types";
 import { useStore } from "../store";
+import React from "react";
 
 // Open to renaming this, this is the parent page for the rest of the app once the user has logged in.
 export default function AppPage() {
   const user = useStore((state) => state.user);
   const mode = useStore((state) => state.userMode);
-  const products = useStore((state) => state.products);
-  const orders = useStore((state) => state.orders);
-  const drones = useStore((state) => state.drones);
-  const cart = useStore((state) => state.cart);
   const appPath = useStore((state) => state.appPath);
+  const error = useStore((state) => state.error);
   const navigate = useNavigate();
   const theme = useTheme();
 
   const { changeMode } = useStore();
   const { changePath } = useStore();
+  const { removeError } = useStore();
   const { clearState } = useStore();
 
   const optionButtonStyle = {
@@ -49,6 +51,18 @@ export default function AppPage() {
       navigate(`/${newPath}`);
     }
   };
+
+  const snackbarClose = () => {
+    removeError();
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton size="small" aria-label="close" onClick={snackbarClose}>
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <>
@@ -329,6 +343,37 @@ export default function AppPage() {
         >
           <Outlet />
         </Box>
+        <Snackbar
+          open={error != ""}
+          autoHideDuration={5000}
+          onClose={snackbarClose}
+        >
+          <Alert
+            severity="error"
+            sx={{
+              width: "100%",
+              backgroundColor: `${theme.palette.secondary.light}`,
+              fontFamily: "pixelfont",
+              fontSize: "10px",
+              color: "#ffff",
+              "& .MuiAlert-message": { alignSelf: "center", width: "inherit" },
+            }}
+            action={
+              <React.Fragment>
+                <IconButton
+                  size="small"
+                  aria-label="close"
+                  sx={{ color: "white" }}
+                  onClick={snackbarClose}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+          >
+            {error}
+          </Alert>
+        </Snackbar>
       </Box>
     </>
   );
