@@ -178,34 +178,42 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           };
           return new_element;
         });
-        try {
-          const body = {
-            total_price: order.total_price,
-            employee_cut: order.employee_cut,
-            profit: order.profit,
-            order_time: date.toLocaleString(),
-            cones: parsedCones,
-          };
-          const response = await axios.post(
-            `${BACKEND_URL_DEV}/customer/${userId}/checkout`,
-            body
-          );
-          if (!response.data?.error) {
-            set((state) => ({
-              cart: [],
-            }));
-          } else {
-            set((state) => ({
-              ...state,
-              error:
-                "Error placing order: " +
-                response.data?.error +
-                ", please try again.",
-            }));
+        if (parsedCones.length > 3) {
+          set((state) => ({
+            ...state,
+            error:
+              "Error: You cannot currently order this many cones. Only 3 cones may be ordered at once.",
+          }));
+        } else {
+          try {
+            const body = {
+              total_price: order.total_price,
+              employee_cut: order.employee_cut,
+              profit: order.profit,
+              order_time: date.toLocaleString(),
+              cones: parsedCones,
+            };
+            const response = await axios.post(
+              `${BACKEND_URL_DEV}/customer/${userId}/checkout`,
+              body
+            );
+            if (!response.data?.error) {
+              set((state) => ({
+                cart: [],
+              }));
+            } else {
+              set((state) => ({
+                ...state,
+                error:
+                  "Error placing order: " +
+                  response.data?.error +
+                  ", please try again.",
+              }));
+            }
+          } catch (error) {
+            console.log(error);
+            set((state) => ({ ...state, error: `${error}` }));
           }
-        } catch (error) {
-          console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
         }
       },
       addProduct: (product) =>
