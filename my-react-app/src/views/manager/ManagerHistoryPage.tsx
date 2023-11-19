@@ -5,16 +5,12 @@ import { Order, UserType } from "../../types";
 import { useStore } from "../../store";
 import useGetHistory from "../../services/manager/useGetHistory";
 import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Accordion,
   AccordionSummary,
   Typography,
   AccordionDetails,
   useTheme,
-  Box,
+ 
 } from "@mui/material";
 import { getConeString, getPriceString } from "../../services/helperFunctions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -27,6 +23,7 @@ const wordStyle = {
 
 
 export default function ManagerHistoryPage() {
+  const theme = useTheme();
   const user = useStore((state) => state.user);
   const [history, setHistory] = useState<Order[]>();
   const fetchHistory = async () => {
@@ -57,8 +54,6 @@ export default function ManagerHistoryPage() {
           {order.timestamp.getMonth()}/{order.timestamp.getDate()}/{order.timestamp.getFullYear()} {order.timestamp.getHours()}:{order.timestamp.getMinutes()} - CUSTOMER NAME - Order Size: {order.cones.length}
       </AccordionSummary>
       <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
-        {/*REPLACE DRONEID AND DRONEOPERATOR ID LATER*/}
-        DRONEID AND DRONEOPERATOR ID
         {order.cones.map((cone, index) => (
           <Typography key={index}>{getConeString(cone)}</Typography>
         ))}
@@ -68,6 +63,22 @@ export default function ManagerHistoryPage() {
         <Typography>{`Employee cut: ${getPriceString(
           order?.employeeCut || 0
         )}`}</Typography>
+{/*BANNING USER WILL TAKE PLACE HERE*/}
+          <Button
+          style={{
+          color:"white",
+          background: `${theme.palette.primary.dark}`,
+          fontSize: "10px",
+          fontFamily: "pixelfont",}}
+
+          onClick={()=>{
+            console.log("Ban user");
+          }}
+          >
+
+          Ban User
+          </Button>
+
       </AccordionDetails>
     </Accordion>
       
