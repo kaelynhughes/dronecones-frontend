@@ -9,7 +9,7 @@ export type Drone = {
 };
 
 export type FullCone = {
-  droneId?: number;
+  drone_id?: number;
   products: Product[];
 };
 
@@ -42,8 +42,8 @@ export enum ProductType {
 
 export type User = {
   username: string;
-  userType: UserType;
-  isActive: boolean;
+  user_type: UserType;
+  is_active: boolean;
   id?: number;
 };
 

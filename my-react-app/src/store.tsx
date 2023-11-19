@@ -21,17 +21,20 @@ type DroneConesState = {
   cart: FullCone[];
   drones: Drone[];
   orders: Order[];
+  users: User[];
   error: string;
 
   loadedProducts: boolean;
   loadedDrones: boolean;
+  loadedUsers: boolean;
   loadedEmployeeOrders: boolean;
   loadedCustomerOrders: boolean;
   loadedManagerOrders: boolean;
 };
 
 type DroneConesActions = {
-  login: (user: User) => void;
+  login: (username: string, password: string) => void;
+  signup: (username: string, password: string, user_type: UserType) => void;
 
   changeMode: (mode: UserType) => void;
   changePath: (path: string) => void;
@@ -41,6 +44,7 @@ type DroneConesActions = {
   loadProducts: () => void;
   addProduct: (product: Product) => void;
   editProduct: (id: number, product: Product) => void;
+  removeProduct: (id: number) => void;
   checkoutOrder: (order: Order) => void;
 
   addConeToCart: (cone: FullCone) => void;
@@ -53,27 +57,31 @@ type DroneConesActions = {
   createDrone: (drone: Drone) => void;
   removeDrone: (serial_number: string) => void;
 
+  loadUsers: () => void;
+  editUser: (user: User) => void;
+
   loadCustomerHistory: () => void;
   loadEmployeeHistory: () => void;
+  loadManagerHistory: () => void;
   addHistory: (order: Order) => void;
 
   clearState: () => void;
-
-  //TODO: Add update functions for if an item is neither created nor removed, but changed?
 };
 
 const initialState: DroneConesState = {
   appPath: "menu",
-  user: { userType: UserType.GUEST, username: "Guest", isActive: true },
+  user: { user_type: UserType.GUEST, username: "Guest", is_active: true },
   userMode: UserType.CUSTOMER,
   products: [],
   cart: [],
   drones: [],
   orders: [],
+  users: [],
   error: "",
 
   loadedProducts: false,
   loadedDrones: false,
+  loadedUsers: false,
   loadedEmployeeOrders: false,
   loadedCustomerOrders: false,
   loadedManagerOrders: false,
@@ -90,7 +98,54 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
       setError: (error) => set(() => ({ error: error })),
       removeError: () => set(() => ({ error: "" })),
 
-      login: (user) => set(() => ({ user: user })),
+      login: async (username, password) => {
+        const body = { username: username, password: password };
+        try {
+          const response = await axios.post(
+            `${BACKEND_URL_DEV}/auth/login`,
+            body
+          );
+          if (!response.data?.error) {
+            set((state) => ({
+              ...state,
+              user: {
+                username: username,
+                id: response.data.id,
+                user_type: response.data.user_type,
+                is_active: response.data.is_active,
+              },
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
+
+      signup: async (username, password, user_type) => {
+        const body = {
+          username: username,
+          password: password,
+          user_type: user_type,
+        };
+        try {
+          const response = await axios.post(
+            `${BACKEND_URL_DEV}/auth/register`,
+            body
+          );
+          if (!response.data?.error) {
+            get().login(username, password);
+          } else {
+            set((state) => ({
+              ...state,
+              error: "Error registering: " + response.data?.error,
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
 
       loadProducts: async () => {
         try {
@@ -216,15 +271,91 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         }
       },
-      addProduct: (product) =>
-        set((state) => ({ products: [...state.products, product] })),
-      editProduct: (id, product) =>
-        set((state) => ({
-          products: [
-            ...state.products.filter((product) => product.id !== id),
-            product,
-          ],
-        })),
+      addProduct: async (product) => {
+        try {
+          const body = {
+            display_name: product.display_name,
+            price_per_unit: product?.price_per_unit || 0,
+            product_type: product.product_type,
+            stock: product?.stock || 0,
+          };
+          const response: AxiosResponse = await axios.post(
+            `${BACKEND_URL_DEV}/manager/product`,
+            body
+          );
+          if (response.data?.success) {
+            set((state) => ({
+              products: [
+                ...state.products,
+                { ...product, id: response.data.success },
+              ],
+            }));
+          } else {
+            set((state) => ({
+              ...state,
+              error: "Error creating product: " + response.data.error,
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
+      editProduct: async (id, product) => {
+        const userId = get().user?.id || 0;
+        try {
+          const body = {
+            display_name: product.display_name,
+            price_per_unit: product?.price_per_unit || 0,
+            product_type: product.product_type,
+            stock: product?.stock || 0,
+            id: product?.id || 0,
+          };
+          const response: AxiosResponse = await axios.put(
+            `${BACKEND_URL_DEV}/manager/product`,
+            body
+          );
+          if (response.data?.success) {
+            set((state) => ({
+              products: [
+                ...state.products.filter((product) => product.id !== id),
+                product,
+              ],
+            }));
+          } else {
+            set((state) => ({
+              ...state,
+              error: "Error updating product: " + response.data.error,
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
+      removeProduct: async (id) => {
+        const body = { id: id };
+        try {
+          const response: AxiosResponse = await axios.delete(
+            `${BACKEND_URL_DEV}/manager/product`,
+            { data: body }
+          );
+          if (!response.data?.error) {
+            set((state) => ({
+              ...state,
+              products: state.products.filter((product) => product.id !== id),
+            }));
+          } else {
+            set((state) => ({
+              ...state,
+              error: "Error deleting product: " + response.data?.error,
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
 
       addConeToCart: (cone) =>
         set((state) => ({ cart: [...state.cart, cone] })),
@@ -299,7 +430,6 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           set((state) => ({ ...state, error: `${error}` }));
         }
       },
-
       createDrone: async (drone) => {
         const userId = get().user?.id || 0;
         try {
@@ -359,6 +489,70 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         }
       },
 
+      loadUsers: async () => {
+        try {
+          const response: AxiosResponse = await axios.get(
+            `${BACKEND_URL_DEV}/manager/users`
+          );
+          if (response.data?.users?.length > 0) {
+            const userArray: User[] = response.data.users;
+            set((state) => ({
+              users: [
+                ...state.users,
+                ...userArray.filter(
+                  (user) =>
+                    state.users.filter((stateUser) => stateUser.id === user.id)
+                      .length === 0
+                ),
+              ],
+              loadedUsers: true,
+            }));
+          } else {
+            set((state) => ({
+              ...state,
+              loadedUsers: true,
+              error: "Error loading users: " + response.data?.error,
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
+      editUser: async (user) => {
+        const userId = user?.id || 0;
+        if (userId !== 0) {
+          try {
+            const body = {
+              username: user.username,
+              is_active: user.is_active,
+            };
+            const response: AxiosResponse = await axios.patch(
+              `${BACKEND_URL_DEV}/customer/${userId}/account`,
+              body
+            );
+            if (!response.data?.error) {
+              set((state) => ({
+                users: [
+                  ...state.users.filter(
+                    (stateUser) => stateUser.id !== user.id
+                  ),
+                  user,
+                ],
+              }));
+            } else {
+              set((state) => ({
+                ...state,
+                error: "Error editing user: " + response.data.error,
+              }));
+            }
+          } catch (error) {
+            console.log(error);
+            set((state) => ({ ...state, error: `${error}` }));
+          }
+        }
+      },
+
       loadCustomerHistory: async () => {
         const userId = get().user?.id || 0;
         try {
@@ -397,6 +591,29 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
             set((state) => ({
               ...state,
               loadedEmployeeOrders: true,
+              error: "Error loading history: " + response.data?.error,
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+          set((state) => ({ ...state, error: `${error}` }));
+        }
+      },
+      loadManagerHistory: async () => {
+        const userId = get().user?.id || 0;
+        try {
+          const response: AxiosResponse = await axios.get(
+            `${BACKEND_URL_DEV}/customer/${userId}/history`
+          );
+          if (response.data?.full_orders.length > 0) {
+            set((state) => ({
+              orders: [...state.orders, ...response.data.full_orders],
+              loadedManagerOrders: true,
+            }));
+          } else {
+            set((state) => ({
+              ...state,
+              loadedManagerOrders: true,
               error: "Error loading history: " + response.data?.error,
             }));
           }

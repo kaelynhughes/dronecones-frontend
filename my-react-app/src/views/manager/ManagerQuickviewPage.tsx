@@ -9,7 +9,7 @@ export default function ManagerQuickviewPage() {
 
   return (
     <>
-      {user.userType === UserType.MANAGER && (
+      {user.user_type === UserType.MANAGER && (
         <>
           <h1>
             Manager Quickview Page, displays and overview of manager information

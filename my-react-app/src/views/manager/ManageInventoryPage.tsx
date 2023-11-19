@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { Product, UserType, ProductType } from "../../types";
 import { useStore } from "../../store";
-import useGetInventory from "../../services/manager/useGetInventory";
 import {
   Radio,
   FormLabel,
@@ -45,19 +44,16 @@ export default function ManageInventoryPage() {
   const { editProduct } = useStore();
   const { removeProduct } = useStore();
   const { addProduct } = useStore();
+  const { loadProducts } = useStore();
+  const { loadedProducts } = useStore();
 
-  const [inventory, setInventory] = useState<Product[] | null>();
   let [newProductName, setNewProductName] = useState("");
   let [newProductQuantity, setNewProductQuantity] = useState(0);
-  let [newProductPrice, setNewPrice] = useState(0);
+  let [newProductPrice, setNewProductPrice] = useState(0);
   let [newProductType, setNewProductType] = useState<ProductType>(
     ProductType.ICECREAM
   );
 
-  const fetchInventory = async () => {
-    const fetchedInventory = await useGetInventory();
-    setInventory(fetchedInventory);
-  };
   let errorState = false;
 
   const toppingsList = useStore((state) =>
@@ -77,23 +73,18 @@ export default function ManageInventoryPage() {
   );
 
   const products = useStore((state) => state.products);
-  const { loadProducts } = useStore();
 
   const [quantity, setQuantity] = useState(0);
 
-  if (products.length === 0) {
-    loadProducts(useGetInventory());
+  if (products.length === 0 && !loadedProducts) {
+    loadProducts();
   }
-
-  useEffect(() => {
-    fetchInventory;
-  }, []);
 
   {
     /*Populate topping options*/
   }
   const renderedToppingsList = toppingsList.map((item) => {
-    let localQuanitity = 0;
+    let localQuantity = 0;
     return (
       <Card key={item.id}>
         <div style={{ display: "flex" }}>
@@ -106,7 +97,7 @@ export default function ManageInventoryPage() {
             color="secondary"
             onClick={() => {
               if (item.id) {
-                removeProduct(item);
+                removeProduct(item.id);
               }
             }}
           >
@@ -122,16 +113,15 @@ export default function ManageInventoryPage() {
               min: "-100",
               max: "100",
               step: "10",
-              error: errorState,
-              helperText: "Invalid.",
+              error: errorState.toString(),
+              helpertext: "Invalid.",
             }}
             onChange={(event) => {
               if (
                 parseInt(event.target.value) <= 100 &&
                 parseInt(event.target.value) >= -100
               ) {
-                localQuanitity = parseInt(event.target.value);
-                console.log(localQuanitity);
+                localQuantity = parseInt(event.target.value);
                 errorState = false;
               } else {
                 setQuantity(0);
@@ -148,14 +138,13 @@ export default function ManageInventoryPage() {
                 const updateItem = { ...item };
 
                 if (updateItem.stock) {
-                  updateItem.stock = updateItem.stock + localQuanitity;
-                  console.log(updateItem.stock);
+                  updateItem.stock = updateItem.stock + localQuantity;
                   if (updateItem.stock < 0) {
                     updateItem.stock = 0;
                   }
                 } else {
-                  updateItem.stock = localQuanitity;
-                  if (localQuanitity < 0) {
+                  updateItem.stock = localQuantity;
+                  if (localQuantity < 0) {
                     updateItem.stock = 0;
                   }
                 }
@@ -175,7 +164,7 @@ export default function ManageInventoryPage() {
     /*Populate flavor options*/
   }
   const renderedFlavorList = flavorList.map((item) => {
-    let localQuanitity = 0;
+    let localQuantity = 0;
     return (
       <Card key={item.id}>
         <div style={{ display: "flex" }}>
@@ -188,7 +177,7 @@ export default function ManageInventoryPage() {
             color="secondary"
             onClick={() => {
               if (item.id) {
-                removeProduct(item);
+                removeProduct(item.id);
               }
             }}
           >
@@ -204,16 +193,16 @@ export default function ManageInventoryPage() {
               min: "-100",
               max: "100",
               step: "10",
-              error: errorState,
-              helperText: "Invalid.",
+              error: errorState.toString(),
+              helpertext: "Invalid.",
             }}
             onChange={(event) => {
               if (
                 parseInt(event.target.value) <= 100 &&
                 parseInt(event.target.value) >= -100
               ) {
-                localQuanitity = parseInt(event.target.value);
-                console.log(localQuanitity);
+                localQuantity = parseInt(event.target.value);
+                console.log(localQuantity);
                 errorState = false;
               } else {
                 errorState = true;
@@ -229,14 +218,14 @@ export default function ManageInventoryPage() {
                 const updateItem = { ...item };
 
                 if (updateItem.stock) {
-                  updateItem.stock = updateItem.stock + localQuanitity;
+                  updateItem.stock = updateItem.stock + localQuantity;
                   console.log(updateItem.stock);
                   if (updateItem.stock < 0) {
                     updateItem.stock = 0;
                   }
                 } else {
-                  updateItem.stock = localQuanitity;
-                  if (localQuanitity < 0) {
+                  updateItem.stock = localQuantity;
+                  if (localQuantity < 0) {
                     updateItem.stock = 0;
                   }
                 }
@@ -256,7 +245,7 @@ export default function ManageInventoryPage() {
     /*Populate cone options*/
   }
   const renderedConesList = conesList.map((item) => {
-    let localQuanitity = 0;
+    let localQuantity = 0;
     return (
       <Card key={item.id}>
         <div style={{ display: "flex" }}>
@@ -269,7 +258,7 @@ export default function ManageInventoryPage() {
             color="secondary"
             onClick={() => {
               if (item.id) {
-                removeProduct(item);
+                removeProduct(item.id);
               }
             }}
           >
@@ -285,16 +274,16 @@ export default function ManageInventoryPage() {
               min: "-100",
               max: "100",
               step: "10",
-              error: errorState,
-              helperText: "Invalid.",
+              error: errorState.toString(),
+              helpertext: "Invalid.",
             }}
             onChange={(event) => {
               if (
                 parseInt(event.target.value) <= 100 &&
                 parseInt(event.target.value) >= -100
               ) {
-                localQuanitity = parseInt(event.target.value);
-                console.log(localQuanitity);
+                localQuantity = parseInt(event.target.value);
+                console.log(localQuantity);
                 errorState = false;
               } else {
                 setQuantity(0);
@@ -311,14 +300,14 @@ export default function ManageInventoryPage() {
                 const updateItem = { ...item };
 
                 if (updateItem.stock) {
-                  updateItem.stock = updateItem.stock + localQuanitity;
+                  updateItem.stock = updateItem.stock + localQuantity;
                   console.log(updateItem.stock);
                   if (updateItem.stock < 0) {
                     updateItem.stock = 0;
                   }
                 } else {
-                  updateItem.stock = localQuanitity;
-                  if (localQuanitity < 0) {
+                  updateItem.stock = localQuantity;
+                  if (localQuantity < 0) {
                     updateItem.stock = 0;
                   }
                 }
@@ -340,7 +329,7 @@ export default function ManageInventoryPage() {
     </>
   ) : (
     <>
-      {user.userType === UserType.MANAGER && (
+      {user.user_type === UserType.MANAGER && (
         <>
           {/*
           Manage Inventory Page, displays remaining stock and inventory cost,
@@ -357,14 +346,6 @@ export default function ManageInventoryPage() {
               {renderedToppingsList}
               <h1 className="header-font">Cones</h1>
               {renderedConesList}
-
-              <Button
-                variant="contained"
-                component={Link}
-                to="/app/manager-quickview"
-              >
-                Back to Quickview
-              </Button>
             </div>
 
             {/* Add items */}
@@ -383,12 +364,13 @@ export default function ManageInventoryPage() {
                   {/* Product name */}
                   <TextField
                     required
-                    id="outlined-required"
+                    id="Outlined-required"
                     label="Product Name"
                     defaultValue=""
+                    value={newProductName}
                     sx={{ margin: "10px", fontFamily: "pixelfont" }}
                     onChange={(event) => {
-                      newProductName = event.target.value;
+                      setNewProductName(event.target.value);
                     }}
                   />
                   {/* Quantity */}
@@ -397,15 +379,16 @@ export default function ManageInventoryPage() {
                     label="Quantity"
                     type="number"
                     defaultValue="0"
+                    value={newProductQuantity}
                     inputProps={{
                       min: "0",
                       max: "100",
                       step: "10",
-                      error: errorState,
-                      helperText: "Invalid.",
+                      error: errorState.toString(),
+                      helpertext: "Invalid.",
                     }}
                     onChange={(event) => {
-                      newProductQuantity = parseInt(event.target.value);
+                      setNewProductQuantity(parseInt(event.target.value));
                     }}
                     sx={{ margin: "10px", fontFamily: "pixelfont" }}
                   />
@@ -415,15 +398,16 @@ export default function ManageInventoryPage() {
                     label="Pricing"
                     type="number"
                     defaultValue="1.00"
+                    value={newProductPrice}
                     inputProps={{
                       min: "0",
                       max: "100",
                       step: ".5",
-                      error: errorState,
-                      helperText: "Invalid.",
+                      error: errorState.toString(),
+                      helpertext: "Invalid.",
                     }}
                     onChange={(event) => {
-                      newProductPrice = parseFloat(event.target.value);
+                      setNewProductPrice(parseFloat(event.target.value));
                     }}
                     sx={{ margin: "10px", fontFamily: "pixelfont" }}
                   />
@@ -435,6 +419,7 @@ export default function ManageInventoryPage() {
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
                       defaultValue=""
+                      value={newProductType}
                       name="radio-buttons-group"
                     >
                       <FormControlLabel
@@ -466,17 +451,15 @@ export default function ManageInventoryPage() {
                   <Button
                     onClick={(event) => {
                       if (newProductName != "" && newProductPrice != 0) {
-                        //ID SHOULD BE CREATED VIA API
                         addProduct({
                           display_name: newProductName,
                           stock: newProductQuantity,
                           price_per_unit: newProductPrice,
                           product_type: newProductType,
-                          id: 23,
                         });
-                        newProductName = "";
-                        newProductPrice = 0;
-                        newProductQuantity = 0;
+                        setNewProductName("");
+                        setNewProductPrice(0);
+                        setNewProductQuantity(0);
                         console.log("Item Added!");
                       } else {
                         console.log("Missing Field...");

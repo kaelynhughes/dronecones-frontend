@@ -63,8 +63,8 @@ export default function ManageDronesPage() {
 
   return (
     <>
-      {(user.userType === UserType.EMPLOYEE ||
-        user.userType === UserType.MANAGER) && (
+      {(user.user_type === UserType.EMPLOYEE ||
+        user.user_type === UserType.MANAGER) && (
         <Box
           sx={{
             width: "100%",

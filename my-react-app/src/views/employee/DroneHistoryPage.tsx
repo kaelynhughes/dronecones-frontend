@@ -47,7 +47,7 @@ export default function DroneHistoryPage() {
   }
 
   const getDroneNames = (order: Order) => {
-    const droneIds = order.cones.map((cone) => cone.droneId);
+    const droneIds = order.cones.map((cone) => cone.drone_id);
     let names =
       drones.find((drone) => drone.id === droneIds[0])?.display_name ||
       "Drone Not Found";

@@ -105,8 +105,8 @@ export default function AppPage() {
                   flexDirection: "row",
                 }}
               >
-                {(user.userType === UserType.EMPLOYEE ||
-                  user.userType === UserType.MANAGER) &&
+                {(user.user_type === UserType.EMPLOYEE ||
+                  user.user_type === UserType.MANAGER) &&
                   mode !== UserType.CUSTOMER && (
                     <Button
                       variant="outlined"
@@ -127,8 +127,8 @@ export default function AppPage() {
                     </Button>
                   )}
 
-                {(user.userType === UserType.EMPLOYEE ||
-                  user.userType === UserType.MANAGER) &&
+                {(user.user_type === UserType.EMPLOYEE ||
+                  user.user_type === UserType.MANAGER) &&
                   mode !== UserType.EMPLOYEE && (
                     <Button
                       variant="outlined"
@@ -149,7 +149,7 @@ export default function AppPage() {
                     </Button>
                   )}
 
-                {user.userType === UserType.MANAGER &&
+                {user.user_type === UserType.MANAGER &&
                   mode !== UserType.MANAGER && (
                     <Button
                       variant="outlined"
@@ -227,8 +227,8 @@ export default function AppPage() {
           anchor="left"
           className="sidebar"
         >
-          {(user.userType === UserType.CUSTOMER ||
-            user.userType === UserType.GUEST ||
+          {(user.user_type === UserType.CUSTOMER ||
+            user.user_type === UserType.GUEST ||
             mode === UserType.CUSTOMER) && (
             <Box sx={{ width: "100%", padding: 0 }}>
               <Divider sx={{ height: "65px" }} />
@@ -257,8 +257,8 @@ export default function AppPage() {
               </ToggleButtonGroup>
             </Box>
           )}
-          {(user.userType === UserType.EMPLOYEE ||
-            user.userType === UserType.MANAGER) &&
+          {(user.user_type === UserType.EMPLOYEE ||
+            user.user_type === UserType.MANAGER) &&
             mode === UserType.EMPLOYEE && (
               <Box sx={{ width: "100%", padding: 0 }}>
                 <Divider sx={{ height: "65px" }} />
@@ -293,7 +293,7 @@ export default function AppPage() {
                 </ToggleButtonGroup>
               </Box>
             )}
-          {user.userType === UserType.MANAGER && mode === UserType.MANAGER && (
+          {user.user_type === UserType.MANAGER && mode === UserType.MANAGER && (
             <Box sx={{ width: "100%", padding: 0 }}>
               <Divider sx={{ height: "65px" }} />
               {/* Here we use a vertical ToggleButtonGroup */}

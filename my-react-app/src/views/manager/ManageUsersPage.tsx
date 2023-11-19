@@ -9,7 +9,7 @@ export default function ManageUsersPage() {
 
   return (
     <>
-      {user.userType === UserType.MANAGER && (
+      {user.user_type === UserType.MANAGER && (
         <>
           <h1>
             Manage Users Page, allows a manager to ban or unban users sorted by
