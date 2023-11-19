@@ -60,7 +60,7 @@ export default function ManagerQuickviewPage() {
     loadHistory(useGetHistory());
   }
   const { loadProducts } = useStore();
-  if(loadProducts.length === 0){
+  if(products.length === 0){
     console.log("Dummy products loaded");
     loadProducts(useGetInventory());
   }
@@ -136,9 +136,9 @@ export default function ManagerQuickviewPage() {
     );
   });
 
-
   
-
+  
+  console.log(earnings);
   return (
     <>
       {user.userType === UserType.MANAGER && (
@@ -157,6 +157,8 @@ export default function ManagerQuickviewPage() {
             backgroundColor: `${theme.palette.background.paper}`,
           }}
         >
+          {/*Displays manager information*/
+          }
               <Typography
                 sx={textStyle}
                 variant="h4"
@@ -200,9 +202,6 @@ export default function ManagerQuickviewPage() {
                 <Card sx={textStyle}><div className="centerFormat">{stockTitle}{renderedLowStockItems}</div></Card>
                 </Grid>
               </Grid>
-
-            
-
         </Box>
 
 
