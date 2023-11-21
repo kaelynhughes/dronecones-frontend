@@ -14,6 +14,9 @@ import {
   AccordionDetails,
   useTheme,
   Box,
+  Card,
+  CardContent,
+  CardHeader,
 } from "@mui/material";
 import { getConeString, getPriceString } from "../../services/helperFunctions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -62,76 +65,90 @@ export default function DroneHistoryPage() {
 
     return names;
   };
-
+  console.log(drones);
   return (
-    <Box
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-      }}
-    >
-      <Box
-        style={{
-          marginBottom: "20px",
-          marginTop: "20px",
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-        }}
-      >
-        <FormControl style={{ marginRight: "10px" }}>
-          <InputLabel sx={wordStyle}>Filter by:</InputLabel>
-          <Select
-            sx={{
-              ...wordStyle,
-              width: "250px",
-              backgroundColor: `${theme.palette.primary.dark}`,
-            }}
-            inputProps={{
-              MenuProps: {
-                MenuListProps: {
-                  sx: {
-                    backgroundColor: `${theme.palette.primary.dark}`,
-                  },
-                },
-              },
-            }}
-            label="Filter by:"
-            onChange={(event) => {
-              sortOrders(
-                orders.filter((order) =>
-                  getDroneNames(order).includes(`${event.target.value}`)
-                )
-              );
+    <>
+      {orders.length === 0 ? (
+        <Card variant="outlined" sx={{ width: "full" }}>
+          <CardContent>
+            <Typography {...wordStyle} paddingBottom="10px">
+              No orders yet!
+            </Typography>
+            <Typography {...wordStyle} fontSize="14px">
+              Looks like your drones haven't delivered anything yet. Check again
+              later!
+            </Typography>
+          </CardContent>
+        </Card>
+      ) : (
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <Box
+            style={{
+              marginBottom: "20px",
+              marginTop: "20px",
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
             }}
           >
-            <MenuItem
-              sx={{
-                ...wordStyle,
-                backgroundColor: `${theme.palette.primary.main}`,
-              }}
-              key={0}
-              value={""}
-            >
-              None
-            </MenuItem>
-            {drones.map((drone) => (
-              <MenuItem
+            <FormControl style={{ marginRight: "10px" }}>
+              <InputLabel sx={wordStyle}>Filter by:</InputLabel>
+              <Select
                 sx={{
                   ...wordStyle,
-                  backgroundColor: `${theme.palette.primary.main}`,
+                  width: "250px",
+                  backgroundColor: `${theme.palette.primary.dark}`,
                 }}
-                key={drone.id}
-                value={drone.display_name}
+                inputProps={{
+                  MenuProps: {
+                    MenuListProps: {
+                      sx: {
+                        backgroundColor: `${theme.palette.primary.dark}`,
+                      },
+                    },
+                  },
+                }}
+                label="Filter by:"
+                onChange={(event) => {
+                  sortOrders(
+                    orders.filter((order) =>
+                      getDroneNames(order).includes(`${event.target.value}`)
+                    )
+                  );
+                }}
               >
-                {drone.display_name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+                <MenuItem
+                  sx={{
+                    ...wordStyle,
+                    backgroundColor: `${theme.palette.primary.main}`,
+                  }}
+                  key={0}
+                  value={""}
+                >
+                  None
+                </MenuItem>
+                {drones.map((drone) => (
+                  <MenuItem
+                    sx={{
+                      ...wordStyle,
+                      backgroundColor: `${theme.palette.primary.main}`,
+                    }}
+                    key={drone.id}
+                    value={drone.display_name}
+                  >
+                    {drone.display_name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-        {/* <FormControl>
+            {/* <FormControl>
           <InputLabel sx={wordStyle}># of Cones</InputLabel>
           <Select
             sx={{
@@ -165,53 +182,55 @@ export default function DroneHistoryPage() {
             ))}
           </Select>
         </FormControl> */}
-      </Box>
+          </Box>
 
-      <Box
-        sx={{
-          width: "100%",
-          flexGrow: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {sortedOrders.map((order, index) => (
-          <Accordion
+          <Box
             sx={{
-              width: "1130px",
-              "& .MuiTypography-root": wordStyle,
+              width: "100%",
               flexGrow: 1,
+              display: "flex",
+              flexDirection: "column",
             }}
-            key={index}
           >
-            <AccordionSummary
-              sx={{ flexGrow: 1, width: "100%" }}
-              expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-            >
-              <Typography>{`${getDroneNames(order)} delivered ${
-                order.cones.length
-              } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
-                order.order_time
-              ).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}`}</Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
-              {order.cones.map((cone, index) => (
-                <Typography key={index}>{getConeString(cone)}</Typography>
-              ))}
-              <Typography>{`Total Order Price: ${getPriceString(
-                order.total_price
-              )}`}</Typography>
-              <Typography>{`Your Earnings: ${getPriceString(
-                order?.employee_cut || 0
-              )}`}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </Box>
-    </Box>
+            {sortedOrders.map((order, index) => (
+              <Accordion
+                sx={{
+                  width: "1130px",
+                  "& .MuiTypography-root": wordStyle,
+                  flexGrow: 1,
+                }}
+                key={index}
+              >
+                <AccordionSummary
+                  sx={{ flexGrow: 1, width: "100%" }}
+                  expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                >
+                  <Typography>{`${getDroneNames(order)} delivered ${
+                    order.cones.length
+                  } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
+                    order.order_time ? order.order_time : ""
+                  ).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}`}</Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
+                  {order.cones.map((cone, index) => (
+                    <Typography key={index}>{getConeString(cone)}</Typography>
+                  ))}
+                  <Typography>{`Total Order Price: ${getPriceString(
+                    order.total_price
+                  )}`}</Typography>
+                  <Typography>{`Your Earnings: ${getPriceString(
+                    order?.employee_cut || 0
+                  )}`}</Typography>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </Box>
+        </Box>
+      )}
+    </>
   );
 }
