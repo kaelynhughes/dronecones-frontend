@@ -8,6 +8,7 @@ import {
   Switch,
   useTheme,
   Tooltip,
+  Box,
 } from "@mui/material";
 import { useStore } from "../../store";
 import { useEffect, useState } from "react";
@@ -35,12 +36,14 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
     state.drones.find((drone) => drone.id === droneId)
   );
   const { editDrone } = useStore();
+  const { createDrone } = useStore();
 
   const [newName, setNewName] = useState("");
   const [newSize, setNewSize] = useState(1);
   const [newIsActive, setNewIsActive] = useState(true);
+  const [newSerialNumber, setNewSerialNumber] = useState("");
 
-  let errorState = false;
+  const [errorState, setErrorState] = useState(false);
 
   useEffect(() => {
     // Find the drone to be edited
@@ -48,14 +51,16 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
 
     if (drone) {
       // If a drone is found, set the input fields with its data
-      setNewName(drone.name);
-      setNewSize(drone.size);
-      setNewIsActive(drone.isActive);
+      setNewName(drone.display_name);
+      setNewSize(drone.drone_size);
+      setNewIsActive(drone.is_active);
+      setNewSerialNumber(drone.serial_number);
     } else {
       // If creating a new drone, reset the input fields
       setNewName("");
       setNewSize(1);
       setNewIsActive(true);
+      setNewSerialNumber("");
     }
   }, [open, droneId, drones]);
 
@@ -64,7 +69,9 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
   return (
     <Dialog
       PaperProps={{
-        sx: { backgroundColor: "rgba(97, 29, 159, 1)" },
+        sx: {
+          backgroundColor: "rgba(97, 29, 159, 1)",
+        },
       }}
       open={open}
       onClose={onClose}
@@ -73,43 +80,55 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
         {droneId != -1 ? "Edit Drone" : "New Drone"}
       </DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Name"
-          value={newName}
-          onChange={(event) => setNewName(event.target.value)}
-          sx={{ input: wordStyle }}
-        />
-        <TextField
-          margin="dense"
-          label="Size"
-          type="number"
-          inputProps={{
-            min: "1",
-            max: "3",
-            step: "1",
-            error: errorState,
-            helperText: "Invalid Input.",
-          }}
-          value={newSize}
-          onChange={(event) => {
-            if (
-              parseInt(event.target.value) <= 3 &&
-              parseInt(event.target.value) >= 1
-            ) {
-              setNewSize(parseInt(event.target.value));
-              errorState = false;
-            } else {
-              setNewSize(1);
-              errorState = true;
-            }
-          }}
-          sx={{ input: wordStyle }}
-        />
-        <Tooltip title="Drone Available Off/On">
-          <Switch checked={newIsActive} onChange={toggle} />
-        </Tooltip>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Name"
+            value={newName}
+            onChange={(event) => setNewName(event.target.value)}
+            sx={{ input: wordStyle }}
+          />
+          <TextField
+            margin="dense"
+            label="Size"
+            type="number"
+            inputProps={{
+              min: "1",
+              max: "3",
+              step: "1",
+              error: errorState.toString(),
+              helpertext: "Invalid Input.",
+            }}
+            value={newSize}
+            onChange={(event) => {
+              if (
+                parseInt(event.target.value) <= 3 &&
+                parseInt(event.target.value) >= 1
+              ) {
+                setNewSize(parseInt(event.target.value));
+                setErrorState(false);
+              } else {
+                setNewSize(1);
+                setErrorState(true);
+              }
+            }}
+            sx={{ input: wordStyle }}
+          />
+          {!droneEdit && (
+            <TextField
+              margin="dense"
+              label="Serial #"
+              value={newSerialNumber}
+              onChange={(event) => setNewSerialNumber(event.target.value)}
+              sx={{ input: wordStyle }}
+            />
+          )}
+
+          <Tooltip title="Drone Available Off/On">
+            <Switch checked={newIsActive} onChange={toggle} />
+          </Tooltip>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button sx={wordStyle} variant="outlined" onClick={onClose}>
@@ -119,14 +138,26 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
           sx={wordStyle}
           variant="contained"
           onClick={() => {
-            editDrone(droneId, {
-              name: newName,
-              size: newSize,
-              isActive: newIsActive,
-              earnings: droneEdit?.earnings || 0,
-              orderCount: droneEdit?.orderCount || 0,
-              id: droneId,
-            });
+            if (droneEdit) {
+              editDrone(droneId, {
+                display_name: newName,
+                drone_size: newSize,
+                is_active: newIsActive,
+                earnings: droneEdit?.earnings || 0,
+                num_orders: droneEdit?.num_orders || 0,
+                serial_number: newSerialNumber,
+                id: droneId,
+              });
+            } else {
+              createDrone({
+                display_name: newName,
+                drone_size: newSize,
+                is_active: newIsActive,
+                serial_number: newSerialNumber,
+                earnings: 0,
+                num_orders: 0,
+              });
+            }
             onClose();
           }}
         >

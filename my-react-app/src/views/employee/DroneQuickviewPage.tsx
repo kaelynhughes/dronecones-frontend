@@ -5,7 +5,6 @@ import { useStore } from "../../store";
 import { Drone, UserType } from "../../types";
 import { Box, Divider, Typography, useTheme } from "@mui/material";
 import { getPriceString } from "../../services/helperFunctions";
-import useGetDrones from "../../services/employee/useGetDrones";
 
 const textStyle = {
   color: "white",
@@ -15,12 +14,13 @@ const textStyle = {
 export default function DroneQuickviewPage() {
   const user = useStore((state) => state.user);
   const drones = useStore((state) => state.drones);
+  const { loadedDrones } = useStore();
   const theme = useTheme();
 
   const { loadDrones } = useStore();
 
-  if (drones.length === 0) {
-    loadDrones(useGetDrones());
+  if (drones.length === 0 && !loadedDrones) {
+    loadDrones();
   }
 
   let earnings = 0;
@@ -28,12 +28,12 @@ export default function DroneQuickviewPage() {
 
   let coneCount = 0;
   //This may not be accurate for how many cones a drone has delivered, but in an ideal world it would be.
-  drones.forEach((drone) => (coneCount += drone.orderCount * drone.size));
+  drones.forEach((drone) => (coneCount += drone.num_orders * drone.drone_size));
 
   drones.sort((a: Drone, b: Drone) => {
-    if (a.orderCount > b.orderCount) {
+    if (a.num_orders > b.num_orders) {
       return -1;
-    } else if (a.orderCount < b.orderCount) {
+    } else if (a.num_orders < b.num_orders) {
       return 1;
     }
     return 0;
@@ -41,8 +41,8 @@ export default function DroneQuickviewPage() {
 
   return (
     <>
-      {(user.userType === UserType.EMPLOYEE ||
-        user.userType === UserType.MANAGER) && (
+      {(user.user_type === UserType.EMPLOYEE ||
+        user.user_type === UserType.MANAGER) && (
         <Box
           sx={{
             display: "flex",
@@ -86,20 +86,23 @@ export default function DroneQuickviewPage() {
 
           {drones.length > 0 && (
             <Typography sx={textStyle} variant="h5" component="h4" gutterBottom>
-              {drones[0].name} (Capacity: {drones[0].size} cone
-              {drones[0].size > 1 ? "s" : ""}) - {drones[0].orderCount} orders
+              {drones[0].display_name} (Capacity: {drones[0].drone_size} cone
+              {drones[0].drone_size > 1 ? "s" : ""}) - {drones[0].num_orders}{" "}
+              orders
             </Typography>
           )}
           {drones.length > 1 && (
             <Typography sx={textStyle} variant="h5" component="h4" gutterBottom>
-              {drones[1]?.name} (Capacity: {drones[1]?.size} cone
-              {drones[0].size > 1 ? "s" : ""}) - {drones[1].orderCount} orders
+              {drones[1]?.display_name} (Capacity: {drones[1]?.drone_size} cone
+              {drones[0].drone_size > 1 ? "s" : ""}) - {drones[1].num_orders}{" "}
+              orders
             </Typography>
           )}
           {drones.length > 2 && (
             <Typography sx={textStyle} variant="h5" component="h4" gutterBottom>
-              {drones[2].name} (Capacity: {drones[2].size} cone
-              {drones[0].size > 1 ? "s" : ""}) - {drones[2].orderCount} orders
+              {drones[2].display_name} (Capacity: {drones[2].drone_size} cone
+              {drones[0].drone_size > 1 ? "s" : ""}) - {drones[2].num_orders}{" "}
+              orders
             </Typography>
           )}
 

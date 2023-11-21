@@ -1,48 +1,49 @@
 export type Drone = {
-  name: string;
-  isActive: boolean;
-  size: number;
+  display_name: string;
+  is_active: boolean;
+  drone_size: number;
   earnings: number;
-  orderCount: number;
-  id: number;
+  num_orders: number;
+  serial_number: string;
+  id?: number;
 };
 
 export type FullCone = {
-  droneId?: number;
-  components: Product[];
+  drone_id?: number;
+  products: Product[];
 };
 
 export type Order = {
   cones: FullCone[];
-  totalPrice: number;
-  employeeCut?: number;
-  remainder?: number;
-  timestamp: Date;
+  total_price: number;
+  employee_cut?: number;
+  profit?: number;
+  order_time?: Date;
   id?: number;
 };
 
 export type Product = {
-  name: string;
+  display_name: string;
   stock?: number;
   //ppu is the Price the customer will pay for a unit of this Product
-  ppu?: number;
+  price_per_unit?: number;
   //cpu is the Cost we pay as the vendor to supply a unit of this Product
   cpu?: number;
   img?: File;
-  type: ProductType;
+  product_type: ProductType;
   id?: number;
 };
 
 export enum ProductType {
-  ICECREAM = "Ice Cream",
+  ICECREAM = "IceCream",
   CONE = "Cone",
   TOPPING = "Topping",
 }
 
 export type User = {
   username: string;
-  userType: UserType;
-  isActive: boolean;
+  user_type: UserType;
+  is_active: boolean;
   id?: number;
 };
 

@@ -1,41 +1,39 @@
-import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
+  Alert,
   AppBar,
   Box,
   Container,
   Divider,
   Drawer,
+  IconButton,
+  Snackbar,
   ToggleButton,
   ToggleButtonGroup,
   Toolbar,
   useTheme,
 } from "@mui/material";
 import IcecreamOutlinedIcon from "@mui/icons-material/IcecreamOutlined";
+import CloseIcon from "@mui/icons-material/CloseOutlined";
 import "../index.css";
 import "../fonts/AerologicaRegular-K7day.ttf";
-import { ProductType, UserType } from "../types";
+import { UserType } from "../types";
 import { useStore } from "../store";
+import React from "react";
 
 // Open to renaming this, this is the parent page for the rest of the app once the user has logged in.
 export default function AppPage() {
   const user = useStore((state) => state.user);
   const mode = useStore((state) => state.userMode);
-  const products = useStore((state) => state.products);
-  const orders = useStore((state) => state.orders);
-  const drones = useStore((state) => state.drones);
-  const cart = useStore((state) => state.cart);
   const appPath = useStore((state) => state.appPath);
+  const error = useStore((state) => state.error);
   const navigate = useNavigate();
   const theme = useTheme();
 
   const { changeMode } = useStore();
   const { changePath } = useStore();
-  const { loadProducts } = useStore();
-  const { loadDrones } = useStore();
-  const { loadHistory } = useStore();
-  const { addConesToCart } = useStore();
+  const { removeError } = useStore();
   const { clearState } = useStore();
 
   const optionButtonStyle = {
@@ -53,6 +51,18 @@ export default function AppPage() {
       navigate(`/${newPath}`);
     }
   };
+
+  const snackbarClose = () => {
+    removeError();
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton size="small" aria-label="close" onClick={snackbarClose}>
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <>
@@ -95,8 +105,8 @@ export default function AppPage() {
                   flexDirection: "row",
                 }}
               >
-                {(user.userType === UserType.EMPLOYEE ||
-                  user.userType === UserType.MANAGER) &&
+                {(user.user_type === UserType.EMPLOYEE ||
+                  user.user_type === UserType.MANAGER) &&
                   mode !== UserType.CUSTOMER && (
                     <Button
                       variant="outlined"
@@ -117,8 +127,8 @@ export default function AppPage() {
                     </Button>
                   )}
 
-                {(user.userType === UserType.EMPLOYEE ||
-                  user.userType === UserType.MANAGER) &&
+                {(user.user_type === UserType.EMPLOYEE ||
+                  user.user_type === UserType.MANAGER) &&
                   mode !== UserType.EMPLOYEE && (
                     <Button
                       variant="outlined"
@@ -139,7 +149,7 @@ export default function AppPage() {
                     </Button>
                   )}
 
-                {user.userType === UserType.MANAGER &&
+                {user.user_type === UserType.MANAGER &&
                   mode !== UserType.MANAGER && (
                     <Button
                       variant="outlined"
@@ -217,8 +227,8 @@ export default function AppPage() {
           anchor="left"
           className="sidebar"
         >
-          {(user.userType === UserType.CUSTOMER ||
-            user.userType === UserType.GUEST ||
+          {(user.user_type === UserType.CUSTOMER ||
+            user.user_type === UserType.GUEST ||
             mode === UserType.CUSTOMER) && (
             <Box sx={{ width: "100%", padding: 0 }}>
               <Divider sx={{ height: "65px" }} />
@@ -247,8 +257,8 @@ export default function AppPage() {
               </ToggleButtonGroup>
             </Box>
           )}
-          {(user.userType === UserType.EMPLOYEE ||
-            user.userType === UserType.MANAGER) &&
+          {(user.user_type === UserType.EMPLOYEE ||
+            user.user_type === UserType.MANAGER) &&
             mode === UserType.EMPLOYEE && (
               <Box sx={{ width: "100%", padding: 0 }}>
                 <Divider sx={{ height: "65px" }} />
@@ -283,7 +293,7 @@ export default function AppPage() {
                 </ToggleButtonGroup>
               </Box>
             )}
-          {user.userType === UserType.MANAGER && mode === UserType.MANAGER && (
+          {user.user_type === UserType.MANAGER && mode === UserType.MANAGER && (
             <Box sx={{ width: "100%", padding: 0 }}>
               <Divider sx={{ height: "65px" }} />
               {/* Here we use a vertical ToggleButtonGroup */}
@@ -321,22 +331,6 @@ export default function AppPage() {
               </ToggleButtonGroup>
             </Box>
           )}
-          <Divider sx={{ height: "45%" }} />
-          <Button
-            sx={optionButtonStyle}
-            style={{ justifySelf: "end" }}
-            variant="outlined"
-            onClick={() => {
-              if (cart.length === 0) {
-                addConesToCart(mockCones);
-              }
-              if (orders.length === 0) {
-                loadHistory(mockOrders);
-              }
-            }}
-          >
-            Populate State
-          </Button>
         </Drawer>
         <Box
           component="main"
@@ -349,336 +343,38 @@ export default function AppPage() {
         >
           <Outlet />
         </Box>
+        <Snackbar
+          open={error != ""}
+          autoHideDuration={5000}
+          onClose={snackbarClose}
+        >
+          <Alert
+            severity="error"
+            sx={{
+              width: "100%",
+              backgroundColor: `${theme.palette.secondary.light}`,
+              fontFamily: "pixelfont",
+              fontSize: "10px",
+              color: "#ffff",
+              "& .MuiAlert-message": { alignSelf: "center", width: "inherit" },
+            }}
+            action={
+              <React.Fragment>
+                <IconButton
+                  size="small"
+                  aria-label="close"
+                  sx={{ color: "white" }}
+                  onClick={snackbarClose}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+          >
+            {error}
+          </Alert>
+        </Snackbar>
       </Box>
     </>
   );
 }
-
-const mockCones = [
-  {
-    components: [
-      {
-        name: "Sugar Cone",
-        stock: 20,
-        ppu: 50,
-        cpu: 10,
-        type: ProductType.CONE,
-        id: 1,
-      },
-      {
-        name: "Oreos",
-        stock: 35,
-        ppu: 50,
-        cpu: 10,
-        type: ProductType.TOPPING,
-        id: 4,
-      },
-      {
-        name: "Chocolate Syrup",
-        stock: 27,
-        ppu: 50,
-        cpu: 5,
-        type: ProductType.TOPPING,
-        id: 5,
-      },
-      {
-        name: "Chocolate",
-        stock: 76,
-        ppu: 250,
-        cpu: 60,
-        type: ProductType.ICECREAM,
-        id: 6,
-      },
-      {
-        name: "Vanilla",
-        stock: 45,
-        ppu: 250,
-        cpu: 30,
-        type: ProductType.ICECREAM,
-        id: 7,
-      },
-      {
-        name: "Vanilla",
-        stock: 45,
-        ppu: 250,
-        cpu: 30,
-        type: ProductType.ICECREAM,
-        id: 7,
-      },
-    ],
-  },
-  {
-    components: [
-      {
-        name: "Waffle Cone",
-        stock: 11,
-        ppu: 100,
-        cpu: 25,
-        type: ProductType.CONE,
-        id: 2,
-      },
-      {
-        name: "Sprinkles",
-        stock: 56,
-        ppu: 50,
-        cpu: 1,
-        type: ProductType.TOPPING,
-        id: 3,
-      },
-      {
-        name: "Vanilla",
-        stock: 45,
-        ppu: 250,
-        cpu: 30,
-        type: ProductType.ICECREAM,
-        id: 7,
-      },
-    ],
-  },
-  {
-    components: [
-      {
-        name: "Waffle Cone",
-        stock: 11,
-        ppu: 100,
-        cpu: 25,
-        type: ProductType.CONE,
-        id: 2,
-      },
-      {
-        name: "Mint Chocolate Chip",
-        stock: 63,
-        ppu: 250,
-        cpu: 75,
-        type: ProductType.ICECREAM,
-        id: 8,
-      },
-      {
-        name: "Mint Chocolate Chip",
-        stock: 63,
-        ppu: 250,
-        cpu: 75,
-        type: ProductType.ICECREAM,
-        id: 8,
-      },
-    ],
-  },
-];
-
-const mockOrders = [
-  {
-    cones: [
-      {
-        components: [
-          {
-            name: "Waffle Cone",
-            stock: 11,
-            ppu: 100,
-            cpu: 25,
-            type: ProductType.CONE,
-            id: 2,
-          },
-          {
-            name: "Mint Chocolate Chip",
-            stock: 63,
-            ppu: 250,
-            cpu: 75,
-            type: ProductType.ICECREAM,
-            id: 8,
-          },
-          {
-            name: "Mint Chocolate Chip",
-            stock: 63,
-            ppu: 250,
-            cpu: 75,
-            type: ProductType.ICECREAM,
-            id: 8,
-          },
-        ],
-      },
-      {
-        components: [
-          {
-            name: "Waffle Cone",
-            stock: 11,
-            ppu: 100,
-            cpu: 25,
-            type: ProductType.CONE,
-            id: 2,
-          },
-          {
-            name: "Mint Chocolate Chip",
-            stock: 63,
-            ppu: 250,
-            cpu: 75,
-            type: ProductType.ICECREAM,
-            id: 8,
-          },
-          {
-            name: "Mint Chocolate Chip",
-            stock: 63,
-            ppu: 250,
-            cpu: 75,
-            type: ProductType.ICECREAM,
-            id: 8,
-          },
-        ],
-      },
-    ],
-    totalPrice: 1200,
-    employeeCut: 300,
-    remainder: 900,
-    timestamp: new Date(),
-    id: 1,
-  },
-  {
-    cones: [
-      {
-        components: [
-          {
-            name: "Waffle Cone",
-            stock: 11,
-            ppu: 100,
-            cpu: 25,
-            type: ProductType.CONE,
-            id: 2,
-          },
-          {
-            name: "Sprinkles",
-            stock: 56,
-            ppu: 50,
-            cpu: 1,
-            type: ProductType.TOPPING,
-            id: 3,
-          },
-          {
-            name: "Vanilla",
-            stock: 45,
-            ppu: 250,
-            cpu: 30,
-            type: ProductType.ICECREAM,
-            id: 7,
-          },
-        ],
-      },
-    ],
-    totalPrice: 400,
-    employeeCut: 100,
-    remainder: 300,
-    timestamp: new Date(),
-    id: 2,
-  },
-  {
-    cones: [
-      {
-        components: [
-          {
-            name: "Sugar Cone",
-            stock: 20,
-            ppu: 50,
-            cpu: 10,
-            type: ProductType.CONE,
-            id: 1,
-          },
-          {
-            name: "Oreos",
-            stock: 35,
-            ppu: 50,
-            cpu: 10,
-            type: ProductType.TOPPING,
-            id: 4,
-          },
-          {
-            name: "Chocolate Syrup",
-            stock: 27,
-            ppu: 50,
-            cpu: 5,
-            type: ProductType.TOPPING,
-            id: 5,
-          },
-          {
-            name: "Chocolate",
-            stock: 76,
-            ppu: 250,
-            cpu: 60,
-            type: ProductType.ICECREAM,
-            id: 6,
-          },
-          {
-            name: "Vanilla",
-            stock: 45,
-            ppu: 250,
-            cpu: 30,
-            type: ProductType.ICECREAM,
-            id: 7,
-          },
-          {
-            name: "Vanilla",
-            stock: 45,
-            ppu: 250,
-            cpu: 30,
-            type: ProductType.ICECREAM,
-            id: 7,
-          },
-        ],
-      },
-      {
-        components: [
-          {
-            name: "Sugar Cone",
-            stock: 20,
-            ppu: 50,
-            cpu: 10,
-            type: ProductType.CONE,
-            id: 1,
-          },
-          {
-            name: "Oreos",
-            stock: 35,
-            ppu: 50,
-            cpu: 10,
-            type: ProductType.TOPPING,
-            id: 4,
-          },
-          {
-            name: "Chocolate Syrup",
-            stock: 27,
-            ppu: 50,
-            cpu: 5,
-            type: ProductType.TOPPING,
-            id: 5,
-          },
-          {
-            name: "Chocolate",
-            stock: 76,
-            ppu: 250,
-            cpu: 60,
-            type: ProductType.ICECREAM,
-            id: 6,
-          },
-          {
-            name: "Vanilla",
-            stock: 45,
-            ppu: 250,
-            cpu: 30,
-            type: ProductType.ICECREAM,
-            id: 7,
-          },
-          {
-            name: "Vanilla",
-            stock: 45,
-            ppu: 250,
-            cpu: 30,
-            type: ProductType.ICECREAM,
-            id: 7,
-          },
-        ],
-      },
-    ],
-    totalPrice: 800,
-    employeeCut: 233,
-    remainder: 467,
-    timestamp: new Date(),
-    id: 3,
-  },
-];

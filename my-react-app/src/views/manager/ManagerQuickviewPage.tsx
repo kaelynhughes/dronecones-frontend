@@ -141,7 +141,7 @@ export default function ManagerQuickviewPage() {
   console.log(earnings);
   return (
     <>
-      {user.userType === UserType.MANAGER && (
+      {user.user_type === UserType.MANAGER && (
         <>
             {/*Manager Quickview Page, displays and overview of manager information
             and status.*/

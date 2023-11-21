@@ -21,7 +21,6 @@ const wordStyle = {
   fontFamily: "pixelfont",
 };
 
-
 export default function ManagerHistoryPage() {
   const theme = useTheme();
   const user = useStore((state) => state.user);
@@ -90,7 +89,7 @@ export default function ManagerHistoryPage() {
   }, []);
   return (
     <>
-      {user.userType === UserType.MANAGER && (
+      {user.user_type === UserType.MANAGER && (
         <>
 
         {/* Manager History Page, allows the manager to view all recent orders
