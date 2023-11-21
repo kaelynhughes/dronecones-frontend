@@ -41,24 +41,25 @@ export default function DroneHistoryPage() {
     loadDrones();
   }
 
-  if (orders.length === 0 && loadedEmployeeOrders) {
+  if (orders.length === 0 && !loadedEmployeeOrders) {
     loadEmployeeHistory();
     sortOrders(orders);
   }
 
   const getDroneNames = (order: Order) => {
-    const droneIds = order.cones.map((cone) => cone.drone_id);
-    let names =
-      drones.find((drone) => drone.id === droneIds[0])?.display_name ||
-      "Drone Not Found";
-    droneIds.shift();
-    droneIds.forEach((droneId) => {
-      let name =
-        drones.find((drone) => drone.id === droneId)?.display_name || "";
-      if (name !== "" && !names.includes(name)) {
-        names = names + " and " + name;
-      }
-    });
+    // const droneIds = order.cones.map((cone) => cone.drone_id);
+    // let names =
+    //   drones.find((drone) => drone.id === droneIds[0])?.display_name ||
+    //   "Drone Not Found";
+    // droneIds.shift();
+    // droneIds.forEach((droneId) => {
+    //   let name =
+    //     drones.find((drone) => drone.id === droneId)?.display_name || "";
+    //   if (name !== "" && !names.includes(name)) {
+    //     names = names + " and " + name;
+    //   }
+    // });
+    let names = "Placeholder_text";
 
     return names;
   };
@@ -98,6 +99,7 @@ export default function DroneHistoryPage() {
               },
             }}
             label="Filter by:"
+            defaultValue={""}
             onChange={(event) => {
               sortOrders(
                 orders.filter((order) =>
@@ -188,7 +190,7 @@ export default function DroneHistoryPage() {
               sx={{ flexGrow: 1, width: "100%" }}
               expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
             >
-              <Typography>{`${getDroneNames(order)} delivered ${
+              {/* <Typography>{`${getDroneNames(order)} delivered ${
                 order.cones.length
               } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
                 order.order_time
@@ -196,12 +198,12 @@ export default function DroneHistoryPage() {
                 month: "long",
                 day: "numeric",
                 year: "numeric",
-              })}`}</Typography>
+              })}`}</Typography> */}
             </AccordionSummary>
             <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
-              {order.cones.map((cone, index) => (
+              {/* {order.cones.map((cone, index) => (
                 <Typography key={index}>{getConeString(cone)}</Typography>
-              ))}
+              ))} */}
               <Typography>{`Total Order Price: ${getPriceString(
                 order.total_price
               )}`}</Typography>

@@ -184,7 +184,11 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         } catch (error) {
           console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
+          set((state) => ({
+            ...state,
+            error: `${error}`,
+            loadedProducts: true,
+          }));
         }
       },
       checkoutOrder: async (order) => {
@@ -396,7 +400,7 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         } catch (error) {
           console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
+          set((state) => ({ ...state, error: `${error}`, loadedDrones: true }));
         }
       },
       editDrone: async (id, drone) => {
@@ -516,7 +520,7 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         } catch (error) {
           console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
+          set((state) => ({ ...state, error: `${error}`, loadedUsers: true }));
         }
       },
       editUser: async (user) => {
@@ -559,9 +563,17 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/customer/${userId}/history`
           );
-          if (response.data?.full_orders.length > 0) {
+          if (response.data?.orders_history.length > 0) {
             set((state) => ({
-              orders: [...state.orders, ...response.data.full_orders],
+              orders: [
+                ...state.orders,
+                ...response.data.orders_history.filter(
+                  (order: Order) =>
+                    state.orders.filter(
+                      (stateOrder) => stateOrder.id === order.id
+                    ).length === 0
+                ),
+              ],
               loadedCustomerOrders: true,
             }));
           } else {
@@ -573,18 +585,30 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         } catch (error) {
           console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
+          set((state) => ({
+            ...state,
+            error: `${error}`,
+            loadedCustomerOrders: true,
+          }));
         }
       },
       loadEmployeeHistory: async () => {
         const userId = get().user?.id || 0;
         try {
           const response: AxiosResponse = await axios.get(
-            `${BACKEND_URL_DEV}/customer/${userId}/history`
+            `${BACKEND_URL_DEV}/employee/${userId}/history`
           );
-          if (response.data?.full_orders.length > 0) {
+          if (response.data?.orders_history.length > 0) {
             set((state) => ({
-              orders: [...state.orders, ...response.data.full_orders],
+              orders: [
+                ...state.orders,
+                ...response.data.orders_history.filter(
+                  (order: Order) =>
+                    state.orders.filter(
+                      (stateOrder) => stateOrder.id === order.id
+                    ).length === 0
+                ),
+              ],
               loadedEmployeeOrders: true,
             }));
           } else {
@@ -596,18 +620,30 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         } catch (error) {
           console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
+          set((state) => ({
+            ...state,
+            error: `${error}`,
+            loadedEmployeeOrders: true,
+          }));
         }
       },
       loadManagerHistory: async () => {
         const userId = get().user?.id || 0;
         try {
           const response: AxiosResponse = await axios.get(
-            `${BACKEND_URL_DEV}/customer/${userId}/history`
+            `${BACKEND_URL_DEV}/manager/orders`
           );
-          if (response.data?.full_orders.length > 0) {
+          if (response.data?.orders.length > 0) {
             set((state) => ({
-              orders: [...state.orders, ...response.data.full_orders],
+              orders: [
+                ...state.orders,
+                ...response.data.orders.filter(
+                  (order: Order) =>
+                    state.orders.filter(
+                      (stateOrder) => stateOrder.id === order.id
+                    ).length === 0
+                ),
+              ],
               loadedManagerOrders: true,
             }));
           } else {
@@ -619,7 +655,11 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         } catch (error) {
           console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
+          set((state) => ({
+            ...state,
+            error: `${error}`,
+            loadedManagerOrders: true,
+          }));
         }
       },
       addHistory: (order) =>
