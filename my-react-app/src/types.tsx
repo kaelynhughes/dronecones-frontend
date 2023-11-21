@@ -18,7 +18,7 @@ export type Order = {
   total_price: number;
   employee_cut?: number;
   profit?: number;
-  order_time?: Date;
+  order_time: string;
   id?: number;
 };
 
