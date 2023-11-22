@@ -12,6 +12,7 @@ import {
 import { BACKEND_URL_DEV } from "./constants";
 import axios, { AxiosResponse } from "axios";
 import { json } from "react-router-dom";
+import { jsx } from "@emotion/react";
 
 type DroneConesState = {
   appPath: string;
@@ -58,6 +59,7 @@ type DroneConesActions = {
   removeDrone: (serial_number: string) => void;
 
   loadUsers: () => void;
+  banUser: (id: number) => void;
   editUser: (user: User) => void;
 
   loadCustomerHistory: () => void;
@@ -70,7 +72,12 @@ type DroneConesActions = {
 
 const initialState: DroneConesState = {
   appPath: "menu",
-  user: { user_type: UserType.GUEST, username: "Guest", is_active: true },
+  user: {
+    user_type: UserType.GUEST,
+    username: "Guest",
+    is_active: true,
+    id: 0,
+  },
   userMode: UserType.CUSTOMER,
   products: [],
   cart: [],
@@ -115,6 +122,11 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
                 is_active: response.data.is_active,
               },
             }));
+          } else {
+            set((state) => ({
+              ...state,
+              error: response.data?.error,
+            }));
           }
         } catch (error) {
           console.log(error);
@@ -127,6 +139,7 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           username: username,
           password: password,
           user_type: user_type,
+          is_active: 1,
         };
         try {
           const response = await axios.post(
@@ -259,6 +272,10 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
             if (!response.data?.error) {
               set((state) => ({
                 cart: [],
+                orders: [
+                  ...state.orders,
+                  { ...body, id: response.data.full_order_id },
+                ],
               }));
             } else {
               set((state) => ({
@@ -498,8 +515,8 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/manager/users`
           );
-          if (response.data?.users?.length > 0) {
-            const userArray: User[] = response.data.users;
+          if (response.data?.length > 0) {
+            const userArray: User[] = response.data;
             set((state) => ({
               users: [
                 ...state.users,
@@ -528,10 +545,10 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         if (userId !== 0) {
           try {
             const body = {
-              username: user.username,
-              is_active: user.is_active,
+              username: user?.username,
+              is_active: user.is_active ? 1 : 0,
             };
-            const response: AxiosResponse = await axios.patch(
+            const response: AxiosResponse = await axios.put(
               `${BACKEND_URL_DEV}/customer/${userId}/account`,
               body
             );
@@ -556,18 +573,91 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           }
         }
       },
+      banUser: async (id) => {
+        if (id !== 0) {
+          try {
+            const body = {
+              id: id,
+              is_active: 0,
+            };
+            const response: AxiosResponse = await axios.put(
+              `${BACKEND_URL_DEV}/manager/user`,
+              body
+            );
+            if (response.data?.error) {
+              set((state) => ({
+                ...state,
+                error: "Error banning user: " + response.data.error,
+              }));
+            }
+          } catch (error) {
+            console.log(error);
+            set((state) => ({ ...state, error: `${error}` }));
+          }
+        } else {
+          set((state) => ({
+            ...state,
+            error:
+              "Error banning user: No valid ID is connected to this order.",
+          }));
+        }
+      },
 
       loadCustomerHistory: async () => {
         const userId = get().user?.id || 0;
+
         try {
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/customer/${userId}/history`
           );
-          if (response.data?.orders_history.length > 0) {
+          const findProduct = (id: number): Product | undefined => {
+            if (id === null) {
+              return undefined;
+            }
+            const matches = get().products.filter(
+              (product: Product) => product.id === id
+            );
+            if (matches?.length > 0) {
+              return matches[0];
+            }
+            return {
+              display_name: "Product Unavailable",
+              product_type: ProductType.ICECREAM,
+            };
+          };
+          if (response.data?.orders_history?.length > 0) {
+            const parsedOrders: Order[] = response.data.orders_history.map(
+              (order: any) => {
+                const parsedCones: FullCone[] = order.cones.map((cone: any) => {
+                  const newCone = {
+                    drone_id: cone.drone_id,
+                    products: [
+                      findProduct(cone?.cone),
+                      findProduct(cone?.scoop_1),
+                      findProduct(cone?.scoop_2),
+                      findProduct(cone?.scoop_3),
+                      findProduct(cone?.topping_1),
+                      findProduct(cone?.topping_2),
+                      findProduct(cone?.topping_3),
+                    ].filter((product) => product !== undefined),
+                  };
+                  return newCone;
+                });
+                const parsed = {
+                  id: order?.id,
+                  total_price: order?.total_price,
+                  order_time: order?.order_time,
+                  cones: parsedCones,
+                };
+                console.log(parsed);
+                return parsed;
+              }
+            );
+
             set((state) => ({
               orders: [
                 ...state.orders,
-                ...response.data.orders_history.filter(
+                ...parsedOrders.filter(
                   (order: Order) =>
                     state.orders.filter(
                       (stateOrder) => stateOrder.id === order.id
@@ -584,7 +674,6 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
             }));
           }
         } catch (error) {
-          console.log(error);
           set((state) => ({
             ...state,
             error: `${error}`,
@@ -594,15 +683,58 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
       },
       loadEmployeeHistory: async () => {
         const userId = get().user?.id || 0;
+
         try {
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/employee/${userId}/history`
           );
-          if (response.data?.orders_history.length > 0) {
+          const findProduct = (id: number): Product | undefined => {
+            if (id === null) {
+              return undefined;
+            }
+            const matches = get().products.filter(
+              (product: Product) => product.id === id
+            );
+            if (matches?.length > 0) {
+              return matches[0];
+            }
+            return {
+              display_name: "Product Unavailable",
+              product_type: ProductType.ICECREAM,
+            };
+          };
+          if (response.data?.orders_history?.length > 0) {
+            const parsedOrders: Order[] = response.data.orders_history.map(
+              (order: any) => {
+                const parsedCones: FullCone[] = order.cones.map((cone: any) => {
+                  const newCone = {
+                    drone_id: cone.drone_id,
+                    products: [
+                      findProduct(cone?.cone),
+                      findProduct(cone?.scoop_1),
+                      findProduct(cone?.scoop_2),
+                      findProduct(cone?.scoop_3),
+                      findProduct(cone?.topping_1),
+                      findProduct(cone?.topping_2),
+                      findProduct(cone?.topping_3),
+                    ].filter((product) => product !== undefined),
+                  };
+                  return newCone;
+                });
+                const parsed = {
+                  id: order?.id,
+                  employee_cut: order?.employee_cut,
+                  order_time: order?.order_time,
+                  cones: parsedCones,
+                };
+                return parsed;
+              }
+            );
+
             set((state) => ({
               orders: [
                 ...state.orders,
-                ...response.data.orders_history.filter(
+                ...parsedOrders.filter(
                   (order: Order) =>
                     state.orders.filter(
                       (stateOrder) => stateOrder.id === order.id
@@ -629,15 +761,61 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
       },
       loadManagerHistory: async () => {
         const userId = get().user?.id || 0;
+
         try {
           const response: AxiosResponse = await axios.get(
-            `${BACKEND_URL_DEV}/manager/orders`
+            `${BACKEND_URL_DEV}/manager/history`
           );
-          if (response.data?.orders.length > 0) {
+          const findProduct = (id: number): Product | undefined => {
+            if (id === null) {
+              return undefined;
+            }
+            const matches = get().products.filter(
+              (product: Product) => product.id === id
+            );
+            if (matches?.length > 0) {
+              return matches[0];
+            }
+            return {
+              display_name: "Product Unavailable",
+              product_type: ProductType.ICECREAM,
+            };
+          };
+          if (response.data?.orders_history?.length > 0) {
+            const parsedOrders: Order[] = response.data.orders_history.map(
+              (order: any) => {
+                const parsedCones: FullCone[] = order.cones.map((cone: any) => {
+                  const newCone = {
+                    drone_id: cone.drone_id,
+                    products: [
+                      findProduct(cone?.cone),
+                      findProduct(cone?.scoop_1),
+                      findProduct(cone?.scoop_2),
+                      findProduct(cone?.scoop_3),
+                      findProduct(cone?.topping_1),
+                      findProduct(cone?.topping_2),
+                      findProduct(cone?.topping_3),
+                    ].filter((product) => product !== undefined),
+                  };
+                  return newCone;
+                });
+                const parsed = {
+                  id: order?.id,
+                  employee_cut: order?.employee_cut,
+                  total_price: order?.total_price,
+                  profit: order?.profit,
+                  customer_id: order?.customer_id,
+                  order_time: order?.order_time,
+                  cones: parsedCones,
+                };
+                return parsed;
+              }
+            );
+
             set((state) => ({
               orders: [
                 ...state.orders,
-                ...response.data.orders.filter(
+                ...parsedOrders.filter(
                   (order: Order) =>
                     state.orders.filter(
                       (stateOrder) => stateOrder.id === order.id

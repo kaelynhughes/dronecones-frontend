@@ -1,75 +1,170 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-
-import { Link, useNavigate } from "react-router-dom";
-import { UserType } from "../types";
+import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/CloseOutlined";
 import { useStore } from "../store";
+import { UserType } from "../types";
+import {
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+  Box,
+  Alert,
+  IconButton,
+  Snackbar,
+  useTheme,
+} from "@mui/material";
+
+const wordStyle = {
+  color: "white",
+  fontSize: "16px",
+  fontFamily: "pixelfont",
+};
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useStore();
-  const { user } = useStore();
-  const { error } = useStore();
-  const { changeMode } = useStore();
-  const { changePath } = useStore();
+  const theme = useTheme();
+  const { login, user, error, changeMode, changePath, removeError } =
+    useStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigateToPath = (path: string) => {
+    changeMode(user.user_type);
+    changePath(path);
+    navigate(path);
+  };
+
   if (user?.id) {
-    if (user.user_type == UserType.CUSTOMER) {
-      changeMode(UserType.CUSTOMER);
-      changePath("app/menu");
-      navigate("/app/menu");
-    } else if (user.user_type == UserType.EMPLOYEE) {
-      changeMode(UserType.EMPLOYEE);
-      changePath("app/drone-quickview");
-      navigate("/app/drone-quickview");
-    } else if (user.user_type == UserType.MANAGER) {
-      changeMode(UserType.MANAGER);
-      changePath("app/manager-quickview");
-      navigate("/app/manager-quickview");
+    if (user.user_type === UserType.CUSTOMER) {
+      navigateToPath("/app/menu");
+    } else if (user.user_type === UserType.EMPLOYEE) {
+      navigateToPath("/app/drone-quickview");
+    } else if (user.user_type === UserType.MANAGER) {
+      navigateToPath("/app/manager-quickview");
     }
   }
+
+  const snackbarClose = () => {
+    removeError();
+  };
 
   function logIn() {
     login(username, password);
   }
 
+  function logInGuest() {
+    navigateToPath("/app/menu");
+  }
+
+  function signUp() {
+    navigateToPath("/signup");
+  }
+
   return (
-    <>
-      <div className="centerFormat">
-        <div className="dialogue-container">
-          <div className="login">
-            <div className="centerFormat">
-              <h1 className="header-font">Log in</h1>
-              <input
-                type="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
-              />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-              />
-              <div className="login-controls">
-                <Button
-                  variant="contained"
-                  id="fullbutton"
-                  className="loginbutton button"
-                  style={{ margin: "20px", fontFamily: "pixelfont" }}
-                  onClick={logIn}
-                >
-                  Log in
-                </Button>
-              </div>
-              {error != "" && <h3>{error}</h3>}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="98vh"
+      width="98vh"
+    >
+      <Card sx={{ width: "40%" }}>
+        <CardContent sx={{ alignContent: "center" }}>
+          <Typography
+            variant="h4"
+            className="header-font"
+            fontFamily={"homeheader"}
+            align="center"
+          >
+            Log in
+          </Typography>
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            sx={{ input: wordStyle }}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ input: wordStyle }}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="contained"
+              style={{ margin: "10px 0" }}
+              onClick={logIn}
+              sx={{ ...wordStyle, width: "140px" }}
+            >
+              Log in
+            </Button>
+            <Button
+              variant="text"
+              onClick={signUp}
+              size="small"
+              sx={{ margin: "0px", padding: "0px" }}
+            >
+              No account? Create one here!
+            </Button>
+            <Button
+              variant="text"
+              onClick={logInGuest}
+              size="small"
+              sx={{ margin: "0px", padding: "0px" }}
+            >
+              or Continue as a Guest -{">"}
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+      <Snackbar
+        open={error != ""}
+        autoHideDuration={5000}
+        onClose={snackbarClose}
+      >
+        <Alert
+          severity="error"
+          sx={{
+            width: "100%",
+            backgroundColor: `${theme.palette.secondary.light}`,
+            fontFamily: "pixelfont",
+            fontSize: "10px",
+            color: "#ffff",
+            "& .MuiAlert-message": { alignSelf: "center", width: "inherit" },
+          }}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                sx={{ color: "white" }}
+                onClick={snackbarClose}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 }

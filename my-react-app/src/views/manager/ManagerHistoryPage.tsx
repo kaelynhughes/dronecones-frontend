@@ -22,12 +22,18 @@ const wordStyle = {
 export default function ManagerordersPage() {
   const theme = useTheme();
   const user = useStore((state) => state.user);
+  const { users, loadedUsers, loadUsers } = useStore();
+  const { banUser } = useStore();
   const { orders } = useStore();
   const { loadedManagerOrders } = useStore();
   const { loadManagerHistory } = useStore();
 
   if (orders.length === 0 && !loadedManagerOrders) {
     loadManagerHistory();
+  }
+
+  if (users.length === 0 && !loadedUsers) {
+    loadUsers();
   }
 
   let renderedorders = orders?.map((order) => {
@@ -50,13 +56,14 @@ export default function ManagerordersPage() {
           expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
         >
           {/*REPLACE CUSTOMER NAME LATER*/}
-          {order.order_time} - CUSTOMER NAME -
-          {/* Order Size: {order.cones.length} */}
+          {order.order_time} -{" "}
+          {users.filter((user) => user.id === order?.customer_id)[0]?.username}{" "}
+          -Order Size: {order.cones.length}
         </AccordionSummary>
         <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
-          {/* {order.cones.map((cone, index) => (
+          {order.cones.map((cone, index) => (
             <Typography key={index}>{getConeString(cone)}</Typography>
-          ))} */}
+          ))}
           <Typography>{`Total Order Price: ${getPriceString(
             order.total_price
           )}`}</Typography>
@@ -72,7 +79,7 @@ export default function ManagerordersPage() {
               fontFamily: "pixelfont",
             }}
             onClick={() => {
-              console.log("Ban user");
+              banUser(order?.customer_id || 0);
             }}
           >
             Ban User

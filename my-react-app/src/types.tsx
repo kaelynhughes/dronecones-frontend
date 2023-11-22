@@ -20,6 +20,7 @@ export type Order = {
   profit?: number;
   order_time: string;
   id?: number;
+  customer_id?: number;
 };
 
 export type Product = {

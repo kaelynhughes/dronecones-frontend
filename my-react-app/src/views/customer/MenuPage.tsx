@@ -39,6 +39,7 @@ export default function MenuPage() {
   const { loadProducts } = useStore();
   const { loadedProducts } = useStore();
   const { setError } = useStore();
+  const { addConeToCart } = useStore();
 
   if (products.length === 0 && !loadedProducts) {
     loadProducts();
@@ -104,7 +105,6 @@ export default function MenuPage() {
         key={item.id}
         onClick={() => {
           setselectedCone([item]);
-          console.log(item);
         }}
       >
         {item.display_name}
@@ -231,7 +231,13 @@ export default function MenuPage() {
                     selectedCone.length !== 0
                   ) {
                     {
-                      /*-----SEND DATA TO CART HERE AND CLEAR OPTIONS--------*/
+                      addConeToCart({
+                        products: [
+                          ...selectedCone,
+                          ...selectedFlavors,
+                          ...selectedToppings,
+                        ],
+                      });
                     }
 
                     setselectedToppings([]);

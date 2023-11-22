@@ -202,7 +202,6 @@ export default function ManageInventoryPage() {
                 parseInt(event.target.value) >= -100
               ) {
                 localQuantity = parseInt(event.target.value);
-                console.log(localQuantity);
                 errorState = false;
               } else {
                 errorState = true;
@@ -219,7 +218,6 @@ export default function ManageInventoryPage() {
 
                 if (updateItem.stock) {
                   updateItem.stock = updateItem.stock + localQuantity;
-                  console.log(updateItem.stock);
                   if (updateItem.stock < 0) {
                     updateItem.stock = 0;
                   }
@@ -283,7 +281,6 @@ export default function ManageInventoryPage() {
                 parseInt(event.target.value) >= -100
               ) {
                 localQuantity = parseInt(event.target.value);
-                console.log(localQuantity);
                 errorState = false;
               } else {
                 setQuantity(0);
@@ -301,7 +298,6 @@ export default function ManageInventoryPage() {
 
                 if (updateItem.stock) {
                   updateItem.stock = updateItem.stock + localQuantity;
-                  console.log(updateItem.stock);
                   if (updateItem.stock < 0) {
                     updateItem.stock = 0;
                   }
@@ -366,7 +362,6 @@ export default function ManageInventoryPage() {
                     required
                     id="Outlined-required"
                     label="Product Name"
-                    defaultValue=""
                     value={newProductName}
                     sx={{ margin: "10px", fontFamily: "pixelfont" }}
                     onChange={(event) => {
@@ -378,7 +373,6 @@ export default function ManageInventoryPage() {
                     id="Outlined-required"
                     label="Quantity"
                     type="number"
-                    defaultValue="0"
                     value={newProductQuantity}
                     inputProps={{
                       min: "0",
@@ -397,7 +391,6 @@ export default function ManageInventoryPage() {
                     id="Outlined-required"
                     label="Pricing"
                     type="number"
-                    defaultValue="1.00"
                     value={newProductPrice}
                     inputProps={{
                       min: "0",
@@ -418,7 +411,6 @@ export default function ManageInventoryPage() {
                     </FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue=""
                       value={newProductType}
                       name="radio-buttons-group"
                     >
