@@ -37,6 +37,7 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
   );
   const { editDrone } = useStore();
   const { createDrone } = useStore();
+  const { setError } = useStore();
 
   const [newName, setNewName] = useState("");
   const [newSize, setNewSize] = useState(1);
@@ -138,27 +139,31 @@ export const DroneDialog: React.FC<DroneDialogProps> = ({
           sx={wordStyle}
           variant="contained"
           onClick={() => {
-            if (droneEdit) {
-              editDrone(droneId, {
-                display_name: newName,
-                drone_size: newSize,
-                is_active: newIsActive,
-                earnings: droneEdit?.earnings || 0,
-                num_orders: droneEdit?.num_orders || 0,
-                serial_number: newSerialNumber,
-                id: droneId,
-              });
+            if (newName !== "" && newSerialNumber !== "") {
+              if (droneEdit) {
+                editDrone(droneId, {
+                  display_name: newName,
+                  drone_size: newSize,
+                  is_active: newIsActive,
+                  earnings: droneEdit?.earnings || 0,
+                  num_orders: droneEdit?.num_orders || 0,
+                  serial_number: newSerialNumber,
+                  id: droneId,
+                });
+              } else {
+                createDrone({
+                  display_name: newName,
+                  drone_size: newSize,
+                  is_active: newIsActive,
+                  serial_number: newSerialNumber,
+                  earnings: 0,
+                  num_orders: 0,
+                });
+              }
+              onClose();
             } else {
-              createDrone({
-                display_name: newName,
-                drone_size: newSize,
-                is_active: newIsActive,
-                serial_number: newSerialNumber,
-                earnings: 0,
-                num_orders: 0,
-              });
+              setError("Name or Serial Number is missing.  Cannot save drone.");
             }
-            onClose();
           }}
         >
           Save

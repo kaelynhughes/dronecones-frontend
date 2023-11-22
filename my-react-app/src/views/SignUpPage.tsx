@@ -1,121 +1,184 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/CloseOutlined";
 import { useStore } from "../store";
-import { ProductType, UserType } from "../types";
+import { UserType } from "../types";
 import {
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+  Box,
+  Alert,
+  IconButton,
+  Snackbar,
   FormControl,
   FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
+  useTheme,
 } from "@mui/material";
+
+const wordStyle = {
+  color: "white",
+  fontSize: "16px",
+  fontFamily: "pixelfont",
+};
 
 export default function SignUpPage() {
   const navigate = useNavigate();
-  const { signup } = useStore();
-  const { user } = useStore();
-  const { error } = useStore();
-  const { changeMode } = useStore();
-  const { changePath } = useStore();
+  const theme = useTheme();
+  const { signup, user, error, changeMode, changePath, removeError, setError } =
+    useStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [usertype, setUsertype] = useState(UserType.CUSTOMER);
 
   function signUp() {
-    signup(username, password, usertype);
-    if (user?.id) {
-      if (user.user_type == UserType.CUSTOMER) {
-        changeMode(UserType.CUSTOMER);
-        changePath("app/menu");
-        navigate("/app/menu");
-      } else if (user.user_type == UserType.EMPLOYEE) {
-        changeMode(UserType.EMPLOYEE);
-        changePath("app/drone-quickview");
-        navigate("/app/drone-quickview");
-      } else if (user.user_type == UserType.MANAGER) {
-        changeMode(UserType.MANAGER);
-        changePath("app/manager-quickview");
-        navigate("/app/manager-quickview");
-      }
+    if (password === password2) {
+      signup(username, password, usertype);
+    } else {
+      setError("Passwords do not match, please try re-typing them.");
     }
   }
 
+  const snackbarClose = () => {
+    removeError();
+  };
+
   return (
-    <>
-      <div className="centerFormat">
-        <div className="login">
-          <div className="centerFormat">
-            <h1 className="header-font">Sign Up</h1>
-            <input
-              type="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-            />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            />
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">
-                Account Type
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue=""
-                value={usertype}
-                name="radio-buttons-group"
-              >
-                <FormControlLabel
-                  value={UserType.CUSTOMER}
-                  control={<Radio />}
-                  label="Customer"
-                  onChange={() => {
-                    setUsertype(UserType.CUSTOMER);
-                  }}
-                />
-                <FormControlLabel
-                  value={UserType.EMPLOYEE}
-                  control={<Radio />}
-                  label="Employee"
-                  onChange={() => {
-                    setUsertype(UserType.EMPLOYEE);
-                  }}
-                />
-                <FormControlLabel
-                  value={UserType.MANAGER}
-                  control={<Radio />}
-                  label="Manager - Remove this one before production!"
-                  onChange={() => {
-                    setUsertype(UserType.MANAGER);
-                  }}
-                />
-              </RadioGroup>
-            </FormControl>
-            <br></br>
-            <div className="signup-controls">
-              <Button
-                style={{
-                  backgroundColor: "purple",
-                  fontFamily: "pixelfont",
-                  textShadow: "0 0 5px",
-                  boxShadow: "0 0 10px",
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="98vh"
+      width="98vh"
+    >
+      <Card sx={{ width: "40%" }}>
+        <CardContent sx={{ alignContent: "center" }}>
+          <Typography
+            variant="h4"
+            className="header-font"
+            fontFamily={"homeheader"}
+            align="center"
+          >
+            Sign Up
+          </Typography>
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            sx={{ input: wordStyle }}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ input: wordStyle }}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            sx={{ input: wordStyle }}
+          />
+          <FormControl fullWidth>
+            <FormLabel
+              id="demo-radio-buttons-group-label"
+              sx={{ ...wordStyle }}
+            >
+              Account Type
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              name="radio-buttons-group"
+              value={usertype}
+              onChange={(e) => setUsertype(e.target.value as UserType)}
+            >
+              <FormControlLabel
+                value={UserType.CUSTOMER}
+                control={<Radio />}
+                label="Cone Buyer"
+                sx={{
+                  ...wordStyle,
                 }}
-                variant="contained"
-                id="fullbutton"
-                className=""
-                onClick={signUp}
+              />
+              <FormControlLabel
+                value={UserType.EMPLOYEE}
+                control={<Radio />}
+                label="Drone Flyer"
+                sx={{
+                  ...wordStyle,
+                }}
+              />
+              <FormControlLabel
+                value={UserType.MANAGER}
+                control={<Radio />}
+                label="Manager - REMOVE BEFORE PRODUCTION"
+                sx={{
+                  ...wordStyle,
+                }}
+              />
+            </RadioGroup>
+          </FormControl>
+          <Box display="flex" justifyContent="center" mt={2}>
+            <Button
+              variant="contained"
+              onClick={signUp}
+              sx={{
+                ...wordStyle,
+              }}
+            >
+              Create Account
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+      <Snackbar
+        open={error != ""}
+        autoHideDuration={5000}
+        onClose={snackbarClose}
+      >
+        <Alert
+          severity="error"
+          sx={{
+            width: "100%",
+            backgroundColor: `${theme.palette.secondary.light}`,
+            fontFamily: "pixelfont",
+            fontSize: "10px",
+            color: "#ffff",
+            "& .MuiAlert-message": { alignSelf: "center", width: "inherit" },
+          }}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                sx={{ color: "white" }}
+                onClick={snackbarClose}
               >
-                Create Account
-              </Button>
-            </div>
-            {error != "" && <h3>{error}</h3>}
-          </div>
-        </div>
-      </div>
-    </>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 }

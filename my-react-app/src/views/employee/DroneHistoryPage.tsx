@@ -28,14 +28,28 @@ export default function DroneHistoryPage() {
   const theme = useTheme();
   const user = useStore((state) => state.user);
   const drones = useStore((state) => state.drones);
-  const orders = useStore((state) => state.orders);
+  const orders = useStore((state) => state.orders).filter(
+    (order) =>
+      order.cones.filter(
+        (cone) =>
+          drones.filter((drone) => cone.drone_id === drone.id)?.length > 0
+      )?.length > 0
+  );
   const { loadedEmployeeOrders } = useStore();
   const { loadedDrones } = useStore();
 
   const { loadDrones } = useStore();
   const { loadEmployeeHistory } = useStore();
 
-  const [sortedOrders, sortOrders] = useState(orders);
+  const [filter, setFilter] = useState("");
+
+  const products = useStore((state) => state.products);
+  const { loadProducts } = useStore();
+  const { loadedProducts } = useStore();
+
+  if (products.length === 0 && !loadedProducts) {
+    loadProducts();
+  }
 
   if (drones.length === 0 && !loadedDrones) {
     loadDrones();
@@ -43,23 +57,21 @@ export default function DroneHistoryPage() {
 
   if (orders.length === 0 && !loadedEmployeeOrders) {
     loadEmployeeHistory();
-    sortOrders(orders);
   }
 
   const getDroneNames = (order: Order) => {
-    // const droneIds = order.cones.map((cone) => cone.drone_id);
-    // let names =
-    //   drones.find((drone) => drone.id === droneIds[0])?.display_name ||
-    //   "Drone Not Found";
-    // droneIds.shift();
-    // droneIds.forEach((droneId) => {
-    //   let name =
-    //     drones.find((drone) => drone.id === droneId)?.display_name || "";
-    //   if (name !== "" && !names.includes(name)) {
-    //     names = names + " and " + name;
-    //   }
-    // });
-    let names = "Placeholder_text";
+    const droneIds = order.cones.map((cone) => cone.drone_id);
+    let names =
+      drones.find((drone) => drone.id === droneIds[0])?.display_name ||
+      "Drone Not Found";
+    droneIds.shift();
+    droneIds.forEach((droneId) => {
+      let name =
+        drones.find((drone) => drone.id === droneId)?.display_name || "";
+      if (name !== "" && !names.includes(name)) {
+        names = names + " and " + name;
+      }
+    });
 
     return names;
   };
@@ -101,11 +113,7 @@ export default function DroneHistoryPage() {
             label="Filter by:"
             defaultValue={""}
             onChange={(event) => {
-              sortOrders(
-                orders.filter((order) =>
-                  getDroneNames(order).includes(`${event.target.value}`)
-                )
-              );
+              setFilter(`${event.target.value}`);
             }}
           >
             <MenuItem
@@ -151,7 +159,7 @@ export default function DroneHistoryPage() {
               },
             }}
             label="# of Cones"
-            // onChange={handleConeChange}
+            onChange={handleConeChange}
           >
             {[...Array()].map((number) => (
               <MenuItem
@@ -177,42 +185,41 @@ export default function DroneHistoryPage() {
           flexDirection: "column",
         }}
       >
-        {sortedOrders.map((order, index) => (
-          <Accordion
-            sx={{
-              width: "1130px",
-              "& .MuiTypography-root": wordStyle,
-              flexGrow: 1,
-            }}
-            key={index}
-          >
-            <AccordionSummary
-              sx={{ flexGrow: 1, width: "100%" }}
-              expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+        {orders
+          .filter((order) => getDroneNames(order).includes(filter))
+          .map((order, index) => (
+            <Accordion
+              sx={{
+                width: "1120px",
+                "& .MuiTypography-root": wordStyle,
+                flexGrow: 1,
+              }}
+              key={index}
             >
-              {/* <Typography>{`${getDroneNames(order)} delivered ${
-                order.cones.length
-              } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
-                order.order_time
-              ).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}`}</Typography> */}
-            </AccordionSummary>
-            <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
-              {/* {order.cones.map((cone, index) => (
-                <Typography key={index}>{getConeString(cone)}</Typography>
-              ))} */}
-              <Typography>{`Total Order Price: ${getPriceString(
-                order.total_price
-              )}`}</Typography>
-              <Typography>{`Your Earnings: ${getPriceString(
-                order?.employee_cut || 0
-              )}`}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
+              <AccordionSummary
+                sx={{ flexGrow: 1, width: "100%" }}
+                expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+              >
+                <Typography>{`${getDroneNames(order)} delivered ${
+                  order.cones.length
+                } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
+                  order.order_time
+                ).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}`}</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
+                {order.cones.map((cone, index) => (
+                  <Typography key={index}>{getConeString(cone)}</Typography>
+                ))}
+                <Typography>{`Your Earnings: ${getPriceString(
+                  order?.employee_cut || 0
+                )}`}</Typography>
+              </AccordionDetails>
+            </Accordion>
+          ))}
       </Box>
     </Box>
   );

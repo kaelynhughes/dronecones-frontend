@@ -2,8 +2,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 
 import { Link } from "react-router-dom";
-
-
+import { Box, Card } from "@mui/material";
 
 export default function HomePage() {
   return (
@@ -11,68 +10,106 @@ export default function HomePage() {
       {/*Logo*/}
 
       <div className="centerFormat">
-        <h1 className= "logo-fontFirst" style= {{
+        <h1
+          className="logo-fontFirst"
+          style={{
             padding: "1px",
             border: "1px",
             margin: "0px",
-        }}>DRONE</h1>
-        <h1 className= "logo-fontSecond" style= {{
+          }}
+        >
+          DRONE
+        </h1>
+        <h1
+          className="logo-fontSecond"
+          style={{
             padding: "1px",
             border: "1px",
             margin: "0px",
-        }}>CONES</h1>
+          }}
+        >
+          CONES
+        </h1>
 
-<br></br>
+        <br></br>
 
-{/* sign in*/}
-      <h1 className="header-font">
+        {/* sign in*/}
+        <h1 className="header-font">Welcome to the future!!</h1>
 
-        Welcome to the future!!
-      </h1>
+        <Button
+          style={{
+            backgroundColor: "purple",
+            fontFamily: "pixelfont",
+            textShadow: "0 0 5px",
+            boxShadow: "0 0 10px",
+          }}
+          variant="contained"
+          component={Link}
+          to="/login"
+        >
+          Log In!
+        </Button>
 
+        {/*Sign up*/}
+        <p className="header-font">New to Drone Cones? Sign up here!</p>
 
-      <Button style={{
-          backgroundColor: "purple",
-          fontFamily:"pixelfont",
-          textShadow: "0 0 5px",
-          boxShadow: "0 0 10px"
-        }} variant="contained" component={Link} to="/login">
-        Log In!
-      </Button>
-
-
-{/*Sign up*/}
-      <p className="header-font">
-        New to Drone Cones? Sign up here!
-        </p>
-
-      <Button style={{
-          backgroundColor: "purple",
-          fontFamily:"pixelfont",
-          textShadow: "0 0 5px",
-          boxShadow: "0 0 10px"
-          
-        }}  variant="contained" component={Link} to="/signup">
-        Sign Up!
-      </Button>
+        <Button
+          style={{
+            backgroundColor: "purple",
+            fontFamily: "pixelfont",
+            textShadow: "0 0 5px",
+            boxShadow: "0 0 10px",
+          }}
+          variant="contained"
+          component={Link}
+          to="/signup"
+        >
+          Sign Up!
+        </Button>
       </div>
 
-{/*Introduction*/}
+      {/*Introduction*/}
 
-<h1 className="header-font">Who are we?</h1>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignContent: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <h1 style={{ marginLeft: "16px" }} className="header-font">
+          Who are we?
+        </h1>
 
-<p className = "pixel-font">We are Drone Cones! We're taking the joy of ice cream to new heights - quite literally! 
-  We are a small, innovative startup company dedicated to revolutionizing your ice cream cravings 
-  with our cutting-edge ice cream delivery service via drones. Gone are the days of impatiently waiting 
-  for your favorite frozen treats. With Drone Cones, we bring the ice cream parlor straight to your doorstep, 
-  soaring through the skies for a uniquely delightful delivery experience.</p>
+        <Card sx={{ padding: "8px", justifySelf: "center", margin: "16px" }}>
+          <p className="pixel-font">
+            We are Drone Cones! We're taking the joy of ice cream to new heights
+            - quite literally! We are a small, innovative startup company
+            dedicated to revolutionizing your ice cream cravings with our
+            cutting-edge ice cream delivery service via drones. Gone are the
+            days of impatiently waiting for your favorite frozen treats. With
+            Drone Cones, we bring the ice cream parlor straight to your
+            doorstep, soaring through the skies for a uniquely delightful
+            delivery experience.
+          </p>
+        </Card>
 
-  <h1 className="header-font">Our Mission</h1>
-<h1 className = "pixel-font">Our mission is simple: to make every moment sweeter. Whether you're celebrating a special occasion, 
-  indulging in a late-night craving, or simply treating yourself, Drone Cones is here to elevate your 
-  ice cream experience. Our drones are not only fast and efficient but also eco-friendly, ensuring your 
-  treats arrive with a minimal carbon footprint.</h1>
-
+        <h1 style={{ marginLeft: "16px" }} className="header-font">
+          Our Mission
+        </h1>
+        <Card sx={{ padding: "8px", justifySelf: "center", margin: "16px" }}>
+          <p className="pixel-font">
+            Our mission is simple: to make every moment sweeter. Whether you're
+            celebrating a special occasion, indulging in a late-night craving,
+            or simply treating yourself, Drone Cones is here to elevate your ice
+            cream experience. Our drones are not only fast and efficient but
+            also eco-friendly, ensuring your treats arrive with a minimal carbon
+            footprint.
+          </p>
+        </Card>
+      </Box>
     </>
   );
 }

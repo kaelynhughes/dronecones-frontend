@@ -18,6 +18,13 @@ export default function DroneQuickviewPage() {
   const theme = useTheme();
 
   const { loadDrones } = useStore();
+  const products = useStore((state) => state.products);
+  const { loadProducts } = useStore();
+  const { loadedProducts } = useStore();
+
+  if (products.length === 0 && !loadedProducts) {
+    loadProducts();
+  }
 
   if (drones.length === 0 && !loadedDrones) {
     loadDrones();

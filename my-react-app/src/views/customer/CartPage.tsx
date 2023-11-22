@@ -12,6 +12,7 @@ export default function CartPage() {
       total_price: 500,
       employee_cut: 100,
       profit: 400,
+      order_time: "doesn't matter",
       cones: [
         {
           products: [
@@ -19,16 +20,23 @@ export default function CartPage() {
             {
               display_name: "Vanilla",
               product_type: ProductType.ICECREAM,
-              id: 7,
+              id: 8,
             },
             { display_name: "M&Ms", product_type: ProductType.TOPPING, id: 4 },
           ],
         },
         {
           products: [
-            { display_name: "Cake", product_type: ProductType.CONE, id: 2 },
-            { display_name: "Mint", product_type: ProductType.ICECREAM, id: 9 },
-            { display_name: "Oreos", product_type: ProductType.TOPPING, id: 6 },
+            { display_name: "Cake", product_type: ProductType.CONE, id: 1 },
+            { display_name: "Mint", product_type: ProductType.ICECREAM, id: 8 },
+            { display_name: "Oreos", product_type: ProductType.TOPPING, id: 5 },
+          ],
+        },
+        {
+          products: [
+            { display_name: "Cake", product_type: ProductType.CONE, id: 1 },
+            { display_name: "Mint", product_type: ProductType.ICECREAM, id: 8 },
+            { display_name: "Oreos", product_type: ProductType.TOPPING, id: 5 },
           ],
         },
       ],

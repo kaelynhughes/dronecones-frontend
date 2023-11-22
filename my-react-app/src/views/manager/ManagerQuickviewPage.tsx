@@ -64,27 +64,27 @@ export default function ManagerQuickviewPage() {
     loadProducts();
   }
 
-  // let totalToppings = [];
-  // let totalFlavors = [];
-  // let totalCones = [];
+  let totalToppings = [];
+  let totalFlavors = [];
+  let totalCones = [];
 
-  // for (let i = 0; i < orders.length; i++) {
-  //   earnings += orders[i].total_price;
-  //   for (let j = 0; j < orders[i].cones.length; j++) {
-  //     let currentCone = orders[i].cones;
-  //     for (let k = 0; k < currentCone[0].products.length; k++) {
-  //       let currentName: string = currentCone[0].products[k].display_name;
-  //       if (currentCone[0].products[k].product_type == "Topping") {
-  //         totalToppings.push(currentName);
-  //       } else if (currentCone[0].products[k].product_type == "Cone") {
-  //         totalCones.push(currentName);
-  //       } else totalFlavors.push(currentName);
-  //     }
-  //   }
-  // }
-  // mostPopularTopping = findMostCommonItem(totalToppings);
-  // mostPopularCone = findMostCommonItem(totalCones);
-  // mostPopularFlavor = findMostCommonItem(totalFlavors);
+  for (let i = 0; i < orders.length; i++) {
+    earnings += orders[i].total_price;
+    for (let j = 0; j < orders[i].cones.length; j++) {
+      let currentCone = orders[i].cones;
+      for (let k = 0; k < currentCone[0].products.length; k++) {
+        let currentName: string = currentCone[0].products[k].display_name;
+        if (currentCone[0].products[k].product_type == "Topping") {
+          totalToppings.push(currentName);
+        } else if (currentCone[0].products[k].product_type == "Cone") {
+          totalCones.push(currentName);
+        } else totalFlavors.push(currentName);
+      }
+    }
+  }
+  mostPopularTopping = findMostCommonItem(totalToppings);
+  mostPopularCone = findMostCommonItem(totalCones);
+  mostPopularFlavor = findMostCommonItem(totalFlavors);
 
   //iterates though inventory
   products.forEach((product) => currentProducts.push(product));
@@ -152,17 +152,17 @@ export default function ManagerQuickviewPage() {
               {products.length} items available!
             </Typography>
             <div className="centerFormat">
-              {/* <h3
+              <h3
                 style={{
                   color: "white",
                   fontFamily: "pixelfont",
                 }}
               >
                 Here are the most popular options:
-              </h3> */}
+              </h3>
             </div>
             <Grid container spacing={2}>
-              {/* <Grid item xs={4}>
+              <Grid item xs={4}>
                 <Card sx={textStyle}>
                   <div className="centerFormat">
                     Flavor<p>{mostPopularFlavor}</p>
@@ -182,7 +182,7 @@ export default function ManagerQuickviewPage() {
                     Cone<p>{mostPopularCone}</p>
                   </div>
                 </Card>
-              </Grid> */}
+              </Grid>
               <Grid item xs={12}>
                 <Card sx={textStyle}>
                   <div className="centerFormat">
