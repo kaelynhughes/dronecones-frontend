@@ -45,19 +45,37 @@ export default function SignUpPage() {
     }
   }
 
+  const navigateToPath = (path: string) => {
+    changeMode(user.user_type);
+    changePath(path);
+    navigate(path);
+  };
+
+  if (user?.id) {
+    if (user.user_type === UserType.CUSTOMER) {
+      navigateToPath("/app/menu");
+    } else if (user.user_type === UserType.EMPLOYEE) {
+      navigateToPath("/app/drone-quickview");
+    } else if (user.user_type === UserType.MANAGER) {
+      navigateToPath("/app/manager-quickview");
+    }
+  }
+
   const snackbarClose = () => {
     removeError();
   };
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="98vh"
-      width="98vh"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+      }}
     >
-      <Card sx={{ width: "40%" }}>
+      <Card sx={{ width: "20%" }}>
         <CardContent sx={{ alignContent: "center" }}>
           <Typography
             variant="h4"

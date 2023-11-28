@@ -64,13 +64,15 @@ export default function LoginPage() {
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="98vh"
-      width="98vh"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+      }}
     >
-      <Card sx={{ width: "40%" }}>
+      <Card sx={{ width: "20%" }}>
         <CardContent sx={{ alignContent: "center" }}>
           <Typography
             variant="h4"
@@ -147,7 +149,10 @@ export default function LoginPage() {
             fontFamily: "pixelfont",
             fontSize: "10px",
             color: "#ffff",
-            "& .MuiAlert-message": { alignSelf: "center", width: "inherit" },
+            "& .MuiAlert-message": {
+              alignSelf: "center",
+              width: "inherit",
+            },
           }}
           action={
             <React.Fragment>
