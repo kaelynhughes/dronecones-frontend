@@ -72,7 +72,7 @@ export default function LoginPage() {
         width: "100%",
       }}
     >
-      <Card sx={{ width: "20%" }}>
+      <Card sx={{ width: "35%" }}>
         <CardContent sx={{ alignContent: "center" }}>
           <Typography
             variant="h4"

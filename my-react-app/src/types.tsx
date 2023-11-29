@@ -18,7 +18,7 @@ export type Order = {
   total_price: number;
   employee_cut?: number;
   profit?: number;
-  order_time: string;
+  order_time?: string;
   id?: number;
   customer_id?: number;
 };
@@ -54,3 +54,8 @@ export enum UserType {
   MANAGER = "Manager",
   GUEST = "Guest",
 }
+
+export type Time = {
+  minutes: number;
+  seconds: number;
+};
