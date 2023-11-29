@@ -59,6 +59,7 @@ export default function MenuPage() {
       <Button
         sx={optionButtonStyle}
         key={item.id}
+        disabled={(item?.stock || 1) <= 0}
         onClick={() => {
           if (selectedToppings.length < 3) {
             setselectedToppings([...selectedToppings, item]);
@@ -82,6 +83,7 @@ export default function MenuPage() {
       <Button
         sx={optionButtonStyle}
         key={item.id}
+        disabled={(item?.stock || 1) <= 0}
         onClick={() => {
           if (selectedFlavors.length < 3) {
             setselectedFlavors([...selectedFlavors, item]);
@@ -105,6 +107,7 @@ export default function MenuPage() {
       <Button
         sx={optionButtonStyle}
         key={item.id}
+        disabled={(item?.stock || 1) <= 0}
         onClick={() => {
           setselectedCone([item]);
         }}

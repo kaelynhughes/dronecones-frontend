@@ -286,7 +286,9 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
                   { ...body, id: response.data.full_order_id },
                 ],
                 completedOrder: true,
+                products: [],
               }));
+              get().loadProducts();
             } else {
               set((state) => ({
                 ...state,
