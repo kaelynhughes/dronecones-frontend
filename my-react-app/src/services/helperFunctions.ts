@@ -25,7 +25,7 @@ export const getConeString = (cone: FullCone): String => {
   if (scoops.length > 1) fullString += `${scoops[1].display_name} and `;
   fullString += `${scoops[0].display_name} ice cream`;
   if (toppings.length > 2)
-    fullString += ` and ${toppings[0].display_name}, ${toppings[1].display_name}, and ${toppings[2]}.`;
+    fullString += ` and ${toppings[0].display_name}, ${toppings[1].display_name}, and ${toppings[2].display_name}.`;
   else if (toppings.length > 1)
     fullString += ` and ${toppings[0].display_name} and ${toppings[1].display_name}.`;
   else if (toppings.length > 0) fullString += ` and ${toppings[0].display_name}.`;
@@ -48,7 +48,7 @@ export const getCartString = (cone: FullCone): String => {
   });
   let fullString: String = ``;
   if (toppings.length > 2)
-    fullString += `${toppings[0].display_name}, ${toppings[1].display_name}, and ${toppings[2]} \n`;
+    fullString += `${toppings[0].display_name}, ${toppings[1].display_name}, and ${toppings[2].display_name} \n`;
   else if (toppings.length > 1)
     fullString += `${toppings[0].display_name} and ${toppings[1].display_name} \n`;
   else if (toppings.length > 0) fullString += `${toppings[0].display_name} \n`;
