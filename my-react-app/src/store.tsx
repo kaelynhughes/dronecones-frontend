@@ -150,23 +150,31 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           user_type: user_type,
           is_active: 1,
         };
-        try {
-          const response = await axios.post(
-            `${BACKEND_URL_DEV}/auth/register`,
-            body
-          );
-          if (!response.data?.error) {
-            get().login(username, password);
-          } else {
-            set((state) => ({
-              ...state,
-              error: "Error registering: " + response.data?.error,
-            }));
-          }
-        } catch (error) {
-          console.log(error);
-          set((state) => ({ ...state, error: `${error}` }));
-        }
+        axios
+          .post(`${BACKEND_URL_DEV}/auth/register`, body)
+          .then(function (response) {
+            if (!response.data?.error) {
+              get().login(username, password);
+            } else {
+              set((state) => ({
+                ...state,
+                error: "Error registering: " + response.data?.error,
+              }));
+            }
+          })
+          .catch(function (error) {
+            if (error.response) {
+              set((state) => ({
+                ...state,
+                error: `${error.response.data.error}`,
+              }));
+            } else {
+              set((state) => ({
+                ...state,
+                error: `${error}`,
+              }));
+            }
+          });
       },
 
       loadProducts: async () => {
