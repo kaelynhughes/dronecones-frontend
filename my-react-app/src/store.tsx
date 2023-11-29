@@ -66,6 +66,7 @@ type DroneConesActions = {
 
   loadUsers: () => void;
   banUser: (id: number) => void;
+  activateUser: (id: number) => void;
   editUser: (user: User) => void;
 
   loadCustomerHistory: () => void;
@@ -613,6 +614,36 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
             ...state,
             error:
               "Error banning user: No valid ID is connected to this order.",
+          }));
+        }
+      },
+
+      activateUser: async (id) => {
+        if (id !== 1) {
+          try {
+            const body = {
+              id: id,
+              is_active: 1,
+            };
+            const response: AxiosResponse = await axios.put(
+              `${BACKEND_URL_DEV}/manager/user`,
+              body
+            );
+            if (response.data?.error) {
+              set((state) => ({
+                ...state,
+                error: "Error activating user: " + response.data.error,
+              }));
+            }
+          } catch (error) {
+            console.log(error);
+            set((state) => ({ ...state, error: `${error}` }));
+          }
+        } else {
+          set((state) => ({
+            ...state,
+            error:
+              "Error activating user: No valid ID is connected to this order.",
           }));
         }
       },
