@@ -411,7 +411,6 @@ export default function ManageInventoryPage() {
                     </FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      value={newProductType}
                       name="radio-buttons-group"
                     >
                       <FormControlLabel
