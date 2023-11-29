@@ -30,7 +30,10 @@ export default function ManageUsersPage() {
   let managerList = [];
   for(let i = 0; i < allUsers.length; i++){
     if(allUsers[i].user_type === UserType.MANAGER){
-      managerList.push(allUsers[i]);
+      //prevents manager from entering list
+      if(user.username != allUsers[i].username){
+        managerList.push(allUsers[i]);
+      }
     } else if(allUsers[i].user_type === UserType.EMPLOYEE){
       employeeList.push(allUsers[i]);
 
@@ -43,8 +46,42 @@ export default function ManageUsersPage() {
   {
     /*Populate Customer Users*/
   }
+
+
+
   const renderedCustomers = customerList.map((item) => {
     let localQuantity = 0;
+    return (
+      <div key={item.id}>
+        <div style={{ display: "flex" }}>
+          <p className="pixel-font" style={{margin:"10px"}}>
+            {item.username}
+          </p>
+          <FormGroup>
+          {/* Handles whether or not to ban or activate user */}
+          <FormControlLabel control={<Switch defaultChecked = {item.is_active}/>}  onChange={() => {      
+            if(item.is_active){
+              if(item.id){
+                banUser(item.id);
+              }
+            } else {
+              if(item.id){
+                activateUser(item.id);
+              }
+            }
+            item.is_active = !item.is_active;
+            
+          }} label="Banned" />
+          </FormGroup>
+        </div>
+      </div>
+    );
+  });
+
+  {
+    /*Populate Manager Users - does not include current user*/
+  }
+  const renderedManagers = managerList.map((item) => {
     return (
       <div key={item.id}>
         <div style={{ display: "flex" }}>
@@ -78,6 +115,50 @@ export default function ManageUsersPage() {
       </div>
     );
   });
+
+  {
+    /*Populate Employee Users*/
+  }
+  const renderedEmployees = employeeList.map((item) => {
+    let localQuantity = 0;
+    return (
+      <div key={item.id}>
+        <div style={{ display: "flex" }}>
+          <p className="pixel-font" style={{margin:"10px"}}>
+            {item.username}
+          </p>
+          <FormGroup>
+
+          <FormControlLabel control={<Switch defaultChecked = {item.is_active}/>}  onChange={() => {
+            
+            if(item.is_active){
+              if(item.id){
+                banUser(item.id);
+              }
+            } else {
+              if(item.id){
+                activateUser(item.id);
+                console.log("Should be active again");
+              }
+            }
+            item.is_active = !item.is_active;
+            
+          }} label="Banned" />
+          </FormGroup>
+        </div>
+      </div>
+    );
+  });
+
+  let emptyCustomer= "";
+  if(customerList.length==0){
+    emptyCustomer= "No customer users";
+  }
+  let emtpyEmployee= "";
+  if(employeeList.length==0){
+    emtpyEmployee= "No Employee users";
+  }
+  
   return (
     <>
       {user.user_type === UserType.MANAGER && (
@@ -91,21 +172,21 @@ export default function ManageUsersPage() {
               <Grid item xs={4}>
                 <Card sx={textStyle}>
                   <div className="centerFormat">
-                  <h1 className="header-font" style={{margin:"5px"}}>Customers</h1>{renderedCustomers}
+                  <h1 className="header-font" style={{margin:"5px", height:"100%"}}>Customers</h1>{emptyCustomer}{renderedCustomers}
                   </div>
                 </Card>
               </Grid>
               <Grid item xs={4}>
                 <Card sx={textStyle}>
                   <div className="centerFormat">
-                  <h1 className="header-font" style={{margin:"5px"}}>Employees</h1><p>Hello</p>
+                  <h1 className="header-font" style={{margin:"5px"}}>Employees</h1>{emtpyEmployee}{renderedEmployees}
                   </div>
                 </Card>
               </Grid>
               <Grid item xs={4}>
                 <Card sx={textStyle}>
                   <div className="centerFormat">
-                  <h1 className="header-font" style={{margin:"5px"}}>Managers</h1><p>Hello UWU</p>
+                  <h1 className="header-font" style={{margin:"5px"}}>Managers</h1><p style={{color:"yellow"}}>{user.username}</p>{renderedManagers}
                   </div>
                 </Card>
               </Grid>
