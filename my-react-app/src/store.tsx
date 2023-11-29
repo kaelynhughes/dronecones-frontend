@@ -6,6 +6,7 @@ import {
   Order,
   Product,
   ProductType,
+  Time,
   User,
   UserType,
 } from "./types";
@@ -31,6 +32,9 @@ type DroneConesState = {
   loadedEmployeeOrders: boolean;
   loadedCustomerOrders: boolean;
   loadedManagerOrders: boolean;
+
+  completedOrder: boolean;
+  time: { minutes: number; seconds: number };
 };
 
 type DroneConesActions = {
@@ -47,6 +51,8 @@ type DroneConesActions = {
   editProduct: (id: number, product: Product) => void;
   removeProduct: (id: number) => void;
   checkoutOrder: (order: Order) => void;
+  orderSent: () => void;
+  setTime: (time: Time) => void;
 
   addConeToCart: (cone: FullCone) => void;
   addConesToCart: (cones: FullCone[]) => void;
@@ -92,6 +98,9 @@ const initialState: DroneConesState = {
   loadedEmployeeOrders: false,
   loadedCustomerOrders: false,
   loadedManagerOrders: false,
+
+  completedOrder: false,
+  time: { minutes: 0, seconds: 0 },
 };
 
 export const useStore = create<DroneConesState & DroneConesActions>()(
@@ -276,6 +285,7 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
                   ...state.orders,
                   { ...body, id: response.data.full_order_id },
                 ],
+                completedOrder: true,
               }));
             } else {
               set((state) => ({
@@ -387,6 +397,8 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
           cart: state.cart.filter((item) => item !== cone),
         })),
       clearCart: () => set(() => ({ cart: [] })),
+      orderSent: () => set(() => ({ completedOrder: false })),
+      setTime: (time) => set(() => ({ time: time })),
 
       loadDrones: async () => {
         const userId = get().user?.id || 0;

@@ -1,41 +1,90 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { useStore } from "../../store";
+import { Box } from "@mui/material";
 
 export default function ConfirmationPage() {
+  const { time, setTime } = useStore();
+  const [arrivedBool, setArriveBool] = useState(false);
+  const { completedOrder, orderSent } = useStore();
 
-    const [arrivedBool, setArriveBool] = useState(false);
-    const [hours, setHours] = useState(10);
-    const [minutes, setMinutes] = useState(10);
-    const [seconds, setSeconds] = useState(10);
-  
-    useEffect(() => {
-      const timer = setInterval(() => {
-        if( hours == 0 && seconds == 0 && minutes == 0){
-          setArriveBool(true)
-        } else if (seconds > 0) {
-          setSeconds(seconds - 1);
-        } else if (minutes > 0) {
-          setMinutes(minutes - 1);
-          setSeconds(59);
-        } else if (hours > 0) {
-          setHours(hours - 1);
-          setMinutes(59);
-          setSeconds(59);
+  const timeRef = useRef(time);
+  timeRef.current = time;
+
+  useEffect(() => {
+    if (completedOrder) {
+      setTime({ minutes: 5, seconds: 0 });
+    }
+    orderSent();
+  }, [orderSent]);
+
+  useEffect(() => {
+    const tick = () => {
+      let { minutes, seconds } = timeRef.current;
+
+      if (minutes === 0 && seconds === 0) {
+        setArriveBool(true);
+        return;
+      }
+
+      if (seconds > 0) {
+        seconds--;
+      } else {
+        seconds = 59;
+        if (minutes > 0) {
+          minutes--;
         }
-      }, 1000);
-  
-      // Cleanup the interval on component unmount
-      return () => clearInterval(timer);
-    }, [hours, minutes, seconds]);
-  
-  
+      }
+
+      if (
+        timeRef.current.minutes !== minutes ||
+        timeRef.current.seconds !== seconds
+      ) {
+        setTime({ minutes, seconds });
+      }
+    };
+
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [setTime]);
+
   return (
     <>
-      <code>{String(hours).padStart(2, '0')}:
-  {String(minutes).padStart(2, '0')}:
-  {String(seconds).padStart(2, '0')}</code>
-      {arrivedBool && <p>Arrived</p>}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <h1 className="logo-fontFirst" style={{ fontSize: "250px" }}>
+          {String(time.minutes).padStart(2, "0")}:
+        </h1>
+        <h1 className="logo-fontSecond" style={{ fontSize: "250px" }}>
+          {String(time.seconds).padStart(2, "0")}
+        </h1>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        {!arrivedBool && (
+          <h2 className="header-font" style={{ fontSize: "50px" }}>
+            Your ice cream is on the way!
+          </h2>
+        )}
+        {arrivedBool && (
+          <h2 className="header-font" style={{ fontSize: "75px" }}>
+            Enjoy your Drone Cones!
+          </h2>
+        )}
+      </Box>
     </>
   );
 }

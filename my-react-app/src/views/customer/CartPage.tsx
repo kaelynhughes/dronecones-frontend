@@ -1,58 +1,118 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../../store";
 import { Order, ProductType } from "../../types";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import {
+  Box,
+  Container,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Divider,
+  IconButton,
+} from "@mui/material";
+import {
+  getCartString,
+  getConePrice,
+  getPriceString,
+} from "../../services/helperFunctions";
+
+const textStyle = {
+  color: "white",
+  fontFamily: "pixelfont",
+};
 
 export default function CartPage() {
-  const { checkoutOrder } = useStore();
+  const { checkoutOrder, cart, completedOrder, clearCart, removeConeFromCart } =
+    useStore();
+  const navigate = useNavigate();
+  const { changePath } = useStore();
 
-  const handleTest = () => {
-    const order: Order = {
-      total_price: 500,
-      employee_cut: 100,
-      profit: 400,
-      order_time: "doesn't matter",
-      cones: [
-        {
-          products: [
-            { display_name: "Waffle", product_type: ProductType.CONE, id: 1 },
-            {
-              display_name: "Vanilla",
-              product_type: ProductType.ICECREAM,
-              id: 8,
-            },
-            { display_name: "M&Ms", product_type: ProductType.TOPPING, id: 4 },
-          ],
-        },
-        {
-          products: [
-            { display_name: "Cake", product_type: ProductType.CONE, id: 1 },
-            { display_name: "Mint", product_type: ProductType.ICECREAM, id: 8 },
-            { display_name: "Oreos", product_type: ProductType.TOPPING, id: 5 },
-          ],
-        },
-        {
-          products: [
-            { display_name: "Cake", product_type: ProductType.CONE, id: 1 },
-            { display_name: "Mint", product_type: ProductType.ICECREAM, id: 8 },
-            { display_name: "Oreos", product_type: ProductType.TOPPING, id: 5 },
-          ],
-        },
-      ],
-    };
-    checkoutOrder(order);
+  const handleCheckout = () => {
+    let total_price = 0;
+    cart.forEach((cone) => (total_price += getConePrice(cone)));
+    let employee_cut = Math.trunc(total_price / 10);
+    let profit = total_price - employee_cut;
+    checkoutOrder({
+      total_price: total_price,
+      employee_cut: employee_cut,
+      profit: profit,
+      cones: cart,
+    });
   };
 
+  if (completedOrder) {
+    changePath("app/confirmation");
+    navigate(`/app/confirmation`);
+  }
+
   return (
-    <>
-      <h1>
-        Cart Page, displays items in cart and allows user to complete
-        transaction
-      </h1>
-      <Button variant="contained" onClick={handleTest}>
-        Checkout Test Order
-      </Button>
-    </>
+    <Container>
+      <Card sx={{ width: "75%", margin: "auto" }}>
+        <CardContent sx={{ justifyContent: "start" }}>
+          <div className="centerFormat">
+            <h1
+              style={{ margin: "5px", justifySelf: "center" }}
+              className="header-font"
+            >
+              Cart
+            </h1>
+          </div>
+          {cart?.length === 0 && (
+            <h1
+              style={{ margin: "5px", justifySelf: "center" }}
+              className="pixel-font"
+            >
+              No Cones have been sent to the cart yet, please visit the Menu
+              Page!
+            </h1>
+          )}
+          {cart.map((cone, index) => (
+            <>
+              <div key={index} style={{ ...textStyle, whiteSpace: "pre-line" }}>
+                {"\n"}
+              </div>
+              <Divider></Divider>
+              <div style={{ ...textStyle, whiteSpace: "pre-line" }}>
+                {"\n" + getCartString(cone) + "\n"}{" "}
+                {getPriceString(getConePrice(cone))}{" "}
+                <IconButton
+                  aria-label="delete"
+                  color="secondary"
+                  size="small"
+                  onClick={() => {
+                    removeConeFromCart(cone);
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </div>
+            </>
+          ))}
+          <Divider></Divider>
+        </CardContent>
+        <CardActions sx={{ justifyContent: "center" }}>
+          <Button
+            size="large"
+            color="primary"
+            variant="outlined"
+            onClick={() => clearCart()}
+          >
+            Clear Cart
+          </Button>
+          <Button
+            size="large"
+            color="primary"
+            variant="contained"
+            onClick={handleCheckout}
+          >
+            Checkout
+          </Button>
+        </CardActions>
+      </Card>
+    </Container>
   );
 }

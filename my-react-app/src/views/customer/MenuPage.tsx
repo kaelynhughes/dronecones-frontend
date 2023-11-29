@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
-import { Product, ProductType } from "../../types";
+import { Link, useNavigate } from "react-router-dom";
+import { Product, ProductType, UserType } from "../../types";
 import Card from "@mui/material/Card";
 import { useStore } from "../../store";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -40,6 +40,8 @@ export default function MenuPage() {
   const { loadedProducts } = useStore();
   const { setError } = useStore();
   const { addConeToCart } = useStore();
+  const navigate = useNavigate();
+  const { changePath } = useStore();
 
   if (products.length === 0 && !loadedProducts) {
     loadProducts();
@@ -161,8 +163,10 @@ export default function MenuPage() {
 
           <Button
             variant="contained"
-            component={Link}
-            to="/app/cart"
+            onClick={() => {
+              changePath("app/cart");
+              navigate("/app/cart");
+            }}
             sx={optionButtonStyle}
           >
             View Cart
