@@ -71,7 +71,7 @@ export default function ManageUsersPage() {
             }
             item.is_active = !item.is_active;
             
-          }} label="Banned" />
+          }} label="Active" />
           </FormGroup>
         </div>
       </div>

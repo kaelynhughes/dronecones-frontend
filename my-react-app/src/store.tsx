@@ -38,7 +38,7 @@ type DroneConesState = {
 };
 
 type DroneConesActions = {
-  login: (username: string, password: string) => void;
+  login: (username: string, password: string) => Promise<void>;
   signup: (username: string, password: string, user_type: UserType) => void;
 
   changeMode: (mode: UserType) => void;
