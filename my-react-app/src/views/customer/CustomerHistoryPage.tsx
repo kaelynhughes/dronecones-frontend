@@ -31,16 +31,13 @@ export default function CustomerHistoryPage() {
   }
 
   function turnConeToString(cone: FullCone) : String {
-    // do something with param1 and param2
-    console.log("Dis' da cone:")
     
     if(cone){
-     
-      console.log(cone)
-      return getConeString(cone);
+      if(cone.products){
+        return getConeString(cone);
+      }
     }
-  
-    return "";
+    return "Something went wrong with this order...";
   }
 
   let title = "Order History";
