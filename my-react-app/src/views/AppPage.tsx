@@ -129,7 +129,29 @@ export default function AppPage() {
 
                 {(user.user_type === UserType.EMPLOYEE ||
                   user.user_type === UserType.MANAGER) &&
-                  mode !== UserType.EMPLOYEE && (
+                  mode === UserType.CUSTOMER && (
+                    <Button
+                      variant="outlined"
+                      style={{
+                        color: `${theme.palette.primary.main}`,
+                        fontFamily: "pixelfont",
+                        fontSize: "13px",
+                        width: "120px",
+                      }}
+                      size="medium"
+                      onClick={() => {
+                        changeMode(UserType.EMPLOYEE);
+                        changePath("app/drone-quickview");
+                        navigate("/app/drone-quickview");
+                      }}
+                    >
+                      Your Drones
+                    </Button>
+                  )}
+
+                {(user.user_type === UserType.EMPLOYEE ||
+                  user.user_type === UserType.MANAGER) &&
+                  mode === UserType.MANAGER && (
                     <Button
                       variant="outlined"
                       style={{
@@ -227,12 +249,9 @@ export default function AppPage() {
           anchor="left"
           className="sidebar"
         >
-          {(user.user_type === UserType.CUSTOMER ||
-            user.user_type === UserType.GUEST ||
-            mode === UserType.CUSTOMER) && (
+          {user.user_type === UserType.GUEST && (
             <Box sx={{ width: "100%", padding: 0 }}>
               <Divider sx={{ height: "65px" }} />
-              {/* Here we use a vertical ToggleButtonGroup */}
               <ToggleButtonGroup
                 orientation="vertical"
                 value={appPath}
@@ -247,28 +266,48 @@ export default function AppPage() {
                 <ToggleButton value="app/cart" sx={optionButtonStyle}>
                   Cart
                 </ToggleButton>
-                <Divider sx={{ height: "1px" }} />
-                <ToggleButton
-                  value="app/customer-history"
-                  sx={optionButtonStyle}
-                >
-                  History
-                </ToggleButton>
               </ToggleButtonGroup>
             </Box>
           )}
-          {(user.user_type === UserType.EMPLOYEE ||
-            user.user_type === UserType.MANAGER) &&
-            mode === UserType.EMPLOYEE && (
+          {user.user_type === UserType.CUSTOMER &&
+            mode === UserType.CUSTOMER && (
               <Box sx={{ width: "100%", padding: 0 }}>
                 <Divider sx={{ height: "65px" }} />
-                {/* Here we use a vertical ToggleButtonGroup */}
                 <ToggleButtonGroup
                   orientation="vertical"
                   value={appPath}
                   exclusive
                   onChange={handleNavBar}
-                  sx={{ width: "100%", height: "100%", optionButtonStyle }} // Style to expand to container
+                  sx={{ width: "100%", height: "100%" }}
+                >
+                  <ToggleButton value="app/menu" sx={optionButtonStyle}>
+                    Menu
+                  </ToggleButton>
+                  <Divider sx={{ height: "1px" }} />
+                  <ToggleButton value="app/cart" sx={optionButtonStyle}>
+                    Cart
+                  </ToggleButton>
+                  <Divider sx={{ height: "1px" }} />
+                  <ToggleButton
+                    value="app/customer-history"
+                    sx={optionButtonStyle}
+                  >
+                    History
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
+            )}
+          {(user.user_type === UserType.EMPLOYEE ||
+            user.user_type === UserType.MANAGER) &&
+            mode === UserType.EMPLOYEE && (
+              <Box sx={{ width: "100%", padding: 0 }}>
+                <Divider sx={{ height: "65px" }} />
+                <ToggleButtonGroup
+                  orientation="vertical"
+                  value={appPath}
+                  exclusive
+                  onChange={handleNavBar}
+                  sx={{ width: "100%", height: "100%", optionButtonStyle }}
                 >
                   <ToggleButton
                     value="app/drone-quickview"
@@ -296,13 +335,12 @@ export default function AppPage() {
           {user.user_type === UserType.MANAGER && mode === UserType.MANAGER && (
             <Box sx={{ width: "100%", padding: 0 }}>
               <Divider sx={{ height: "65px" }} />
-              {/* Here we use a vertical ToggleButtonGroup */}
               <ToggleButtonGroup
                 orientation="vertical"
                 value={appPath}
                 exclusive
                 onChange={handleNavBar}
-                sx={{ width: "100%", height: "100%", optionButtonStyle }} // Style to expand to container
+                sx={{ width: "100%", height: "100%", optionButtonStyle }}
               >
                 <ToggleButton
                   value="app/manager-quickview"

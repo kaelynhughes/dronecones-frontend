@@ -5,8 +5,6 @@ export const getPriceString = (price: number) => {
 };
 
 export const getConeString = (cone: FullCone): String => {
-
-  console.log(cone);
   const coneType: Product[] = [];
   const scoops: Product[] = [];
   const toppings: Product[] = [];

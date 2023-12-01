@@ -59,7 +59,7 @@ export default function MenuPage() {
       <Button
         sx={optionButtonStyle}
         key={item.id}
-        disabled={(item?.stock || 1) <= 0}
+        disabled={(item?.stock || 0) <= 0}
         onClick={() => {
           if (selectedToppings.length < 3) {
             setselectedToppings([...selectedToppings, item]);
@@ -83,10 +83,11 @@ export default function MenuPage() {
       <Button
         sx={optionButtonStyle}
         key={item.id}
-        disabled={(item?.stock || 1) <= 0}
+        disabled={(item?.stock || 0) == 0}
         onClick={() => {
           if (selectedFlavors.length < 3) {
             setselectedFlavors([...selectedFlavors, item]);
+            console.log(item);
           } else {
             setError(
               "Scoop limit reached. Use the trash button by Toppings to change your selection."
@@ -107,7 +108,7 @@ export default function MenuPage() {
       <Button
         sx={optionButtonStyle}
         key={item.id}
-        disabled={(item?.stock || 1) <= 0}
+        disabled={(item?.stock || 0) <= 0}
         onClick={() => {
           setselectedCone([item]);
         }}
@@ -137,6 +138,7 @@ export default function MenuPage() {
 
   const dynamicSelectedToppings = showSelectedOptions(selectedToppings);
   const dynamicSelectedFlavors = showSelectedOptions(selectedFlavors);
+  const dynamicSelectedCone = showSelectedOptions(selectedCone);
 
   const [error, setLocalError] = useState<Error | null>(null);
 
@@ -189,7 +191,10 @@ export default function MenuPage() {
             <div className="centerFormat">
               {/*Display selected toppings*/}
               <div style={{ display: "flex" }}>
-                <h1 style={{ margin: "10px" }} className="header-font">
+                <h1
+                  style={{ marginTop: "10px", marginBottom: "5px" }}
+                  className="header-font"
+                >
                   My Toppings
                 </h1>
                 <IconButton
@@ -226,7 +231,16 @@ export default function MenuPage() {
               <h1 style={{ margin: "10px" }} className="header-font">
                 Selected Cone
               </h1>
-              <p className="pixel-font">{selectedCone[0]?.display_name}</p>
+              <div
+                style={{
+                  margin: "0px",
+                  border: "0px",
+                  padding: "0px",
+                  marginBottom: "16px",
+                }}
+              >
+                {dynamicSelectedCone}
+              </div>
 
               {/*This button will post item to cart database and reset everything locally that has been pressed*/}
               <Button

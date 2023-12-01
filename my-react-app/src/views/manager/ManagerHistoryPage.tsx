@@ -40,7 +40,7 @@ export default function ManagerordersPage() {
     return (
       <Accordion
         sx={{
-          width: "1130px",
+          width: "1120px",
           "& .MuiTypography-root": wordStyle,
           flexGrow: 1,
         }}
@@ -57,8 +57,9 @@ export default function ManagerordersPage() {
         >
           {/*REPLACE CUSTOMER NAME LATER*/}
           {order.order_time} -{" "}
-          {users.filter((user) => user.id === order?.customer_id)[0]?.username}{" "}
-          -Order Size: {order.cones.length}
+          {users.filter((user) => user.id === order?.customer_id)[0]
+            ?.username || "Guest"}{" "}
+          - Order Size: {order.cones.length}
         </AccordionSummary>
         <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
           {order.cones.map((cone, index) => (

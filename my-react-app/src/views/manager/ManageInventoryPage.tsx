@@ -33,7 +33,7 @@ import {
 
 const wordStyle = {
   color: "white",
-  fontSize: "16px",
+  fontSize: "12px",
   fontFamily: "pixelfont",
 };
 
@@ -86,9 +86,9 @@ export default function ManageInventoryPage() {
   const renderedToppingsList = toppingsList.map((item) => {
     let localQuantity = 0;
     return (
-      <Card key={item.id}>
+      <Card key={item.id} sx={{ marginTop: "8px", marginBottom: "8px" }}>
         <div style={{ display: "flex" }}>
-          <p className="pixel-font">
+          <p className="pixel-font" style={{ marginLeft: "16px" }}>
             {item.display_name} - {item.stock} Units
           </p>
 
@@ -128,6 +128,7 @@ export default function ManageInventoryPage() {
                 errorState = true;
               }
             }}
+            sx={{ input: wordStyle }}
           />
 
           <IconButton
@@ -166,9 +167,9 @@ export default function ManageInventoryPage() {
   const renderedFlavorList = flavorList.map((item) => {
     let localQuantity = 0;
     return (
-      <Card key={item.id}>
+      <Card key={item.id} sx={{ marginTop: "8px", marginBottom: "8px" }}>
         <div style={{ display: "flex" }}>
-          <p className="pixel-font">
+          <p className="pixel-font" style={{ marginLeft: "16px" }}>
             {item.display_name} - {item.stock} Units
           </p>
 
@@ -196,6 +197,7 @@ export default function ManageInventoryPage() {
               error: errorState.toString(),
               helpertext: "Invalid.",
             }}
+            sx={{ input: wordStyle }}
             onChange={(event) => {
               if (
                 parseInt(event.target.value) <= 100 &&
@@ -245,9 +247,9 @@ export default function ManageInventoryPage() {
   const renderedConesList = conesList.map((item) => {
     let localQuantity = 0;
     return (
-      <Card key={item.id}>
+      <Card key={item.id} sx={{ marginTop: "8px", marginBottom: "8px" }}>
         <div style={{ display: "flex" }}>
-          <p className="pixel-font">
+          <p className="pixel-font" style={{ marginLeft: "16px" }}>
             {item.display_name} - {item.stock} Units
           </p>
 
@@ -287,6 +289,7 @@ export default function ManageInventoryPage() {
                 errorState = true;
               }
             }}
+            sx={{ input: wordStyle }}
           />
 
           <IconButton
@@ -363,7 +366,7 @@ export default function ManageInventoryPage() {
                     id="Outlined-required"
                     label="Product Name"
                     value={newProductName}
-                    sx={{ margin: "10px", fontFamily: "pixelfont" }}
+                    sx={{ margin: "10px", input: wordStyle }}
                     onChange={(event) => {
                       setNewProductName(event.target.value);
                     }}
@@ -384,7 +387,7 @@ export default function ManageInventoryPage() {
                     onChange={(event) => {
                       setNewProductQuantity(parseInt(event.target.value));
                     }}
-                    sx={{ margin: "10px", fontFamily: "pixelfont" }}
+                    sx={{ margin: "10px", input: wordStyle }}
                   />
                   {/* Price */}
                   <TextField
@@ -402,11 +405,14 @@ export default function ManageInventoryPage() {
                     onChange={(event) => {
                       setNewProductPrice(parseFloat(event.target.value));
                     }}
-                    sx={{ margin: "10px", fontFamily: "pixelfont" }}
+                    sx={{ margin: "10px", input: wordStyle }}
                   />
                   {/* Product Type Radio Buttons */}
                   <FormControl>
-                    <FormLabel id="demo-radio-buttons-group-label">
+                    <FormLabel
+                      id="demo-radio-buttons-group-label"
+                      sx={wordStyle}
+                    >
                       Type
                     </FormLabel>
                     <RadioGroup
@@ -420,6 +426,9 @@ export default function ManageInventoryPage() {
                         onChange={(event) => {
                           setNewProductType(ProductType.ICECREAM);
                         }}
+                        sx={{
+                          ...wordStyle,
+                        }}
                       />
                       <FormControlLabel
                         value="topping"
@@ -428,6 +437,9 @@ export default function ManageInventoryPage() {
                         onChange={(event) => {
                           setNewProductType(ProductType.TOPPING);
                         }}
+                        sx={{
+                          ...wordStyle,
+                        }}
                       />
                       <FormControlLabel
                         value="cone"
@@ -435,6 +447,9 @@ export default function ManageInventoryPage() {
                         label="Cone"
                         onChange={(event) => {
                           setNewProductType(ProductType.CONE);
+                        }}
+                        sx={{
+                          ...wordStyle,
                         }}
                       />
                     </RadioGroup>
@@ -456,6 +471,8 @@ export default function ManageInventoryPage() {
                         console.log("Missing Field...");
                       }
                     }}
+                    sx={wordStyle}
+                    variant="contained"
                   >
                     Add Item
                   </Button>

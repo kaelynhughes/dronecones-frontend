@@ -38,8 +38,10 @@ export default function SignUpPage() {
   const [usertype, setUsertype] = useState(UserType.CUSTOMER);
 
   function signUp() {
-    if (password === password2) {
+    if (password === password2 && password.length >= 5) {
       signup(username, password, usertype);
+    } else if (password.length < 5) {
+      setError("Please choose a password with at least 5 characters.");
     } else {
       setError("Passwords do not match, please try re-typing them.");
     }
@@ -139,14 +141,6 @@ export default function SignUpPage() {
                 value={UserType.EMPLOYEE}
                 control={<Radio />}
                 label="Drone Flyer"
-                sx={{
-                  ...wordStyle,
-                }}
-              />
-              <FormControlLabel
-                value={UserType.MANAGER}
-                control={<Radio />}
-                label="Manager - REMOVE BEFORE PRODUCTION"
                 sx={{
                   ...wordStyle,
                 }}
