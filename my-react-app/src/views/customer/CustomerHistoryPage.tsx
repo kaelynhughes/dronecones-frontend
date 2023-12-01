@@ -19,10 +19,8 @@ const wordStyle = {
   fontFamily: "pixelfont",
 };
 
-
-
 export default function CustomerHistoryPage() {
-  const { loadCustomerHistory, loadedCustomerOrders } = useStore();
+  const { loadCustomerHistory, loadedCustomerOrders, user } = useStore();
   const { orders } = useStore();
   const theme = useTheme();
 
@@ -30,10 +28,9 @@ export default function CustomerHistoryPage() {
     loadCustomerHistory();
   }
 
-  function turnConeToString(cone: FullCone) : String {
-    
-    if(cone){
-      if(cone.products){
+  function turnConeToString(cone: FullCone): String {
+    if (cone) {
+      if (cone.products) {
         return getConeString(cone);
       }
     }
@@ -41,15 +38,14 @@ export default function CustomerHistoryPage() {
   }
 
   let title = "Order History";
-  if(orders.length === 0){
-      title = "Your orders will show up here!";
-
+  if (orders.length === 0) {
+    title = "Your orders will show up here!";
   }
   let renderedOrders = orders?.map((order) => {
     return (
       <Accordion
         sx={{
-          width: "1130px",
+          width: "1120px",
           "& .MuiTypography-root": wordStyle,
           flexGrow: 1,
         }}
@@ -64,31 +60,29 @@ export default function CustomerHistoryPage() {
           }}
           expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
         >
-          {order.order_time}{" "}
-          
-          - Order Size : {order.cones.length}
+          {order.order_time} - Order Size : {order.cones.length}
         </AccordionSummary>
         <AccordionDetails sx={{ flexGrow: 1, width: "100%" }}>
-        {order.cones.map((cone, index) => (
+          {order.cones.map((cone, index) => (
             <Typography key={index}>{turnConeToString(cone)}</Typography>
           ))}
-
 
           <Typography>{`Total Order Price: ${getPriceString(
             order.total_price
           )}`}</Typography>
-
         </AccordionDetails>
       </Accordion>
     );
   });
 
-
   return (
     <>
-    {/*Customer History Page, displays info about past orders*/}
-      <h1 className="header-font">{title}</h1>
-      {renderedOrders}
+      {user.id !== 0 && (
+        <>
+          <h1 className="header-font">{title}</h1>
+          {renderedOrders}
+        </>
+      )}
     </>
   );
 }

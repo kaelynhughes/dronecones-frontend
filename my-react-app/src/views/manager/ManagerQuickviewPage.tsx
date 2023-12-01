@@ -52,12 +52,6 @@ export default function ManagerQuickviewPage() {
 
   const { loadManagerHistory } = useStore();
   const { loadedManagerOrders } = useStore();
-  const { loadProducts } = useStore();
-  const { loadedProducts } = useStore();
-
-  if (products.length === 0 && !loadedProducts) {
-    loadProducts();
-  }
 
   if (orders.length === 0 && !loadedManagerOrders) {
     loadManagerHistory();

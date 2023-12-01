@@ -36,8 +36,6 @@ export default function CartPage() {
     cart.forEach((cone) => (total_price += getConePrice(cone)));
     let employee_cut = Math.trunc(total_price / 10);
     let profit = total_price - employee_cut;
-    console.log("CART");
-    console.log(cart);
     checkoutOrder({
       total_price: total_price,
       employee_cut: employee_cut,

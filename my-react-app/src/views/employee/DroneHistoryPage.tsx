@@ -43,14 +43,6 @@ export default function DroneHistoryPage() {
 
   const [filter, setFilter] = useState("");
 
-  const products = useStore((state) => state.products);
-  const { loadProducts } = useStore();
-  const { loadedProducts } = useStore();
-
-  if (products.length === 0 && !loadedProducts) {
-    loadProducts();
-  }
-
   if (drones.length === 0 && !loadedDrones) {
     loadDrones();
   }
@@ -203,7 +195,7 @@ export default function DroneHistoryPage() {
                 <Typography>{`${getDroneNames(order)} delivered ${
                   order.cones.length
                 } cone${order.cones.length > 1 ? "s" : ""}. ${new Date(
-                  order.order_time
+                  order?.order_time || ""
                 ).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",

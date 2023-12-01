@@ -174,6 +174,33 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         try {
           const response = await axios.get(`${BACKEND_URL_DEV}/customer/menu`);
           if (!response.data?.error) {
+            if (
+              response.data.toppings.filter(
+                (product: Product) => product?.stock || 0 > 0
+              ).length === 0
+            ) {
+              get().setError(
+                "No Toppings are currently available - Please check back later!"
+              );
+            }
+            if (
+              response.data.icecream.filter(
+                (product: Product) => product?.stock || 0 > 0
+              ).length === 0
+            ) {
+              get().setError(
+                "No Ice Cream Flavors are currently available - Please check back later!"
+              );
+            }
+            if (
+              response.data.cones.filter(
+                (product: Product) => product?.stock || 0 > 0
+              ).length === 0
+            ) {
+              get().setError(
+                "No Cones are currently available - Please check back later!"
+              );
+            }
             set((state) => ({
               loadedProducts: true,
               products: [
@@ -612,8 +639,7 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         } else {
           set((state) => ({
             ...state,
-            error:
-              "Error banning user: No valid ID is connected to this order.",
+            error: "Error banning user: User ID is invalid.",
           }));
         }
       },
@@ -652,6 +678,9 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         const userId = get().user?.id || 0;
 
         try {
+          if (!get().loadedProducts) {
+            await get().loadProducts();
+          }
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/customer/${userId}/history`
           );
@@ -730,6 +759,9 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         const userId = get().user?.id || 0;
 
         try {
+          if (!get().loadedProducts) {
+            await get().loadProducts();
+          }
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/employee/${userId}/history`
           );
@@ -808,6 +840,9 @@ export const useStore = create<DroneConesState & DroneConesActions>()(
         const userId = get().user?.id || 0;
 
         try {
+          if (!get().loadedProducts) {
+            await get().loadProducts();
+          }
           const response: AxiosResponse = await axios.get(
             `${BACKEND_URL_DEV}/manager/history`
           );
