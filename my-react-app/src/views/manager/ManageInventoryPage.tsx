@@ -460,7 +460,7 @@ export default function ManageInventoryPage() {
                         addProduct({
                           display_name: newProductName,
                           stock: newProductQuantity,
-                          price_per_unit: newProductPrice,
+                          price_per_unit: Math.trunc(newProductPrice * 100),
                           product_type: newProductType,
                         });
                         setNewProductName("");

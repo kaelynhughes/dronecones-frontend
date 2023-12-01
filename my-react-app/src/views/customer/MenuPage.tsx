@@ -148,7 +148,13 @@ export default function MenuPage() {
     </>
   ) : (
     <>
-      <div style={{ display: "flex", flexGrow: 1 }}>
+      <div
+        style={{
+          display: "flex",
+          flexGrow: 1,
+          justifyContent: "space-evenly",
+        }}
+      >
         {/*LHS Menu Side*/}
         <div>
           {/*TOPPINGS*/}
@@ -179,12 +185,13 @@ export default function MenuPage() {
         </div>
 
         {/*RHS View Order*/}
-        <div>
+        <div style={{ flexGrow: 1, maxWidth: "40%" }}>
           <Card
             style={{
-              marginLeft: "100px",
-              paddingLeft: "100px",
-              paddingRight: "100px",
+              marginLeft: "25px",
+              marginRight: "25px",
+              paddingLeft: "50px",
+              paddingRight: "50px",
             }}
             sx={{ flexGrow: 2 }}
           >
